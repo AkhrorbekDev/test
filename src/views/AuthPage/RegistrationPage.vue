@@ -190,6 +190,13 @@ const passwordMatchError = computed(() => {
   }
 }
 
+.registration__wrapper{
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: start;
+}
+
 .registration__form {
   display: flex;
   flex-direction: column;
