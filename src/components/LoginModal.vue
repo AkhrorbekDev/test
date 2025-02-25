@@ -28,9 +28,11 @@
                             <i class="fab fa-vk"></i> Войти с помощью ВКонтакте
                         </button>
 
-                        <router-link  to="/registration" @click="closeModal" class="content__form-btn registration">Зарегистрироваться</router-link>
+                        <router-link to="/registration" @click="closeModal"
+                            class="content__form-btn registration">Зарегистрироваться</router-link>
 
-                        <a class="content__form-link forgot__password" href="#!">Забыли пароль?</a>
+                        <router-link to="/reset-password" @click="closeModal"
+                            class="content__form-link forgot__password" href="#!">Забыли пароль?</router-link>
                     </form>
                 </div>
             </transition>

@@ -244,4 +244,26 @@ const passwordMatchError = computed(() => {
     font-size: 14px;
   }
 }
+
+.registration__form-btn{
+  background: #86489c;
+
+  max-width: 380px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+
+  color: #eee0f1;
+  font-size: 20px;
+}
+
+.registration__form-txt{
+  color: #cdc2d1;
+  font-size: 14px;
+  max-width: 356px;
+  width: 100%;
+  padding: 15px 0;
+}
 </style>
