@@ -11,9 +11,9 @@ const isLoginModalOpen = ref(false);
     <div class="navbar__container container">
       <div class="navbar__wrapper">
         <div class="navbar__left">
-          <div class="navbar__brand">
+          <router-link to="/" class="navbar__brand">
             <img src="@/assets/images/main-logo.svg" alt="Logo" class="navbar__logo" />
-          </div>
+          </router-link>
           <div class="navbar__socials">
             <div class="navbar__socials-btn"><i class="fab fa-vk"></i></div>
             <div class="navbar__socials-btn"><i class="fab fa-telegram-plane"></i></div>
@@ -24,11 +24,11 @@ const isLoginModalOpen = ref(false);
             <li class="navbar__list-item"><router-link to="/tariffs" class="navbar__list-link">О клубе</router-link>
             </li>
             <li class="navbar__list-item"><router-link to="/tariffs" class="navbar__list-link">Тарифы</router-link></li>
-            <li class="navbar__list-item navbar__list-wings">
+            <router-link to="/events" class="navbar__list-item navbar__list-wings">
               <img src="@/assets/icons/left-wing-icon.svg" alt="" />
-              <a href="" class="navbar__list-link">К приключениям</a>
+              <div href="" class="navbar__list-link">К приключениям</div>
               <img src="@/assets/icons/right-wing-icon.svg" alt="" />
-            </li>
+            </router-link>
             <li class="navbar__list-item"><a href="" class="navbar__list-link">Новости</a></li>
             <li class="navbar__list-item"><router-link to="/contacts" class="navbar__list-link">Контакты</router-link>
             </li>
