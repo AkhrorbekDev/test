@@ -1,34 +1,4 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
-onMounted(() => {
-    gsap.utils.toArray('.steps__pirates-item').forEach((item: any, index: number) => {
-        gsap.fromTo(
-            item,
-            {
-                opacity: 0,
-                y: 50,
-                x: index % 2 === 0 ? -100 : 100, // Чередуем направление
-            },
-            {
-                opacity: 1,
-                y: 0,
-                x: 0,
-                duration: 1.2,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: item,
-                    start: 'top 80%',
-                    toggleActions: 'play none none reverse',
-                },
-            }
-        );
-    });
-});
 
 </script>
 <template>
@@ -106,18 +76,22 @@ onMounted(() => {
 </template>
 <style lang="scss" scoped>
 .steps {
-    padding-top: 81px;
-
+    padding: 81px 10px 0 10px;
 
     .steps__title {
         color: #ffffff;
-        font-size: 46px;
         font-family: 'Alegreya-Medium';
         font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
         margin-bottom: 40px;
+        font-size: calc(20px + 26 * (100vw / 1920));
+
+        @media (max-width: 320px) {
+            font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+        }
     }
 
     .steps__pirates-map {
@@ -126,6 +100,8 @@ onMounted(() => {
         width: 100%;
         position: relative;
 
+        @media (max-width:1140px) {}
+
         .steps__line {
             position: absolute;
             top: 0;
@@ -133,6 +109,10 @@ onMounted(() => {
             width: 100%;
             height: 638px;
             z-index: -1;
+
+            @media (max-width:1140px) {
+                display: none;
+            }
         }
 
         .steps__pirates-item {
@@ -142,15 +122,49 @@ onMounted(() => {
 
             max-width: 543px;
 
+            @media (max-width:1140px) {
+                padding-bottom: 54px;
+            }
+
+            @media (max-width:800px) {
+                padding-left: 20px;
+                position: relative;
+
+
+                &::after {
+                    content: '';
+                    width: 12px;
+                    height: 12px;
+                    background: #fff;
+                    border-radius: 50%;
+                    position: absolute;
+                    top: 15px;
+                    left: 0;
+                }
+            }
+
             &:nth-of-type(even) {
                 align-self: flex-end;
 
+                @media (max-width:800px) {
+                    align-self: flex-start;
+                }
+
                 .steps__pirates-top {
                     flex-direction: row-reverse;
+
+                    @media (max-width:800px) {
+                        flex-direction: row;
+                    }
                 }
 
                 .steps__pirates-txt {
                     text-align: right;
+
+                    @media (max-width:800px) {
+                        text-align: left;
+                    }
+
                 }
             }
 
@@ -161,9 +175,15 @@ onMounted(() => {
 
                 .steps__pirates-title {
                     color: #815692;
-                    font-size: 32px;
+
                     font-family: 'Alegreya-Medium';
                     font-weight: 700;
+
+                    font-size: calc(22px + 10 * (100vw / 1920));
+
+                    @media (max-width: 320px) {
+                        font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+                    }
                 }
             }
 
@@ -171,9 +191,14 @@ onMounted(() => {
                 color: var(--04-text-main, #eee0f1);
                 text-align: left;
                 font-family: var(--pc-p3-font-family, "Alegreya-Regular");
-                font-size: var(--pc-p3-font-size, 20px);
                 line-height: var(--pc-p3-line-height, 120%);
                 font-weight: var(--pc-p3-font-weight, 400);
+
+                font-size: calc(16px + 4 * (100vw / 1920));
+
+                @media (max-width: 320px) {
+                    font-size: calc(16px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+                }
 
                 span {
                     color: var(--02-accent-2, #f0515e);
@@ -194,19 +219,38 @@ onMounted(() => {
         position: relative;
         margin-top: 20px;
 
+        @media (max-width: 800px) {
+            flex-direction: column-reverse;
+        }
+
         .steps__bottom-txt {
             color: var(--02-accent-3, #ff7e7e);
             text-align: right;
             font-family: var(--pc-h4-font-family, "AlegreyaSc-Regular");
-            font-size: var(--pc-h4-font-size, 26px);
+
             line-height: var(--pc-h4-line-height, 115%);
             font-weight: var(--pc-h4-font-weight, 400);
             max-width: 566px;
             margin-right: 175px;
+
+            font-size: calc(22px + 4 * (100vw / 1920));
+
+            @media (max-width: 800px) {
+             text-align: center;
+             margin: 0;
+            }
+
+            @media (max-width: 320px) {
+                font-size: calc(22px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
 
         img {
             position: absolute;
+
+            @media (max-width: 800px) {
+                position: static;
+            }
         }
     }
 }

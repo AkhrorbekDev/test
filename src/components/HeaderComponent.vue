@@ -39,7 +39,11 @@ const isLoginModalOpen = ref(false);
             <i class="fas fa-user-circle"></i>
             Войти
           </div>
+          <div class="navbar__burger">
+            <img src="../assets/images/burger.svg" alt="">
+          </div>
         </div>
+
       </div>
     </div>
   </nav>
@@ -76,6 +80,11 @@ const isLoginModalOpen = ref(false);
   display: flex;
   align-items: center;
   gap: 10px;
+
+  @media(max-width: 375px) {
+
+    gap: 5px;
+  }
 }
 
 .navbar__socials {
@@ -83,51 +92,76 @@ const isLoginModalOpen = ref(false);
   gap: 10px;
   align-items: center;
 
+  @media(max-width: 375px) {
+    flex-direction: column;
+    gap: 3px;
+  }
+
   .navbar__socials-btn {
     padding: 5px 10px;
     background: #ff7e7e0f;
 
+
+
     i {
       color: #742628;
       font-size: 20px;
+
+      @media(max-width: 375px) {
+        font-size: 16px;
+      }
     }
   }
 }
 
-.navbar__list {
+.navbar__center {
+
+
+  .navbar__list {
+    display: flex;
+    align-items: center;
+    gap: 36.5px;
+
+    .navbar__list-wings {
+      position: relative;
+
+      img {
+        position: absolute;
+
+        &:nth-of-type(1) {
+          left: -24px;
+          top: -6px;
+        }
+
+        &:nth-of-type(2) {
+          right: -24px;
+          top: -6px;
+        }
+      }
+    }
+
+    .navbar__list-link {
+      font-family: 'Alegreya-Medium';
+      font-weight: 500;
+      font-size: 22px;
+      color: #fff;
+      transition: all 0.4s ease;
+
+      &:hover {
+        color: var(--01-primary-color-main, #86489c);
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.navbar__right {
   display: flex;
   align-items: center;
-  gap: 36.5px;
-
-  .navbar__list-wings {
-    position: relative;
-
-    img {
-      position: absolute;
-
-      &:nth-of-type(1) {
-        left: -24px;
-        top: -6px;
-      }
-
-      &:nth-of-type(2) {
-        right: -24px;
-        top: -6px;
-      }
-    }
-  }
-
-  .navbar__list-link {
-    font-family: 'Alegreya-Medium';
-    font-weight: 500;
-    font-size: 22px;
-    color: #fff;
-    transition: all 0.4s ease;
-
-    &:hover {
-      color: var(--01-primary-color-main, #86489c);
-    }
-  }
+  gap: 9px;
 }
 
 .navbar__right-btn {
@@ -143,13 +177,31 @@ const isLoginModalOpen = ref(false);
   gap: 10px;
   align-items: center;
   justify-content: center;
-  height: 54px;
+
   position: relative;
   color: #fff;
+
+  @media (max-width: 1024px) {
+    padding: 11.5px 24px 8px 15.5px;
+  }
 
   i {
     color: var(--01-primary-color-main, #86489c);
     font-size: 18px;
   }
+}
+
+.navbar__burger {
+  width: 40px;
+  height: 40px;
+  background: var(--gradient-1,
+      linear-gradient(205.07deg,
+        rgba(87, 27, 109, 0.1) 0%,
+        rgba(210, 60, 72, 0.1) 100%));
+  border-radius: 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

@@ -71,19 +71,26 @@
 .comforts {
   margin-top: 56px;
 }
+
 .comforts__row {
   display: flex;
 
   justify-content: space-between;
 
+
+  align-content: center;
+
+  @media (max-width: 900px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   .comforts__row-item {
     padding: 40px 28px;
-    background: linear-gradient(
-      109.35deg,
-      rgba(0, 0, 0, 0.3) -1.6%,
-      rgba(22, 19, 23, 0.3) 48.61%,
-      rgba(0, 0, 0, 0.3) 98.83%
-    );
+    background: linear-gradient(109.35deg,
+        rgba(0, 0, 0, 0.3) -1.6%,
+        rgba(22, 19, 23, 0.3) 48.61%,
+        rgba(0, 0, 0, 0.3) 98.83%);
     display: flex;
     flex-direction: column;
     gap: 28px;
@@ -102,6 +109,12 @@
       font-family: 'Alegreya-Medium';
       max-width: 324px;
       width: 100%;
+
+      font-size: calc(22px + 10 * (100vw / 1920));
+
+      @media (max-width: 320px) {
+        font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+      }
     }
 
     .comforts__item-list {
@@ -115,13 +128,18 @@
         align-items: center;
 
         .comforts__list-txt {
-          font-size: 20px;
           color: #eee0f1;
           font-weight: 400;
           font-family: 'Alegreya-Regular';
           max-width: 282px;
           width: 100%;
           line-height: 24px;
+
+          font-size: calc(16px + 4 * (100vw / 1920));
+
+          @media (max-width: 320px) {
+            font-size: calc(16px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+          }
         }
       }
     }

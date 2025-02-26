@@ -58,13 +58,8 @@ const prevImage = () => {
 
       <div class="interier__gallery">
         <div class="interier__gallery-btns">
-          <div
-            class="interier__gallery-btn"
-            :class="{ active: item.active }"
-            v-for="(item, index) in interies"
-            :key="index"
-            @click="setActive(index)"
-          >
+          <div class="interier__gallery-btn" :class="{ active: item.active }" v-for="(item, index) in interies"
+            :key="index" @click="setActive(index)">
             {{ item.title }}
             <img src="../images/interier/bg-btn.png" alt="" />
           </div>
@@ -83,27 +78,44 @@ const prevImage = () => {
 <style lang="scss" scoped>
 .interier {
   margin-top: 86px;
+  padding: 0 10px;
 
   .interier__title {
     color: #ffffff;
-    font-size: 46px;
     font-family: 'Alegreya-Medium';
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 40px;
+
+    font-size: calc(20px + 26 * (100vw / 1920));
+
+    @media (max-width: 320px) {
+      font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+    }
   }
 
   .interier__gallery {
     display: flex;
+    align-items: start;
     gap: 20px;
     width: 100%;
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+    }
 
     .interier__gallery-btns {
       display: flex;
       flex-direction: column;
       gap: 20px;
+
+      @media (max-width: 900px) {
+        flex-direction: row;
+        width: 100%;
+        overflow-y: auto;
+      }
 
       .interier__gallery-btn {
         min-width: 280px;
@@ -115,10 +127,24 @@ const prevImage = () => {
         padding: 18px 15px;
         color: #eee0f1;
         font-size: 32px;
-        font-family: 'Alegreya-Medium';
+        font-family: 'Alegreya-Medium', sans-serif;
         font-weight: 500;
         overflow: hidden;
         transition: color 0.3s ease;
+
+        font-size: calc(22px + 10 * (100vw / 1920));
+
+        @media (max-width: 320px) {
+          font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+        }
+
+        @media (max-width: 900px) {
+          min-width: 91px !important;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
+
 
         img {
           position: absolute;
@@ -150,15 +176,25 @@ const prevImage = () => {
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-height: 463px;
+      min-height: 480px;
       height: 100%;
       border-radius: 15px;
       overflow: hidden;
 
+      @media (max-width: 500px) {
+        min-height: 230px;
+      }
+
       img {
         width: 100%;
-        height: auto;
+
         object-fit: cover;
+        min-height: 480px;
+        height: 100%;
+
+        @media (max-width: 500px) {
+          min-height: 230px;
+        }
       }
 
       .show__left,
@@ -172,17 +208,17 @@ const prevImage = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(
-          --plate-03,
-          linear-gradient(
-            114.17deg,
-            rgba(54, 38, 38, 0.3) 0%,
-            rgba(34, 27, 36, 0.3) 50%,
-            rgba(54, 38, 38, 0.3) 100%
-          )
-        );
+        background: var(--plate-03,
+            linear-gradient(114.17deg,
+              rgba(54, 38, 38, 0.3) 0%,
+              rgba(34, 27, 36, 0.3) 50%,
+              rgba(54, 38, 38, 0.3) 100%));
         color: white;
         backdrop-filter: blur(2px);
+
+        @media (max-width: 900px) {
+          display: none;
+        }
 
         i {
           color: #815692;
