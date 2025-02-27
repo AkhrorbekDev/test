@@ -26,7 +26,7 @@
 
 <style lang="scss" scoped>
 .reset {
-  padding-top: 151px;
+  padding: 151px 10px 0 10px;
   margin-bottom: 81px;
   position: relative;
   min-height: 100vh;
@@ -66,6 +66,20 @@
       margin-bottom: 12px;
       margin-bottom: 50px;
 
+
+      font-size: calc(32px + 24 * (100vw / 1920));
+
+
+      @media (max-width: 648px) {
+ 
+        margin-bottom: 16px !important;
+      }
+
+
+      @media (max-width: 320px) {
+        font-size: calc(32px + (24 + 24 * 0.7) * ((100vw - 320px) / 1920));
+      }
+
     }
 
     .reset__form {
@@ -84,16 +98,42 @@
       flex-grow: 1;
       justify-content: center;
 
+
+
+      @media (max-width: 648px) {
+        flex-direction: column;
+        align-items: center;
+      }
+
       .reset__form-title {
         color: #eee0f1;
-        font-size: 26px;
+
         max-width: 359px;
         width: 100%;
+
+
+        font-size: calc(18px + 8 * (100vw / 1920));
+
+        @media (max-width: 648px) {
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          margin-bottom: 40px;
+        }
+
+
+        @media (max-width: 320px) {
+          font-size: calc(18px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
+        }
       }
 
       .reset__form-input {
         max-width: 400px;
         width: 100%;
+
+        @media (max-width: 648px) {
+          max-width: 100%;
+        }
 
         div {
           width: 100%;

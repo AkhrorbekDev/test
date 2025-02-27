@@ -42,13 +42,25 @@
             font-weight: 700;
             margin-bottom: 12px;
             margin-bottom: 30px;
+
+            font-size: calc(32px + 24 * (100vw / 1920));
+
+            @media (max-width: 320px) {
+                font-size: calc(32px + (24 + 24 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
 
-        .require__subtitle{
+        .require__subtitle {
             color: #d23c48;
-            font-size: 26px;
+
             text-align: center;
             font-weight: 700;
+
+            font-size: calc(18px + 8 * (100vw / 1920));
+
+            @media (max-width: 320px) {
+                font-size: calc(18px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
     }
 }

@@ -143,13 +143,15 @@ const passwordMatchError = computed(() => {
 
 <style lang="scss" scoped>
 .registration {
-  padding-top: 151px;
+  padding: 151px 10px 0 10px;
   margin-bottom: 81px;
   position: relative;
   min-height: 100vh;
   height: 100%;
   display: flex;
   justify-content: center;
+
+
 
   .registration__bg {
     position: absolute;
@@ -171,6 +173,15 @@ const passwordMatchError = computed(() => {
     font-family: 'Alegreya-Medium';
     font-weight: 500;
     margin-bottom: 12px;
+
+    font-size: calc(20px + 26 * (100vw / 1920));
+
+
+
+
+    @media (max-width: 320px) {
+      font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+    }
   }
 
   .registration__container {
@@ -187,10 +198,19 @@ const passwordMatchError = computed(() => {
     font-family: 'Alegreya-Medium';
     font-weight: 500;
     margin-bottom: 40px;
+
+    font-size: calc(18px + 14 * (100vw / 1920));
+
+
+
+
+    @media (max-width: 320px) {
+      font-size: calc(18px + (14 + 14 * 0.7) * ((100vw - 320px) / 1920));
+    }
   }
 }
 
-.registration__wrapper{
+.registration__wrapper {
   width: 100%;
   flex-grow: 1;
   display: flex;
@@ -208,6 +228,11 @@ const passwordMatchError = computed(() => {
     display: flex;
     gap: 20px;
     width: 100%;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+      align-items: center;
+    }
 
     .input__wrapper {
       display: flex;
@@ -245,7 +270,7 @@ const passwordMatchError = computed(() => {
   }
 }
 
-.registration__form-btn{
+.registration__form-btn {
   background: #86489c;
 
   max-width: 380px;
@@ -257,13 +282,24 @@ const passwordMatchError = computed(() => {
 
   color: #eee0f1;
   font-size: 20px;
+
+  @media (max-width: 500px) {
+    padding: 15px 0;
+    max-width: 100%;
+  }
 }
 
-.registration__form-txt{
+.registration__form-txt {
   color: #cdc2d1;
   font-size: 14px;
   max-width: 356px;
   width: 100%;
   padding: 15px 0;
+
+  @media (max-width: 500px) {
+    text-align: center;
+
+  
+  }
 }
 </style>
