@@ -175,6 +175,10 @@ const togglePasswordRequireVisibility = () => {
         gap: 20px;
         margin-bottom: 20px;
 
+        @media (max-width: 990px) {
+            flex-direction: column;
+        }
+
         .settings__top-left {
             max-width: 252px;
             width: 100%;
@@ -189,6 +193,11 @@ const togglePasswordRequireVisibility = () => {
             align-items: center;
             justify-content: center;
             padding: 32px 0;
+
+
+            @media (max-width: 990px) {
+                max-width: 100%;
+            }
 
             img {
                 margin-bottom: 12px;
@@ -215,10 +224,21 @@ const togglePasswordRequireVisibility = () => {
             flex-direction: column;
             gap: 20px;
 
+
+            @media (max-width: 990px) {
+                width: 100%;
+            }
+
             .settings__right-title {
+
+
                 color: var(--01-primary-color-5, #d5b0e4);
                 text-align: left;
                 font-size: var(--pc-h3-font-size, 32px);
+
+                @media (max-width: 990px) {
+                    display: none;
+                }
             }
         }
     }
@@ -228,6 +248,10 @@ const togglePasswordRequireVisibility = () => {
         display: flex;
         gap: 8px;
         width: 100%;
+
+        @media (max-width: 500px) {
+            flex-direction: column;
+        }
 
 
         .input__wrapper {
@@ -276,6 +300,10 @@ const togglePasswordRequireVisibility = () => {
         gap: 19px;
         width: 100%;
 
+        @media (max-width: 990px) {
+            flex-direction: column;
+        }
+
         .input__wrapper {
             display: flex;
             flex-direction: column;
@@ -309,6 +337,10 @@ const togglePasswordRequireVisibility = () => {
     gap: 19px;
     justify-content: space-between;
 
+    @media (max-width: 670px) {
+        flex-direction: column;
+    }
+
 
     .settings__btn {
         padding: 15px 0;
@@ -325,6 +357,10 @@ const togglePasswordRequireVisibility = () => {
         width: 100%;
         background: var(--05-success-main, #4a7548);
         border-radius: 10px;
+
+        @media (max-width: 670px) {
+            max-width: 100%;
+        }
     }
 
     .cancel {
@@ -332,6 +368,10 @@ const togglePasswordRequireVisibility = () => {
         width: 100%;
         background: var(--08-unavailable-2, #545560);
         border-radius: 10px;
+
+        @media (max-width: 670px) {
+            max-width: 100%;
+        }
     }
 }
 </style>

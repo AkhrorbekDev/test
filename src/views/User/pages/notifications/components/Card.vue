@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
     <div :class="['notifications-item', type]">
-        <p class="notifications-title" v-html="title"></p>
+      
         <p class="notifications-message" v-html="message"></p>
     </div>
 </template>
@@ -36,6 +36,11 @@ defineProps<{
     font-weight: bold;
     margin-bottom: 5px;
     font-size: 22px;
+    font-size: calc(16px + 6 * (100vw / 1920));
+
+    @media (max-width: 320px) {
+        font-size: calc(16px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+    }
 }
 
 .notifications-message {
@@ -49,6 +54,11 @@ defineProps<{
     font-weight: bold;
     text-shadow: 0 0 5px rgba(74, 178, 255, 0.5);
     font-size: 22px;
+    font-size: calc(16px + 6 * (100vw / 1920));
+
+    @media (max-width: 320px) {
+        font-size: calc(16px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+    }
 }
 
 /* Цвета для разных типов */

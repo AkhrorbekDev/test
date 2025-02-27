@@ -5,11 +5,18 @@
 <template>
     <div class="event__card">
         <div class="event__card-top">
-            <div class="event__card-name">Название события в пару слов <div class="event__card-subtitle">Игровая сессия
-                </div>
+            <div class="event__card-name">Название события в пару слов
             </div>
+            <div class="event__top-right">
+                <div class="event__card-subtitle">Игровая сессия
+                </div>
 
-            <div class="event__card-status">Авторская</div>
+                <div class="event__card-status">Авторская</div>
+            </div>
+            <div class="event__top-bottom">
+                <div class="event__top-date"><img src="../images/CalendarBlank.svg" alt=""> 25 ноября, 19:00</div>
+                <div class="event__top-room"><img src="../images/Vector.svg" alt="">5/10</div>
+            </div>
         </div>
         <div class="event__card-content">
             <div class="event__card-left">
@@ -40,7 +47,7 @@
         <div class="event__card-bottom">
             <div class="event__card-date"><img src="../images/CalendarBlank.svg" alt=""> 25 ноября, 19:00</div>
             <div class="event__card-any">Подробнее</div>
-            <div class="event__card-btn">Отменить запись</div>
+            <div class="event__card-btn">Ожидать</div>
             <div class="event__card-room"><img src="../images/Vector.svg" alt="">5/10</div>
         </div>
     </div>
@@ -57,12 +64,73 @@
     max-width: 880px;
     width: 100%;
 
+    @media (max-width: 450px) {
+        padding: 18px;
+    }
+
 
     .event__card-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 32px;
+        gap: 20px;
+
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            align-items: start;
+        }
+
+        .event__top-bottom {
+            display: none;
+            width: 100%;
+
+            @media (max-width: 1024px) {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+
+            .event__top-date {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--04-text-1, #cdc2d1);
+                text-align: left;
+                font-family: "AlegreyaSc-Medium";
+                margin-right: 24px;
+
+                font-size: calc(22px + 6 * (100vw / 1920));
+
+
+
+                @media (max-width: 320px) {
+                    font-size: calc(22px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+                }
+            }
+
+            .event__top-room {
+                display: flex;
+                gap: 10px;
+                color: var(--05-success-main, #4a7548);
+                text-align: center;
+                font-size: 20px;
+
+
+            }
+        }
+
+        .event__top-right {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-between;
+            align-items: center;
+
+            @media (max-width: 1024px) {
+                width: 100%;
+            }
+        }
 
         .event__card-name {
             color: #cdc2d1;
@@ -71,11 +139,17 @@
             display: flex;
             align-items: center;
             gap: 32px;
+            font-size: calc(26px + 6 * (100vw / 1920));
 
-            .event__card-subtitle {
-                color: #335781;
-                font-size: 20px;
+            @media (max-width: 320px) {
+                font-size: calc(26px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
             }
+
+        }
+
+        .event__card-subtitle {
+            color: #335781;
+            font-size: 20px;
         }
 
         .event__card-status {
@@ -85,12 +159,22 @@
 
             color: var(--01-primary-color-5, #d5b0e4);
             font-size: 20px;
+
+            font-size: calc(14px + 6 * (100vw / 1920));
+
+            @media (max-width: 320px) {
+                font-size: calc(14px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
     }
 
     .event__card-content {
         display: flex;
         gap: 24px;
+
+        @media (max-width: 930px) {
+            flex-direction: column;
+        }
 
 
         .event__card-left {
@@ -100,6 +184,10 @@
             width: 100%;
             overflow: hidden;
             border-radius: 15px;
+
+            @media (max-width: 930px) {
+                max-width: 100%;
+            }
 
             .event__left-img {
                 position: absolute;
@@ -155,6 +243,11 @@
             .event__card-genres {
                 display: flex;
                 gap: 14px;
+                overflow-y: auto;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
 
                 .event__card-genre {
                     background: var(--01-primary-color-main, #86489c);
@@ -168,8 +261,13 @@
             .event__card-descr {
                 color: var(--04-text-main, #eee0f1);
                 text-align: left;
-                font-size: var(--pc-p3-font-size, 20px);
                 max-width: 535px;
+
+                font-size: calc(16px + 6 * (100vw / 1920));
+
+                @media (max-width: 320px) {
+                    font-size: calc(16px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+                }
             }
         }
     }
@@ -180,6 +278,10 @@
         justify-content: space-between;
         margin-top: 20px;
 
+        @media (max-width: 1054px) {
+            flex-direction: row-reverse;
+        }
+
         .event__card-date {
             display: flex;
             align-items: center;
@@ -187,8 +289,17 @@
             color: var(--04-text-1, #cdc2d1);
             text-align: left;
             font-family: "AlegreyaSc-Medium";
-            font-size: 28px;
             margin-right: 24px;
+
+            font-size: calc(22px + 6 * (100vw / 1920));
+
+            @media (max-width: 1054px) {
+                display: none;
+            }
+
+            @media (max-width: 320px) {
+                font-size: calc(22px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
 
         .event__card-any {
@@ -200,6 +311,12 @@
             text-align: center;
             font-size: 20px;
             margin-right: 20px;
+
+            @media (max-width: 450px) {
+                display: none;
+            }
+
+
         }
 
         .event__card-btn {
@@ -217,6 +334,10 @@
             text-align: center;
             font-size: 20px;
             margin-right: 17px;
+
+            @media (max-width: 450px) {
+                max-width: 100%;
+            }
         }
 
         .event__card-room {
@@ -225,6 +346,10 @@
             color: var(--05-success-main, #4a7548);
             text-align: center;
             font-size: 20px;
+
+            @media (max-width: 1054px) {
+                display: none;
+            }
         }
     }
 }

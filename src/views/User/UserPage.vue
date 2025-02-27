@@ -20,7 +20,7 @@ const pageTitle = computed(() => pageTitles[route.name as string] || 'Профи
     <div class="user">
         <div class="user__container container">
             <div class="user__header">
-                <div class="user__header-title">{{ pageTitle }}</div>
+                <div class="user__header-title">{{ pageTitle }} <span class="kotiqueee-span4">(игрок)</span></div>
                 <div class="user__header-username"><span class="kotiqueee-span3">Kotiqueee</span>
                     <span class="kotiqueee-span4">(игрок)</span>
                 </div>
@@ -36,7 +36,7 @@ const pageTitle = computed(() => pageTitles[route.name as string] || 'Профи
 </template>
 <style lang="scss" scoped>
 .user {
-    padding: 145px 0;
+    padding: 145px 10px;
 
     .user__header {
         display: flex;
@@ -44,22 +44,48 @@ const pageTitle = computed(() => pageTitles[route.name as string] || 'Профи
         gap: 30px;
         margin-bottom: 55px;
 
+        @media (max-width: 600px) {
+            margin-bottom: 24px;
+
+
+        }
+
         .user__header-title {
-            background: var(--04-text-h1-style,
-                    linear-gradient(90deg,
-                        rgba(203, 190, 205, 1) 0%,
-                        rgba(255, 255, 255, 1) 46.50000035762787%,
-                        rgba(203, 190, 205, 1) 100%));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 46px;
+            color: #eee0f1 !important;
 
             max-width: 300px;
             width: 100%;
+
+            font-size: calc(32px + 14 * (100vw / 1920));
+
+
+            @media (max-width: 600px) {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+
+            }
+
+            @media (max-width: 320px) {
+                font-size: calc(32px + (14 + 14 * 0.7) * ((100vw - 320px) / 1920));
+            }
+
+            span {
+                color: #233751;
+                display: none;
+
+                @media (max-width: 600px) {
+                    display: flex;
+                }
+            }
         }
 
         .user__header-username {
+
+            @media (max-width: 600px) {
+                display: none;
+            }
 
             .kotiqueee-span3 {
                 color: var(--03-dark-3, #422748);

@@ -37,6 +37,10 @@
 .user__nav {
   max-width: 280px;
 
+  @media (max-width: 768px) {
+    display: none;
+  }
+
   .user__nav-list {
     display: flex;
     flex-direction: column;

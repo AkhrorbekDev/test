@@ -111,6 +111,12 @@ const toggleCheckbox = (key: string) => {
     max-width: 277px;
     width: 100%;
 
+    @media (max-width: 768px) {
+        position: absolute;
+        background: #000;
+        transform: translateX(-100%);
+    }
+
     .filters__header {
         display: flex;
         align-items: center;

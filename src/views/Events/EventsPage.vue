@@ -77,11 +77,21 @@ import EventsFilter from './components/EventsFilter.vue';
         align-items: center;
         justify-content: center;
         margin-bottom: 40px;
+
+        font-size: calc(32px + 14 * (100vw / 1920));
+
+        @media (max-width: 320px) {
+            font-size: calc(32px + (14 + 14 * 0.7) * ((100vw - 320px) / 1920));
+        }
     }
 
     .club__events-row {
         display: flex;
         gap: 20px;
+
+        @media (max-width: 1000px) {
+            flex-direction: column;
+        }
 
         .club__events-intro {
             background: var(--plate-03,
@@ -100,6 +110,10 @@ import EventsFilter from './components/EventsFilter.vue';
             display: flex;
             flex-direction: column;
             gap: 16px;
+
+            @media (max-width: 1000px) {
+                max-width: 100%;
+            }
 
             .club__intro-item {
                 display: flex;
@@ -135,6 +149,11 @@ import EventsFilter from './components/EventsFilter.vue';
             flex-direction: column;
             align-items: center;
 
+
+            @media (max-width: 1000px) {
+                max-width: 100%;
+            }
+
             .club__help-title {
                 color: var(--01-primary-color-5, #d5b0e4);
                 text-align: center;
@@ -165,6 +184,7 @@ import EventsFilter from './components/EventsFilter.vue';
     display: flex;
     gap: 20px;
     width: 100%;
+    position: relative;
 
     .club__events-cards {
         display: flex;

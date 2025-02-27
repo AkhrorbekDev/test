@@ -7,6 +7,9 @@
         <div class="profile__top">
             <div class="profile__top-left">
                 <img src="./images/avatar.png" alt="">
+                <div class="profile__left-info">
+                    <div class="profile__left-login">Kotiqueee</div>
+                </div>
             </div>
             <div class="profile__top-right">
                 <div class="profile__top-item">
@@ -61,17 +64,51 @@
     flex-direction: column;
     gap: 28px;
 
+    @media (max-width: 600px) {
+        padding: 12px;
+
+    }
+
 
     .profile__top {
         display: flex;
         gap: 30px;
 
+        @media (max-width: 600px) {
+            flex-direction: column;
+        }
+
         .profile__top-left {
             width: 256px;
-            height: 256px;
+
+
+            @media (max-width: 600px) {
+
+                display: flex;
+                width: 100%;
+                gap: 12px;
+            }
 
             img {
                 object-fit: cover;
+
+                @media (max-width: 600px) {
+
+                    max-width: 154px;
+                    width: 100%;
+
+                }
+            }
+
+            .profile__left-login {
+                display: none;
+
+                @media (max-width: 600px) {
+                    display: flex;
+                    color: var(--01-primary-color-main, #86489c);
+                    text-align: left;
+                    font-size: var(--mob-h3-font-size, 22px);
+                }
             }
         }
 
@@ -80,6 +117,13 @@
             flex-wrap: wrap;
             justify-content: space-between;
 
+            @media (max-width: 600px) {
+                width: 100%;
+                flex-grow: 1;
+                gap: 12px;
+            }
+
+
             .profile__top-item {
                 max-width: 245px;
                 width: 100%;
@@ -87,15 +131,32 @@
                 flex-direction: column;
                 gap: 11px;
 
+                @media (max-width: 600px) {
+                    flex-direction: row;
+                    max-width: 100%;
+                    gap: 16px;
+                }
+
 
                 .profile__top-label {
                     color: #6a3b7b;
                     font-size: 20px;
+
+                    font-size: calc(18px + 2 * (100vw / 1920));
+
+                    @media (max-width: 320px) {
+                        font-size: calc(18px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
+                    }
                 }
 
                 .profile__top-title {
                     color: #eee0f1;
-                    font-size: 24px;
+
+                    font-size: calc(16px + 8 * (100vw / 1920));
+
+                    @media (max-width: 320px) {
+                        font-size: calc(16px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
+                    }
                 }
             }
         }
@@ -115,6 +176,12 @@
             font-size: 20px;
             color: #eee0f1;
             max-width: 800px;
+
+            font-size: calc(16px + 4 * (100vw / 1920));
+
+            @media (max-width: 320px) {
+                font-size: calc(16px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
     }
 
@@ -130,15 +197,24 @@
             border-radius: 10px;
             gap: 6px;
 
-            .profile__info-label{
+            .profile__info-label {
                 font-size: 20px;
                 color: #d5b0e4;
+
+                font-size: calc(18px + 2 * (100vw / 1920));
+
+                @media (max-width: 320px) {
+                    font-size: calc(18px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
+                }
             }
 
-            .profile__info-txt{
+            .profile__info-txt {
                 color: #eee0f1;
-                font-size: 32px;
+                font-size: calc(24px + 8 * (100vw / 1920));
 
+                @media (max-width: 320px) {
+                    font-size: calc(24px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
+                }
             }
         }
     }
