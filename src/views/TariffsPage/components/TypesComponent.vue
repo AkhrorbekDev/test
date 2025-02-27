@@ -67,22 +67,32 @@
 <style lang="scss" scoped>
 .types {
     margin-top: 80px;
+    padding: 0 10px 0 10px;
 
     .types__title {
         color: #ffffff;
-        font-size: 46px;
         font-family: 'Alegreya-Medium';
         font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 40px;
+
+        font-size: calc(20px + 26 * (100vw / 1920));
+
+
+
+
+        @media (max-width: 320px) {
+            font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+        }
     }
 
     .types__boxes {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
+        justify-content: center;
 
         .types__box {
             padding: 40px 28px;
@@ -105,32 +115,61 @@
                     color: #86489c;
                     font-weight: 500;
                     font-family: 'Alegreya-Medium';
+
+                    font-size: calc(22px + 10 * (100vw / 1920));
+
+
+
+
+                    @media (max-width: 320px) {
+                        font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+                    }
                 }
 
                 .types__box-info {
                     padding: 8px 16px;
                     background: #742628;
                     color: #d5b0e4;
-                    font-size: 16px;
                     font-family: "Alegreya-Regular";
                     border-radius: 40px;
+text-align: center;
+                    font-size: calc(14px + 2 * (100vw / 1920));
+
+                    @media (max-width: 320px) {
+                        font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
+                    }
                 }
             }
 
             .types__box-descr {
                 color: #fff;
-                font-size: 20px;
+        
                 margin-bottom: 28px;
+
+                font-size: calc(16px + 4 * (100vw / 1920));
+
+                @media (max-width: 320px) {
+                    font-size: calc(16px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+                }
             }
 
             .types__box-link {
                 color: #d23c48;
-                font-size: 32px;
+            
                 font-family: 'Alegreya-Bold';
 
                 display: flex;
                 align-items: center;
                 gap: 16px;
+
+                font-size: calc(22px + 10 * (100vw / 1920));
+
+
+
+
+                @media (max-width: 320px) {
+                    font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+                }
 
             }
         }
