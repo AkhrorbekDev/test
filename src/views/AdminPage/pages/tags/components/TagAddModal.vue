@@ -2,37 +2,27 @@
     <transition name="fade">
         <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
             <transition name="modal">
-                <div class="modal-content">
+                <div class="modal-content add-modal">
                     <div class="modal__content-top">
                         <button class="close-btn" @click="closeModal"><i class="fal fa-times"></i></button>
                     </div>
-                    <h3 class="modal-content__title">Соскучились по приключениям?</h3>
+                    <h3 class="modal-content__title">Новый тег?</h3>
 
                     <form class="modal-content__form">
                         <div class="inputs">
                             <div class="input__group">
-                                <input type="text" placeholder="Введите логин, Email или телефон">
+                                <input type="text" placeholder="Полное название тега">
+                            </div>
+                            <div class="input__group">
+                                <input type="text" placeholder="Короткое название тега">
                             </div>
 
-                            <div class="input__group">
-                                <input :type="passwordVisible ? 'text' : 'password'" placeholder="Введите пароль">
-                                <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
-                                    @click="togglePasswordVisibility">
-                                </i>
-                            </div>
+                            
                         </div>
 
-                        <router-link to="/user" @click="closeModal" class="content__form-btn login">Войти</router-link>
+                        <a href="#!" @click="closeModal" class="content__form-btn add">Добавить</a>
 
-                        <router-link to="/admin " @click="closeModal" class="content__form-btn vk">
-                            <i class="fab fa-vk"></i> Войти с помощью ВКонтакте
-                        </router-link>
 
-                        <router-link to="/registration" @click="closeModal"
-                            class="content__form-btn registration">Зарегистрироваться</router-link>
-
-                        <router-link to="/reset-password" @click="closeModal"
-                            class="content__form-link forgot__password" href="#!">Забыли пароль?</router-link>
                     </form>
                 </div>
             </transition>
@@ -90,6 +80,11 @@ const togglePasswordVisibility = () => {
     justify-content: center;
     align-items: center;
     z-index: 99;
+}
+
+.add-modal{
+    max-width: 560px;
+    width: 100%;
 }
 
 .modal-content {
@@ -161,6 +156,12 @@ const togglePasswordVisibility = () => {
     align-items: center;
     justify-content: center;
 
+}
+
+.add {
+    margin-top: 31px;
+    background: #000;
+    background: var(--05-success-main, #4a7548);
 }
 
 .login {

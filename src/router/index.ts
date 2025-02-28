@@ -86,6 +86,49 @@ const router = createRouter({
           component: () => import('@/views/User/pages/settings/SettingPage.vue')
         },
       ]
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/AdminPage/AdminPage.vue'),
+      redirect: { name: 'admin-profile' },
+      children: [
+        {
+          path: 'profile/',
+          name: 'admin-profile',
+          component: () => import('@/views/AdminPage/pages/profile/ProfilePage.vue')
+        },
+        {
+          path: 'events/',
+          name: 'admin-events',
+          component: () => import('@/views/AdminPage/pages/events/EventsPage.vue')
+        },
+        {
+          path: 'notifications/',
+          name: 'admin-notifications',
+          component: () => import('@/views/AdminPage/pages/notifications/NotificationsPage.vue')
+        },
+        {
+          path: 'favourites/',
+          name: 'admin-favourites',
+          component: () => import('@/views/AdminPage/pages/favourites/FavouritePage.vue')
+        },
+        {
+          path: 'settings/',
+          name: 'admin-settings',
+          component: () => import('@/views/AdminPage/pages/settings/SettingPage.vue')
+        },
+        {
+          path: 'admin-base-user/',
+          name: 'admin-base-user',
+          component: () => import('@/views/AdminPage/pages/baseUsers/BaseUsers.vue')
+        },
+        {
+          path: 'admin-tags/',
+          name: 'admin-tags',
+          component: () => import('@/views/AdminPage/pages/tags/TagsPage.vue')
+        },
+      ]
     }
   ],
 })
