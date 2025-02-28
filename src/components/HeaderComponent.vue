@@ -200,8 +200,13 @@ const isLoginModalOpen = ref(false);
         rgba(210, 60, 72, 0.1) 100%));
   border-radius: 4px;
 
-  display: flex;
+
   align-items: center;
   justify-content: center;
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: flex;
+  }
 }
 </style>
