@@ -135,7 +135,7 @@ const togglePasswordRequireVisibility = () => {
                         <p v-if="errors.password" class="error-msg">{{ errors.password }}</p>
                     </div>
                     <div class="input__wrapper"
-                        :class="{ 'input-error': errors.confirmPassword || passwordMatchError }">
+                        :class="{ 'input-error': errors.confirmPassword }">
                         <label for="confirmPassword">Повторите пароль</label>
                         <div class="input__group">
                             <input :type="passwordVisibleRequire ? 'text' : 'password'" v-model="form.confirmPassword"
@@ -143,8 +143,8 @@ const togglePasswordRequireVisibility = () => {
                             <i :class="passwordVisibleRequire ? 'fas fa-eye-slash' : 'fas fa-eye'"
                                 @click="togglePasswordRequireVisibility"></i>
                         </div>
-                        <p v-if="errors.confirmPassword || passwordMatchError" class="error-msg">
-                            {{ errors.confirmPassword || passwordMatchError }}
+                        <p v-if="errors.confirmPassword" class="error-msg">
+                            {{ errors.confirmPassword }}
                         </p>
                     </div>
                 </div>
