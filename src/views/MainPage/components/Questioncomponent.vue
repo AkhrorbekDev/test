@@ -80,6 +80,7 @@ onMounted(updateHeights);
 .questions {
     padding-top: 81px;
     padding-bottom: 100px;
+    position: relative;
 
     .questions__bg {
         width: 100%;
