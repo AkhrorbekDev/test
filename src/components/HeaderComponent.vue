@@ -29,7 +29,7 @@ const isLoginModalOpen = ref(false);
               <div href="" class="navbar__list-link">К приключениям</div>
               <img src="@/assets/icons/right-wing-icon.svg" alt="" />
             </router-link>
-            <li class="navbar__list-item"><a href="" class="navbar__list-link">Новости</a></li>
+            <li class="navbar__list-item"><router-link to="/news" class="navbar__list-link">Новости</router-link></li>
             <li class="navbar__list-item"><router-link to="/contacts" class="navbar__list-link">Контакты</router-link>
             </li>
           </ul>

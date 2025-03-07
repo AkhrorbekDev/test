@@ -25,6 +25,16 @@ const router = createRouter({
       component: () => import('@/views/NewsPage/NewsPage.vue'),
     },
     {
+      path: '/news',
+      name: 'news',
+      component: () => import('@/views/NewsPage/NewsPage.vue'),
+    },
+    {
+      path: '/news-self',
+      name: 'news-self',
+      component: () => import('@/views/NewsPage/pages/NewsSelfPage.vue'),
+    },
+    {
       path: '/calendar',
       name: 'calendar',
       component: () => import('@/views/CalendarPage/CalendarPage.vue'),
@@ -54,6 +64,7 @@ const router = createRouter({
       name: 'welcome',
       component: () => import('@/views/WelcomePage/WelcomePage.vue'),
     },
+     
     {
       path: '/user',
       name: 'user',
