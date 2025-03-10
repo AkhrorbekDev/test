@@ -17,7 +17,8 @@ const errors = ref({
   confirmPassword: '',
 });
 
-const textareaRef = ref(null);
+const textareaRef = ref<HTMLTextAreaElement | null>(null);
+
 
 const autoResize = () => {
   if (textareaRef.value) {
