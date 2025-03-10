@@ -24,7 +24,7 @@
 
                         <router-link to="/user" @click="closeModal" class="content__form-btn login">Войти</router-link>
 
-                        <router-link to="/admin " @click="closeModal" class="content__form-btn vk">
+                        <router-link to="/admin" @click="closeModal" class="content__form-btn vk">
                             <i class="fab fa-vk"></i> Войти с помощью ВКонтакте
                         </router-link>
 

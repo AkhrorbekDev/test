@@ -158,6 +158,13 @@ const togglePasswordRequireVisibility = () => {
     </div>
 </template>
 <style lang="scss" scoped>
+textarea {
+  width: 100%;
+  height: 62px !important;
+
+  resize: none;
+  overflow-y: auto;
+}
 .settings {
     background: var(--plate-main,
             radial-gradient(closest-side,

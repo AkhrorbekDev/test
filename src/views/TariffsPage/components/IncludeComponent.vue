@@ -92,7 +92,7 @@
                         rgba(31, 24, 33, 0.2) 100%));
             border-radius: 10px;
             position: relative;
-            padding: 50px 0;
+            padding: 50px 14px;
             overflow: hidden;
 
             display: flex;
@@ -138,7 +138,7 @@
                 font-size: 22px;
                 text-align: center;
 
-                font-size: calc(16px + 8 * (100vw / 1920));
+                font-size: calc(14px + 8 * (100vw / 1920));
 
                 @media (max-width: 1000px) {
                     max-width: 100% !important;
@@ -146,7 +146,7 @@
 
 
                 @media (max-width: 320px) {
-                    font-size: calc(16px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
+                    font-size: calc(14px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
                 }
             }
         }

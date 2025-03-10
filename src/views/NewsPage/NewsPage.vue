@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import Pagination from './components/Pagination.vue';
 import image from './images/image.png'
+
+import { ref } from "vue";
+const currentPage = ref(1);
+
 
 </script>
 <template>
@@ -72,6 +77,7 @@ import image from './images/image.png'
                     </div>
                 </div>
             </div>
+            <Pagination v-model="currentPage" :totalPages="123" />
         </div>
     </div>
 </template>

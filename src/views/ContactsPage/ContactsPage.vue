@@ -91,39 +91,38 @@
             </div>
           </div>
           <div class="contacts__ways-box">
-            <img src="./images/1.png" alt="">
+            <img src="./images/2.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Метро Арбатская: </div>
+              <div class="contacts__box-title">Далее около 10 минут пешком: </div>
 
               <div class="contacts__box-links">
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Арбатско-покровская Выход 8</div>
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Филёвская Выход 1</div>
+                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> по Новому Арбату (быстрее)</div>
+                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> по Старому Арбату (интереснее)
+                </div>
               </div>
             </div>
           </div>
           <div class="contacts__ways-box">
-            <img src="./images/1.png" alt="">
+            <img src="./images/3.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Метро Арбатская: </div>
+              <div class="contacts__box-title">Поворот в Серебрянный переулок </div>
 
               <div class="contacts__box-links">
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Арбатско-покровская Выход 8</div>
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Филёвская Выход 1</div>
+                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> налево (и вниз) с Нового Арбата
+                </div>
+                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> направо со Старого Арбата </div>
               </div>
             </div>
           </div>
           <div class="contacts__ways-box">
-            <img src="./images/1.png" alt="">
+            <img src="./images/4.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Метро Арбатская: </div>
+              <div class="contacts__box-title">Поворот во двор на углу дома «улица Арбат, 18/1с2» </div>
 
-              <div class="contacts__box-links">
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Арбатско-покровская Выход 8</div>
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Филёвская Выход 1</div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -426,16 +425,7 @@
         min-width: 280px;
         width: 100%;
 
-        img {
-          max-width: 280px;
-          width: 100%;
-        }
-
-        .contacts__box-info {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-
+        &:nth-of-type(1) {
           .contacts__box-title {
             color: #ffffff;
             text-align: left;
@@ -449,6 +439,33 @@
 
             @media (max-width: 320px) {
               font-size: calc(16px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
+            }
+          }
+        }
+
+        img {
+          max-width: 280px;
+          width: 100%;
+        }
+
+        .contacts__box-info {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .contacts__box-title {
+            color: #ffffff;
+            text-align: left;
+            font-family: "Alegreya-Regular";
+
+            font-weight: 400;
+            font-size: calc(14px + 2 * (100vw / 1920));
+
+
+
+
+            @media (max-width: 320px) {
+              font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
             }
           }
 
@@ -466,13 +483,13 @@
               display: flex;
               align-items: center;
               gap: 12px;
-              font-size: calc(16px + 2 * (100vw / 1920));
+              font-size: calc(14px + 2 * (100vw / 1920));
 
 
 
 
               @media (max-width: 320px) {
-                font-size: calc(16px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
+                font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
               }
 
 

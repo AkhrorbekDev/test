@@ -46,7 +46,7 @@ const pageTitle = computed(() => pageTitles[route.name as string] || 'Профи
 
         @media (max-width: 600px) {
             margin-bottom: 24px;
-
+            width: 100%;
 
         }
 
@@ -63,6 +63,7 @@ const pageTitle = computed(() => pageTitles[route.name as string] || 'Профи
                 display: flex;
                 align-items: center;
                 gap: 5px;
+                max-width: 100%;
 
 
             }

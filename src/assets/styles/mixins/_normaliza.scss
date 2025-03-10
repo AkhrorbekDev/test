@@ -26,7 +26,7 @@ body {
 }
 
 .input__group {
-  background: #1d1a1e;
+  background: #1d1a1e !important;
   padding: 15px 12px;
   border-radius: 4px;
   border-style: solid;
@@ -52,8 +52,8 @@ body {
   }
 
   input {
-    border: none;
-    background: none;
+    border: none !important;
+    background: none !important;
     outline: none;
     color: #eee0f1;
     font-size: 20px;
@@ -67,15 +67,29 @@ body {
   }
 
 
+
+
+
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #1d1a1e inset !important;
+  -webkit-text-fill-color: #eee0f1 !important;
+  background-color: #1d1a1e !important;
+  transition: background-color 5000s ease-in-out 0s; // Скрывает изменение фона
+}
+
+
 textarea {
-  background: #1d1a1e;
+  background: #1d1a1e !important;
   padding: 15px 12px;
   border-radius: 4px;
-  border-style: solid;
-  border-color: var(--08-unavailable-2, #545560);
-  border-width: 1px;
+  border-style: solid !important;
+  border-color: var(--08-unavailable-2, #545560) !important;
+  border-width: 1px !important;
 
   background: none;
   outline: none;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const form = ref({
   login: '',
@@ -15,6 +15,19 @@ const errors = ref({
   email: '',
   password: '',
   confirmPassword: '',
+});
+
+const textareaRef = ref(null);
+
+const autoResize = () => {
+  if (textareaRef.value) {
+    textareaRef.value.style.height = 'auto';
+    textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`;
+  }
+};
+
+onMounted(() => {
+  autoResize();
 });
 
 const passwordVisible = ref(false);
@@ -97,7 +110,9 @@ const passwordMatchError = computed(() => {
             <div class="input__wrapper">
               <label for="about_you">Расскажите о себе</label>
 
-              <textarea type="text" name="about_you" id="about_you" placeholder="Пусть весь мир узнает"></textarea>
+              <textarea ref="textareaRef" @input="autoResize" name="about_you" id="about_you"
+                placeholder="Пусть весь мир узнает"></textarea>
+
               <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
 
             </div>
@@ -142,6 +157,16 @@ const passwordMatchError = computed(() => {
 
 
 <style lang="scss" scoped>
+textarea {
+  width: 100%;
+  height: 62px !important;
+
+  resize: none;
+  overflow-y: auto;
+}
+
+
+
 .registration {
   padding: 151px 10px 0 10px;
   margin-bottom: 81px;
@@ -299,7 +324,7 @@ const passwordMatchError = computed(() => {
   @media (max-width: 500px) {
     text-align: center;
 
-  
+
   }
 }
 </style>
