@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import LoginModal from './LoginModal.vue';
 import { ref } from 'vue';
+import { useUserGlobal } from '@/stores/userGlobal'
+import {useRoute, useRouter} from 'vue-router'
 
-
+const router = useRouter();
 const isLoginModalOpen = ref(false);
+const userStore = useUserGlobal();
+const goProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
@@ -35,9 +41,14 @@ const isLoginModalOpen = ref(false);
           </ul>
         </div>
         <div class="navbar__right">
-          <div class="navbar__right-btn" @click="isLoginModalOpen = true">
+          <div v-if="!userStore.loggedIn" class="navbar__right-btn" @click="isLoginModalOpen = true">
             <i class="fas fa-user-circle"></i>
             Войти
+          </div>
+          <div v-else class="navbar__right-btn" @click="goProfile">
+            <img v-if="userStore.users.profile?.avatarUrl" :src="userStore.user.profile.avatarUrl" alt="">
+            <i v-else class="fas fa-user-circle"></i>
+            Профиль
           </div>
         </div>
       </div>
@@ -137,7 +148,7 @@ const isLoginModalOpen = ref(false);
         rgba(34, 27, 36, 0.3) 50%,
         rgba(54, 38, 38, 0.3) 100%));
   border-radius: 5px;
-  padding: 12px 24px 12px 20px;
+  padding: 12px 24px 12px 24px;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -150,6 +161,13 @@ const isLoginModalOpen = ref(false);
   i {
     color: var(--01-primary-color-main, #86489c);
     font-size: 18px;
+  }
+
+  &._profile {
+    padding: 12px 20px;
+    i {
+      font-size: 35px;
+    }
   }
 }
 </style>

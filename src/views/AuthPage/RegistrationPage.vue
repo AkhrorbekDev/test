@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed } from 'vue'
+import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
+import { registerUser } from '@/services/authService'
 
 const form = ref({
   login: '',
@@ -7,44 +10,80 @@ const form = ref({
   email: '',
   password: '',
   confirmPassword: '',
-});
+  socialLink: '',
+  bio: ''
+})
 
 const errors = ref({
   login: '',
   phone: '',
   email: '',
   password: '',
-  confirmPassword: '',
-});
+  confirmPassword: ''
+})
 
-const passwordVisible = ref(false);
-const passwordVisibleRequire = ref(false);
+const passwordVisible = ref(false)
+const passwordVisibleRequire = ref(false)
 
 const togglePasswordVisibility = () => {
-  passwordVisible.value = !passwordVisible.value;
-};
+  passwordVisible.value = !passwordVisible.value
+}
 
 const togglePasswordRequireVisibility = () => {
-  passwordVisibleRequire.value = !passwordVisibleRequire.value;
-};
+  passwordVisibleRequire.value = !passwordVisibleRequire.value
+}
 
 const validateForm = () => {
-  errors.value.login = form.value.login ? '' : 'Обязательно';
-  errors.value.phone = form.value.phone ? '' : 'Обязательно';
-  errors.value.email = form.value.email ? '' : 'Обязательно';
-  errors.value.password = form.value.password ? '' : 'Обязательно';
-  errors.value.confirmPassword = form.value.confirmPassword ? '' : 'Обязательно';
+  errors.value.login = form.value.login ? '' : 'Обязательно'
+  errors.value.phone = form.value.phone ? '' : 'Обязательно'
+  errors.value.email = form.value.email ? '' : 'Обязательно'
+  errors.value.password = form.value.password ? '' : 'Обязательно'
+  errors.value.confirmPassword = form.value.confirmPassword ? '' : 'Обязательно'
 
   if (form.value.password && form.value.confirmPassword && form.value.password !== form.value.confirmPassword) {
-    errors.value.confirmPassword = 'Пароли не совпадают';
+    errors.value.confirmPassword = 'Пароли не совпадают'
   }
-};
+}
 
 const passwordMatchError = computed(() => {
   return form.value.password && form.value.confirmPassword && form.value.password !== form.value.confirmPassword
     ? 'Пароли не совпадают'
-    : '';
-});
+    : ''
+})
+
+const toast = useToast()
+const router = useRouter()
+const transformValues = (data) => {
+  return {
+    username: data.login,
+    phone: data.phone,
+    email: data.email,
+    password: data.password,
+    name: data.name,
+    socialLink: data.socialLink,
+    bio: data.bio
+  }
+}
+const register = () => {
+  validateForm()
+  if (!errors.value.login && !errors.value.phone && !errors.value.email && !errors.value.password && !errors.value.confirmPassword) {
+    // Здесь можно добавить логику для регистрации
+    registerUser(transformValues(form.value))
+      .then((response) => {
+        // Дополнительные действия после успешной регистрации
+        toast.success(response.message || 'Регистрация прошла успешно')
+
+        router.push({name: 'home'})
+      })
+      .catch((error) => {
+         toast.error(error.data.error || 'Ошибка регистрации')
+        }
+      )
+  } else {
+    console.log('Ошибка валидации', errors.value)
+  }
+}
+
 </script>
 <template>
   <div class="registration">
@@ -90,14 +129,14 @@ const passwordMatchError = computed(() => {
             <div class="input__wrapper">
               <label for="social">Ссылка на соц. сеть</label>
               <div class="input__group">
-                <input type="text" name="social" id="social" placeholder="Телеграм или ВК">
+                <input v-model="form.socialLink" type="text" name="social" id="social" placeholder="Телеграм или ВК">
               </div>
               <div class="input__wrapper-txt">Видно в профиле по умолчанию</div>
             </div>
             <div class="input__wrapper">
               <label for="about_you">Расскажите о себе</label>
 
-              <textarea type="text" name="about_you" id="about_you" placeholder="Пусть весь мир узнает"></textarea>
+              <textarea v-model="form.bio" type="text" name="about_you" id="about_you" placeholder="Пусть весь мир узнает"></textarea>
               <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
 
             </div>
@@ -108,7 +147,7 @@ const passwordMatchError = computed(() => {
               <label for="password">Придумайте пароль<span>*</span></label>
               <div class="input__group">
                 <input :type="passwordVisible ? 'text' : 'password'" v-model="form.password" id="password"
-                  placeholder="Введите пароль">
+                       placeholder="Введите пароль">
                 <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'" @click="togglePasswordVisibility"></i>
               </div>
               <p v-if="errors.password" class="error-msg">{{ errors.password }}</p>
@@ -117,9 +156,9 @@ const passwordMatchError = computed(() => {
               <label for="confirmPassword">Повторите пароль<span>*</span></label>
               <div class="input__group">
                 <input :type="passwordVisibleRequire ? 'text' : 'password'" v-model="form.confirmPassword"
-                  id="confirmPassword" placeholder="Введите пароль">
+                       id="confirmPassword" placeholder="Введите пароль">
                 <i :class="passwordVisibleRequire ? 'fas fa-eye-slash' : 'fas fa-eye'"
-                  @click="togglePasswordRequireVisibility"></i>
+                   @click="togglePasswordRequireVisibility"></i>
               </div>
               <p v-if="errors.confirmPassword || passwordMatchError" class="error-msg">
                 {{ errors.confirmPassword || passwordMatchError }}
@@ -127,9 +166,10 @@ const passwordMatchError = computed(() => {
             </div>
           </div>
           <div class="registration__form-row">
-            <div class="registration__form-btn">Зарегистрироваться</div>
+            <button type="button" @click="register" class="registration__form-btn">Зарегистрироваться</button>
             <div class="registration__form-txt">Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с политикой
-              конфиденциальности.</div>
+              конфиденциальности.
+            </div>
           </div>
         </form>
       </div>
@@ -138,7 +178,6 @@ const passwordMatchError = computed(() => {
 
   </div>
 </template>
-
 
 
 <style lang="scss" scoped>
@@ -190,7 +229,7 @@ const passwordMatchError = computed(() => {
   }
 }
 
-.registration__wrapper{
+.registration__wrapper {
   width: 100%;
   flex-grow: 1;
   display: flex;
