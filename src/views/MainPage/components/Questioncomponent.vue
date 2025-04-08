@@ -80,6 +80,7 @@ onMounted(updateHeights);
 .questions {
     padding-top: 81px;
     padding-bottom: 100px;
+    position: relative;
 
     .questions__bg {
         width: 100%;
@@ -98,6 +99,12 @@ onMounted(updateHeights);
         align-items: center;
         justify-content: center;
         margin-bottom: 40px;
+
+        font-size: calc(20px + 26 * (100vw / 1920));
+
+        @media (max-width: 320px) {
+            font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+        }
     }
 
     .questions__cards {
@@ -116,16 +123,30 @@ onMounted(updateHeights);
             padding: 28px;
             transition: background 0.3s ease;
 
+            @media (max-width: 1180px) {
+                max-width: 100%;
+            }
+
             .questions__card-top {
                 display: flex;
                 width: 100%;
                 justify-content: space-between;
                 cursor: pointer;
 
+
+                @media (max-width: 600px) {
+                    align-items: center;
+                    gap: 30px;
+                }
+
                 i {
                     color: #422748;
                     font-size: 48px;
                     transition: transform 0.3s ease;
+
+                    @media (max-width: 600px) {
+                        font-size: 30px;
+                    }
                 }
 
                 .open__icon {
@@ -138,13 +159,22 @@ onMounted(updateHeights);
                 }
 
                 .questions__card-title {
-                    font-size: 26px;
                     color: #eee0f1;
                     max-width: 449px;
                     width: 100%;
                     font-family: 'Alegreya-Medium';
                     font-weight: 500;
                     transition: all .3 ease;
+
+                    font-size: calc(18px + 4 * (100vw / 1920));
+
+                    @media (max-width: 1180px) {
+                        max-width: 100%;
+                    }
+
+                    @media (max-width: 320px) {
+                        font-size: calc(18px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+                    }
                 }
             }
 

@@ -10,6 +10,8 @@ import "vue-toastification/dist/index.css";
 import '@/assets/styles/main.scss'
 import '@/assets/css/all.min.css'
 
+import vuetify from './plugins/vuetify';
+
 
 const app = createApp(App)
 
@@ -42,6 +44,7 @@ const options: PluginOptions = {
     return toast;
   }
 };
+app.use(vuetify);
 
 app.use(Toast, options);
 app.mount('#app')

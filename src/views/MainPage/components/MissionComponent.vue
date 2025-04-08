@@ -41,13 +41,19 @@
 
 .mission__title {
     color: #ffffff;
-    font-size: 46px;
+
     font-family: 'Alegreya-Medium';
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 40px;
+
+    font-size: calc(20px + 26 * (100vw / 1920));
+
+    @media (max-width: 320px) {
+        font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+    }
 }
 
 .mission__grid {
@@ -62,6 +68,10 @@
         align-items: center;
         justify-content: center;
         padding: 60px 0;
+
+        @media (max-width: 1200px) {
+            display: none;
+        }
 
         .mission__first-txt {
             color: var(--04-text-main, #eee0f1);
@@ -88,6 +98,10 @@
         position: relative;
         overflow: hidden;
 
+        @media (max-width: 1180px) {
+            max-width: 100%;
+        }
+
         img {
             position: absolute;
             right: 0;
@@ -108,6 +122,11 @@
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 26px;
+            font-size: calc(22px + 10 * (100vw / 1920));
+
+            @media (max-width: 320px) {
+                font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
 
         .mission__grid-txt {
@@ -118,6 +137,15 @@
             font-weight: 400;
             max-width: 486px;
             width: 100%;
+            font-size: calc(16px + 4 * (100vw / 1920));
+
+            @media (max-width: 1180px) {
+                max-width: 100%;
+            }
+
+            @media (max-width: 320px) {
+                font-size: calc(16px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
+            }
         }
     }
 }

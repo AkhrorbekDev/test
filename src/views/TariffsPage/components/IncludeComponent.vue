@@ -52,6 +52,7 @@
 <style lang="scss" scoped>
 .include {
     margin-top: 81px;
+    padding: 0 10px;
 
     .include__title {
         color: #ffffff;
@@ -62,12 +63,26 @@
         align-items: center;
         justify-content: center;
         margin-bottom: 40px;
+
+        font-size: calc(20px + 26 * (100vw / 1920));
+
+
+
+
+        @media (max-width: 320px) {
+            font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+        }
     }
 
     .include__grid {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
+        justify-content: center;
+
+        @media (max-width: 1000px) {
+            flex-direction: column;
+        }
 
         .include__grid-item {
             max-width: 380px;
@@ -77,12 +92,23 @@
                         rgba(31, 24, 33, 0.2) 100%));
             border-radius: 10px;
             position: relative;
-            padding: 50px 0;
+            padding: 50px 14px;
             overflow: hidden;
 
             display: flex;
             justify-content: center;
             align-items: center;
+
+
+
+            @media (max-width: 1180px) {
+                max-width: 320px !important;
+            }
+
+            @media (max-width: 1000px) {
+                max-width: 100% !important;
+            }
+
 
             img {
                 position: absolute;
@@ -95,6 +121,14 @@
             &:nth-of-type(1),
             &:nth-of-type(2) {
                 min-width: 580px !important;
+
+                @media (max-width: 1180px) {
+                    min-width: 480px !important;
+                }
+
+                @media (max-width: 1000px) {
+                    min-width: 100% !important;
+                }
             }
 
             .include__grid-txt {
@@ -103,6 +137,17 @@
                 color: #eee0f1;
                 font-size: 22px;
                 text-align: center;
+
+                font-size: calc(14px + 8 * (100vw / 1920));
+
+                @media (max-width: 1000px) {
+                    max-width: 100% !important;
+                }
+
+
+                @media (max-width: 320px) {
+                    font-size: calc(14px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
+                }
             }
         }
 

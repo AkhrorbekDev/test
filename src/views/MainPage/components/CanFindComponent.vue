@@ -47,7 +47,6 @@
 }
 
 .canfind__title {
-  font-size: 46px;
   font-family: 'Alegreya-Meduim';
   font-weight: 500;
   color: #fff;
@@ -55,31 +54,61 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  font-size: calc(20px + 26 * (100vw / 1920));
+
+  @media (max-width: 320px) {
+    font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+  }
 }
 
 .canfind__box {
-  background: linear-gradient(
-    114.17deg,
-    rgba(54, 38, 38, 0.3) -3.5%,
-    rgba(34, 27, 36, 0.3) 47.08%,
-    rgba(54, 38, 38, 0.3) 97.65%
-  );
+  background: linear-gradient(114.17deg,
+      rgba(54, 38, 38, 0.3) -3.5%,
+      rgba(34, 27, 36, 0.3) 47.08%,
+      rgba(54, 38, 38, 0.3) 97.65%);
   border-radius: 28px;
   padding: 28px 30px;
+  gap: 20px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 940px) {
+    flex-direction: column;
+    background: linear-gradient(114.17deg,
+        rgba(54, 38, 38, 0.3) 0%,
+        rgba(34, 27, 36, 0.3) 50%,
+        rgba(54, 38, 38, 0.3) 100%);
+    border-radius: 8px;
+  }
 }
 
 .canfind__box-left {
+
+  @media (max-width: 940px) {
+
+    background: linear-gradient(114.17deg,
+        rgba(54, 38, 38, 0.3) 0%,
+        rgba(34, 27, 36, 0.3) 50%,
+        rgba(54, 38, 38, 0.3) 100%);
+    border-radius: 8px;
+    padding: 24px 16px;
+  }
+
   .canfind__box-title {
     color: #9e2014;
-    font-size: 32px;
     font-family: 'Alegreya-Meduim';
     font-weight: 500;
     margin-bottom: 35px;
+    font-size: calc(22px + 10 * (100vw / 1920));
+
+    @media (max-width: 320px) {
+      font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
+    }
   }
+
   .canfind__box-items {
     display: flex;
     flex-direction: column;
@@ -91,11 +120,35 @@
 
       .canfind__box-txt {
         color: #eee0f1;
-        font-size: 22px;
         font-family: 'Alegreya-Regular';
         max-width: 505px;
         width: 100%;
+        font-size: calc(16px + 6 * (100vw / 1920));
+
+        @media (max-width: 320px) {
+          font-size: calc(16px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
+        }
       }
+    }
+  }
+}
+
+.canfind__box-right {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  img {
+    max-width: 520px;
+    width: 100%;
+
+    @media (max-width: 940px) {
+      max-width: 590px;
+    }
+
+    @media (max-width: 340px) {
+      width: 100%;
+      height: 100%;
     }
   }
 }

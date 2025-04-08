@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import { registerUser } from '@/services/authService'
@@ -24,6 +24,22 @@ const errors = ref({
 
 const passwordVisible = ref(false)
 const passwordVisibleRequire = ref(false)
+const textareaRef = ref<HTMLTextAreaElement | null>(null);
+
+
+const autoResize = () => {
+  if (textareaRef.value) {
+    textareaRef.value.style.height = 'auto';
+    textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`;
+  }
+};
+
+onMounted(() => {
+  autoResize();
+});
+
+const passwordVisible = ref(false);
+const passwordVisibleRequire = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value
@@ -136,7 +152,7 @@ const register = () => {
             <div class="input__wrapper">
               <label for="about_you">Расскажите о себе</label>
 
-              <textarea v-model="form.bio" type="text" name="about_you" id="about_you" placeholder="Пусть весь мир узнает"></textarea>
+              <textarea v-model="form.bio" ref="textareaRef" @input="autoResize" type="text" name="about_you" id="about_you" placeholder="Пусть весь мир узнает"></textarea>
               <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
 
             </div>
@@ -181,14 +197,26 @@ const register = () => {
 
 
 <style lang="scss" scoped>
+textarea {
+  width: 100%;
+  height: 62px !important;
+
+  resize: none;
+  overflow-y: auto;
+}
+
+
+
 .registration {
-  padding-top: 151px;
+  padding: 151px 10px 0 10px;
   margin-bottom: 81px;
   position: relative;
   min-height: 100vh;
   height: 100%;
   display: flex;
   justify-content: center;
+
+
 
   .registration__bg {
     position: absolute;
@@ -210,6 +238,15 @@ const register = () => {
     font-family: 'Alegreya-Medium';
     font-weight: 500;
     margin-bottom: 12px;
+
+    font-size: calc(20px + 26 * (100vw / 1920));
+
+
+
+
+    @media (max-width: 320px) {
+      font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
+    }
   }
 
   .registration__container {
@@ -226,6 +263,15 @@ const register = () => {
     font-family: 'Alegreya-Medium';
     font-weight: 500;
     margin-bottom: 40px;
+
+    font-size: calc(18px + 14 * (100vw / 1920));
+
+
+
+
+    @media (max-width: 320px) {
+      font-size: calc(18px + (14 + 14 * 0.7) * ((100vw - 320px) / 1920));
+    }
   }
 }
 
@@ -247,6 +293,11 @@ const register = () => {
     display: flex;
     gap: 20px;
     width: 100%;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+      align-items: center;
+    }
 
     .input__wrapper {
       display: flex;
@@ -281,6 +332,39 @@ const register = () => {
   .error-msg {
     color: #f0515e;
     font-size: 14px;
+  }
+}
+
+.registration__form-btn {
+  background: #86489c;
+
+  max-width: 380px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+
+  color: #eee0f1;
+  font-size: 20px;
+
+  @media (max-width: 500px) {
+    padding: 15px 0;
+    max-width: 100%;
+  }
+}
+
+.registration__form-txt {
+  color: #cdc2d1;
+  font-size: 14px;
+  max-width: 356px;
+  width: 100%;
+  padding: 15px 0;
+
+  @media (max-width: 500px) {
+    text-align: center;
+
+
   }
 }
 </style>

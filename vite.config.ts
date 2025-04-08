@@ -10,13 +10,6 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "./src/assets/styles/colors";`,
-      }
-    }
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
