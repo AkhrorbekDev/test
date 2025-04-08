@@ -6,7 +6,7 @@ export const createUserService = () => {
   return {
     // Get user details
     getUserDetails: () => authApi('/users/me'),
-
+    getAllUsers: () => authApi('/admin/users/'),
     // Generate API key
     generateApiKey: () => authApi('/generate-api-key/'),
 
@@ -20,13 +20,20 @@ export const createUserService = () => {
       method: 'DELETE'
     }),
 
-    getUSerById: (userId) => authApi(`/users/${userId}`),
+    getUserById: (userId) => authApi(`/users/${userId}`),
+
+    getUserEvents: (userId) => authApi(`/users/${userId}/events`),
 
     updateAvatar: (data) => authApi('/users/me/avatar', {
-      method: 'PATCH',
+      method: 'POST',
       body: data
     }),
 
     getNotifications: () => authApi('/users/me/notifications'),
+
+    resetPassword: (data) => authApi('/users/reset-password', {
+      method: 'POST',
+      body: data
+    })
   }
 }

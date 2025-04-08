@@ -2,8 +2,33 @@
 import EventsCard from './components/EventsCard.vue';
 import EventsDataManager from './components/EventsDataManager.vue';
 import EventsFilter from './components/EventsFilter.vue';
+import { onMounted, ref } from 'vue'
+import { createEventsService } from '@/services/eventsService'
+import { useToast } from 'vue-toastification'
+import { filtersService } from '@/services/publicServices'
 
+const events = ref([])
+const filters = ref([])
+const toast = useToast()
 
+onMounted(() => {
+    const eventsService = createEventsService()
+    eventsService.getEvents()
+        .then((response) => {
+            events.value = response.events
+        })
+        .catch((error) => {
+            toast.error(error.message)
+        })
+
+  filtersService().getFilters()
+    .then((response) => {
+      filters.value = response
+    })
+    .catch((error) => {
+      toast.error(error.message)
+    })
+})
 
 </script>
 <template>
@@ -54,11 +79,9 @@ import EventsFilter from './components/EventsFilter.vue';
             <EventsDataManager />
 
             <div class="club__events-content">
-                <EventsFilter />
+                <EventsFilter :filters="filters" />
                 <div class="club__events-cards">
-                    <EventsCard></EventsCard>
-                    <EventsCard></EventsCard>
-                    <EventsCard></EventsCard>
+                    <EventsCard v-for="event in events" :key="event.id" :event="event"></EventsCard>
                 </div>
             </div>
         </div>

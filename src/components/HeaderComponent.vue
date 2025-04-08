@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import LoginModal from './LoginModal.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue'
 import { useUserGlobal } from '@/stores/userGlobal'
 import {useRoute, useRouter} from 'vue-router'
 
@@ -8,8 +8,9 @@ const router = useRouter();
 const isLoginModalOpen = ref(false);
 const userStore = useUserGlobal();
 const goProfile = () => {
-  router.push('/profile')
+  router.push('/user')
 }
+const loggedIn = computed(() => userStore.loggedIn)
 </script>
 
 <template>
@@ -41,17 +42,19 @@ const goProfile = () => {
           </ul>
         </div>
         <div class="navbar__right">
-          <div v-if="!userStore.loggedIn" class="navbar__right-btn" @click="isLoginModalOpen = true">
+          <div v-if="loggedIn" class="navbar__right-btn" @click="goProfile">
+            <img v-if="userStore.user.profile?.avatarUrl" :src="userStore.user.profile.avatarUrl" alt="">
+            <i v-else class="fas fa-user-circle"></i>
+            Профиль
+          </div>
+          <div  v-else class="navbar__right-btn" @click="isLoginModalOpen = true">
             <i class="fas fa-user-circle"></i>
             Войти
           </div>
+
+
           <div class="navbar__burger">
             <img src="../assets/images/burger.svg" alt="">
-          </div>
-          <div v-else class="navbar__right-btn" @click="goProfile">
-            <img v-if="userStore.users.profile?.avatarUrl" :src="userStore.user.profile.avatarUrl" alt="">
-            <i v-else class="fas fa-user-circle"></i>
-            Профиль
           </div>
         </div>
 

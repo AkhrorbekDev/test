@@ -15,19 +15,19 @@
                             <div class="input__wrapper">
                                 <label for="">Введите логин</label>
                                 <div class="input__group">
-                                    <input type="text" placeholder="Введите логин">
+                                    <input v-model="form.username" type="text" placeholder="Введите логин">
                                 </div>
                             </div>
                             <div class="input__wrapper">
                                 <label for="">Имя</label>
                                 <div class="input__group">
-                                    <input type="text" placeholder="Имя">
+                                    <input v-model="form.name" type="text" placeholder="Имя">
                                 </div>
                             </div>
                             <div class="input__wrapper">
                                 <label for="">Какая роль? </label>
                                 <div class="input__group">
-                                    <input type="text" placeholder="Какая роль?">
+                                    <input v-model="form.username" type="text" placeholder="Какая роль?">
                                     <i class="fal fa-chevron-down"></i>
                                 </div>
                             </div>
@@ -59,6 +59,16 @@ const closeModal = () => {
 const togglePasswordVisibility = () => {
     passwordVisible.value = !passwordVisible.value;
 };
+
+const form = ref({
+    username: '',
+    name: '',
+    role: ''
+});
+
+const submit = () => {
+  createAdminService()
+}
 </script>
 
 <style lang="scss" scoped>

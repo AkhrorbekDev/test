@@ -5,10 +5,10 @@ import { jwtDecode } from 'jwt-decode'
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 // Cookie names
-const AUTH_TOKEN_COOKIE = 'auth_token'
+export const AUTH_TOKEN_COOKIE = 'auth_token'
 const REFRESH_TOKEN_COOKIE = 'refresh_token'
 // Token expiration time in days
-const TOKEN_EXPIRY = 7
+export const TOKEN_EXPIRY = 7
 
 export const getTokenExpiration = (token) => {
   try {
@@ -46,12 +46,12 @@ export const obtainToken = async (data: {
     })
     if (response && response.token) {
       Cookies.set(AUTH_TOKEN_COOKIE, response.token, { expires: TOKEN_EXPIRY, secure: true, sameSite: 'strict' })
-      return response
+      return Promise.resolve(response)
     }
-    return false
+    return Promise.reject(new Error('Invalid response from server'))
   } catch (error) {
     console.error('Error obtaining token:', error)
-    return error
+    return Promise.reject(error)
   }
 }
 

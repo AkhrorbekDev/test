@@ -3,6 +3,9 @@ import { ref, computed, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import { registerUser } from '@/services/authService'
+import { useUserGlobal } from '@/stores/userGlobal'
+import Cookies from 'js-cookie'
+import { AUTH_TOKEN_COOKIE, TOKEN_EXPIRY } from '@/services/tokenService'
 
 const form = ref({
   login: '',
@@ -22,24 +25,22 @@ const errors = ref({
   confirmPassword: ''
 })
 
-const passwordVisible = ref(false)
-const passwordVisibleRequire = ref(false)
-const textareaRef = ref<HTMLTextAreaElement | null>(null);
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
 
 const autoResize = () => {
   if (textareaRef.value) {
-    textareaRef.value.style.height = 'auto';
-    textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`;
+    textareaRef.value.style.height = 'auto'
+    textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`
   }
-};
+}
 
 onMounted(() => {
-  autoResize();
-});
+  autoResize()
+})
 
-const passwordVisible = ref(false);
-const passwordVisibleRequire = ref(false);
+const passwordVisible = ref(false)
+const passwordVisibleRequire = ref(false)
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value
@@ -80,6 +81,8 @@ const transformValues = (data) => {
     bio: data.bio
   }
 }
+const userStore = useUserGlobal()
+
 const register = () => {
   validateForm()
   if (!errors.value.login && !errors.value.phone && !errors.value.email && !errors.value.password && !errors.value.confirmPassword) {
@@ -88,11 +91,13 @@ const register = () => {
       .then((response) => {
         // Дополнительные действия после успешной регистрации
         toast.success(response.message || 'Регистрация прошла успешно')
-
-        router.push({name: 'home'})
+        Cookies.set(AUTH_TOKEN_COOKIE, response.token, { expires: TOKEN_EXPIRY, secure: true, sameSite: 'strict' })
+        userStore.initUserGlobal()
+        userStore.setLoggedIn(true)
+        router.push({ name: 'home' })
       })
       .catch((error) => {
-         toast.error(error.data.error || 'Ошибка регистрации')
+          toast.error(error.data.error || 'Ошибка регистрации')
         }
       )
   } else {
@@ -152,7 +157,8 @@ const register = () => {
             <div class="input__wrapper">
               <label for="about_you">Расскажите о себе</label>
 
-              <textarea v-model="form.bio" ref="textareaRef" @input="autoResize" type="text" name="about_you" id="about_you" placeholder="Пусть весь мир узнает"></textarea>
+              <textarea v-model="form.bio" ref="textareaRef" @input="autoResize" type="text" name="about_you"
+                        id="about_you" placeholder="Пусть весь мир узнает"></textarea>
               <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
 
             </div>
@@ -206,7 +212,6 @@ textarea {
 }
 
 
-
 .registration {
   padding: 151px 10px 0 10px;
   margin-bottom: 81px;
@@ -215,7 +220,6 @@ textarea {
   height: 100%;
   display: flex;
   justify-content: center;
-
 
 
   .registration__bg {
@@ -242,8 +246,6 @@ textarea {
     font-size: calc(20px + 26 * (100vw / 1920));
 
 
-
-
     @media (max-width: 320px) {
       font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
     }
@@ -265,8 +267,6 @@ textarea {
     margin-bottom: 40px;
 
     font-size: calc(18px + 14 * (100vw / 1920));
-
-
 
 
     @media (max-width: 320px) {

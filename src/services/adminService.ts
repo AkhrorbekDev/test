@@ -7,10 +7,15 @@ export const createAdminService = () => {
     approveEvent: (eventId: string) => api(`/admin/events/${eventId}/approve`, {
       method: 'POST'
     }),
+
     rejectEvent: (eventId: string) => api(`/admin/events/${eventId}/reject`, {
       method: 'POST'
     }),
 
+    addUser: (data) => api('/admin/users', {
+      method: 'POST',
+      body: data
+    }),
     blockUser: (userId) => api(`/admin/users/${userId}/block`, {
       method: 'PATCH'
     }),

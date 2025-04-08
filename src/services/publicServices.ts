@@ -3,7 +3,11 @@ import { api } from '@/services/api'
 
 const newsService = () => {
   return {
-    getNews: () => api('/common/news/'),
+    getNews: (query) => api('/common/news/', {
+      method: 'GET',
+      params: query,
+    }),
+    getNewsById: (newsId) => api(`/common/news/${newsId}`, {}),
   }
 }
 

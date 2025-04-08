@@ -1,7 +1,14 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue'
 import UserAddModal from './components/UserAddModal.vue';
+import { createUserService } from '@/services'
 
+const roles = {
+    admin: "Админ",
+    master: "Мастер",
+    player: "Игрок"
+};
+const selectedRole = ref()
 const users = ref([
     { id: 1, username: "Бубебубебубу", phone: "+7 999 999-99-99", email: "EXAMASDASD@FJFA.COM", role: "Админ" },
     { id: 2, username: "Бубеб", phone: "+7 999 999-99-99", email: "EXAMASDASD@FJFA.COM", role: "Мастер" },
@@ -14,6 +21,16 @@ const users = ref([
 
 const addModal = ref(false)
 
+onMounted(() => {
+    // Здесь можно выполнить дополнительные действия при монтировании компонента
+  createUserService().getAllUsers()
+    .then((response) => {
+        // users.value = response.users
+    })
+    .catch((error) => {
+        console.error("Ошибка при получении пользователей:", error)
+    })
+});
 
 </script>
 <template>
@@ -30,15 +47,15 @@ const addModal = ref(false)
 
                     <div class="filters">
                         <div class="filters-checkbox">
-                            <input type="checkbox" name="" id="">
+                            <input v-model="selectedRole" type="checkbox" value="admin" id="">
                             <label for="">Админ</label>
                         </div>
                         <div class="filters-checkbox">
-                            <input type="checkbox" name="" id="">
+                            <input v-model="selectedRole" type="checkbox" value="master" id="">
                             <label for="">Мастер</label>
                         </div>
                         <div class="filters-checkbox">
-                            <input type="checkbox" name="" id="">
+                            <input v-model="selectedRole" type="checkbox" value="player" id="">
                             <label for="">Игрок</label>
                         </div>
                     </div>
@@ -66,7 +83,7 @@ const addModal = ref(false)
                         <td>{{ user.phone }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            <span :class="['role-badge', user.role.toLowerCase()]">{{ user.role }}</span>
+                            <span :class="['role-badge', user.role]">{{ roles[user.role] }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -195,15 +212,15 @@ const addModal = ref(false)
     color: white;
 }
 
-.админ {
+.admin {
     background: red;
 }
 
-.мастер {
+.master {
     background: green;
 }
 
-.игрок {
+.player {
     background: blue;
 }
 

@@ -29,22 +29,25 @@
               <i class="fab fa-vk"></i> Войти с помощью ВКонтакте
             </button>
 
-                        <router-link to="/registration" @click="closeModal"
-                            class="content__form-btn registration">Зарегистрироваться</router-link>
+            <router-link to="/registration" @click="closeModal"
+                         class="content__form-btn registration">Зарегистрироваться
+            </router-link>
 
-                        <router-link to="/reset-password" @click="closeModal"
-                            class="content__form-link forgot__password" href="#!">Забыли пароль?</router-link>
-                    </form>
-                </div>
-            </transition>
+            <router-link to="/reset-password" @click="closeModal"
+                         class="content__form-link forgot__password" href="#!">Забыли пароль?
+            </router-link>
+          </form>
         </div>
-    </transition>
+      </transition>
+    </div>
+  </transition>
 </template>
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue'
 import { obtainToken } from '@/services/tokenService'
 import { useToast } from 'vue-toastification'
 import { useUserGlobal } from '@/stores/userGlobal'
+import router from '@/router'
 
 defineProps<{ isOpen: boolean }>()
 const emit = defineEmits(['close'])
@@ -69,7 +72,9 @@ const login = () => {
   obtainToken(loginData.value)
     .then((response) => {
       toast.success(response.message)
+      userStore.initUserGlobal()
       userStore.setLoggedIn(true)
+      router.push({ name: 'home' })
       closeModal()
     })
     .catch((error) => {
