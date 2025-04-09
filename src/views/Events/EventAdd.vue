@@ -20,6 +20,41 @@ const placeTypes = [
   { title: 'Онлайн', value: 'online' },
   { title: 'Офлайн', value: 'offline' }
 ]
+const eventSystem = [
+  { title: 'D&D', value: 'dnd' },
+  { title: 'Pathfinder', value: 'pathfinder' },
+  { title: 'Vampire', value: 'vampire' }
+]
+const settings = [
+  { title: 'Фантастика', value: 'fantasy' },
+  { title: 'Комедия', value: 'comedy' },
+  { title: 'Драма', value: 'drama' }
+]
+const eventDuration = [
+  { title: 'Одноразовая', value: 'one-time' },
+  { title: 'Кампания', value: 'campaign' }
+]
+const eventExperience = [
+  { title: 'Новички', value: 'newbies' },
+  { title: 'Опытные', value: 'experienced' },
+  { title: 'Все', value: 'all' }
+]
+const eventGenre = [
+  { title: 'Фантастика', value: 'fantasy' },
+  { title: 'Комедия', value: 'comedy' },
+  { title: 'Драма', value: 'drama' }
+]
+const eventPreparation = [
+  { title: 'Не требуется', value: 'no-preparation' },
+  { title: 'Минимальная', value: 'minimal' },
+  { title: 'Требуется', value: 'required' }
+]
+const eventLevel = [
+  { title: 'Низкий', value: 'low' },
+  { title: 'Средний', value: 'medium' },
+  { title: 'Высокий', value: 'high' },
+  { title: 'Эпик', value: 'epic' }
+]
 const avatarUpload = ref(false)
 const eventForm = ref({
   title: '',
@@ -97,7 +132,11 @@ const submit = (saveType) => {
     toast.error('Пожалуйста, исправьте ошибки в форме.')
     return
   }
-
+  if (saveType === 'draft') {
+    eventForm.value.status = 'draft'
+  } else if (saveType === 'create') {
+    eventForm.value.status = 'pending'
+  }
   createEventsService().createEvent(eventForm.value).then(() => {
     toast.success('Событие успешно создано')
     isUpdateSuccess.value = true
@@ -154,40 +193,146 @@ const cancelUpdate = () => {
         Основная информация
       </h3>
 
-      <div class="event-main__info">
-        <div class="event-main__titles">
-          <div class="input__wrapper">
-            <label>Название</label>
-            <div class="input__group">
-              <input v-model="eventForm.title" type="text" name="title" id="title"
-                     placeholder="Как будет называться мероприятие?">
-            </div>
-          </div>
-          <div class="input__wrapper">
-            <label>Расскажите о себе</label>
-
-            <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
-                      placeholder="Пусть весь мир узнает"></textarea>
-            <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
-
-          </div>
-        </div>
-        <div class="event-main__image">
-          <label class="settings__top-left">
-            <div class="file-upload__img">
-              <img src="@/assets/icons/FilePlus.svg" alt="">
-            </div>
-            <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
-                   @change="handleFileUpload">
-            <div class="file-upload__info">
-              <div class="settings__left-title">Нажмите для выбора изображения, либо перетащите его</div>
-              <div class="settings__left-subtitle">Формат jpeg, jpg, png, весом не более 1 MB и размером не более
-                2000 × 200
+      <template v-if="eventForm.type === 'game'">
+        <div class="event-main__info">
+          <div class="event-main__titles _game">
+            <div class="input__wrapper">
+              <label>Название</label>
+              <div class="input__group">
+                <input v-model="eventForm.title" type="text" name="title" id="title"
+                       placeholder="Как будет называться мероприятие?">
               </div>
             </div>
-          </label>
+            <div class="input__wrapper">
+              <label>Система*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.system" :items="eventSystem"
+                            placeholder="Выберите из списка..." />
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Сеттинг*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.setting" :items="settings"
+                            placeholder="Выберите из списка..." />
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Длительность*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.duration" :items="eventDuration"
+                            placeholder="Нулевая сессия, ваншот, кампания..." />
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Опыт игроков*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.playerExp" :items="eventExperience"
+                            placeholder="Новички, опытные или оба?" />
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Жанр*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.genre" :items="eventGenre"
+                            placeholder="Фантастика, комедия, драма" />
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Необходимая подготовка игрока*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.preparation" :items="eventPreparation"
+                            placeholder="Не требуется, минимальная или..." />
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Уровень персонажа*</label>
+              <div class="input__group _no-padding">
+                <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+                <!--            <i class="fal fa-chevron-down"></i>-->
+                <BaseSelect v-model="eventForm.playerLevel" :items="eventLevel"
+                            placeholder="Низкий, средний, высокий, эпик?" />
+              </div>
+            </div>
+
+            <div class="titles-footer">
+              <div class="input__wrapper">
+                <label>Расскажите о себе</label>
+
+                <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
+                          placeholder="Пусть весь мир узнает"></textarea>
+                <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+
+              </div>
+              <div class="event-main__image">
+
+                <label class="settings__top-left">
+                  <div class="file-upload__img">
+                    <img src="@/assets/icons/FilePlus.svg" alt="">
+                  </div>
+                  <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
+                         @change="handleFileUpload">
+                  <div class="file-upload__info">
+                    <div class="settings__left-title">Нажмите для выбора изображения, либо перетащите его</div>
+                    <div class="settings__left-subtitle">Формат jpeg, jpg, png, весом не более 1 MB и размером не более
+                      2000 × 200
+                    </div>
+                  </div>
+                </label>
+
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </template>
+      <template v-else>
+        <div class="event-main__info">
+          <div class="event-main__titles">
+            <div class="input__wrapper">
+              <label>Название</label>
+              <div class="input__group">
+                <input v-model="eventForm.title" type="text" name="title" id="title"
+                       placeholder="Как будет называться мероприятие?">
+              </div>
+            </div>
+            <div class="input__wrapper">
+              <label>Расскажите о себе</label>
+
+              <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
+                        placeholder="Пусть весь мир узнает"></textarea>
+              <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+
+            </div>
+          </div>
+          <div class="event-main__image">
+            <label class="settings__top-left">
+              <div class="file-upload__img">
+                <img src="@/assets/icons/FilePlus.svg" alt="">
+              </div>
+              <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
+                     @change="handleFileUpload">
+              <div class="file-upload__info">
+                <div class="settings__left-title">Нажмите для выбора изображения, либо перетащите его</div>
+                <div class="settings__left-subtitle">Формат jpeg, jpg, png, весом не более 1 MB и размером не более
+                  2000 × 200
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </template>
     </div>
 
     <div class="create-event__form">
@@ -306,7 +451,7 @@ const cancelUpdate = () => {
       <button type="button" class="settings__btn submit" @click="submit('create')">
         Отправить на утверждение
       </button>
-      <div class="settings__btn cancel" @click=" ('draft')">Сохранить в черновики</div>
+      <div class="settings__btn cancel" @click="submit('draft')">Сохранить в черновики</div>
     </div>
 
   </div>
@@ -392,6 +537,19 @@ const cancelUpdate = () => {
 
           .input__wrapper {
             width: 100%;
+          }
+
+          &._game {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+
+            .titles-footer {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              grid-column: 1 / 4;
+              gap: 20px;
+            }
           }
         }
 
@@ -488,6 +646,8 @@ const cancelUpdate = () => {
             }
           }
         }
+
+
       }
 
 
@@ -602,4 +762,55 @@ const cancelUpdate = () => {
     }
   }
 }
+
+@media (max-width: 576px) {
+  .event-main__titles, .event-main__info, .create-event__totals {
+    flex-direction: column;
+  }
+  .create-event__header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+
+    .event-types__type {
+      width: 100%;
+    }
+  }
+
+  .event-types {
+    width: 100%;
+  }
+
+  .event-main__titles {
+    &._game {
+      grid-template-columns: repeat(1, 1fr) !important;
+      gap: 20px;
+
+      .titles-footer {
+        grid-template-columns: repeat(1, 1fr) !important;
+        grid-column: 1 / 1 !important;
+        gap: 20px;
+      }
+    }
+  }
+
+  .event-main__dates {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+
+    .input__wrapper:nth-child(1), .input__wrapper:nth-child(4) {
+      grid-column: 1 / 3;
+    }
+  }
+
+  .event-main__orginfo {
+    display: grid !important;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .event-main__desc {
+    flex-direction: column;
+  }
+}
+
 </style>

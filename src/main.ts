@@ -11,11 +11,23 @@ import '@/assets/styles/main.scss'
 import '@/assets/css/all.min.css'
 
 import vuetify from './plugins/vuetify';
+import { isAuthenticated } from '@/services/authService'
 
 
 const app = createApp(App)
 
 app.use(createPinia())
+
+
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.auth && !isAuthenticated()) {
+    next({ name: 'home' })
+  } else {
+    next()
+  }
+})
+
+
 app.use(router)
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,
