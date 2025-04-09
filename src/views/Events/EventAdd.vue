@@ -3,9 +3,23 @@ import { ref } from 'vue'
 import { createUserService } from '@/services'
 import { useToast } from 'vue-toastification'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import DatePicker from '@/components/DatePicker.vue'
+import TimePicker from '@/components/TimePicker.vue'
+import BaseSelect from '@/components/BaseSelect.vue'
+import chair from '@/assets/icons/Armchair.svg'
+import { createEventsService } from '@/services/eventsService'
 
 const toast = useToast()
 
+const regTypes = [
+  { title: 'Открытая', value: 'open' },
+  { title: 'Закрытая', value: 'close' }
+]
+
+const placeTypes = [
+  { title: 'Онлайн', value: 'online' },
+  { title: 'Офлайн', value: 'offline' }
+]
 const avatarUpload = ref(false)
 const eventForm = ref({
   title: '',
@@ -16,6 +30,11 @@ const eventForm = ref({
   org_bio: '',
   startTime: '',
   maxPlayers: '',
+  place: '',
+  price: '',
+  discount: '',
+  org_info: '',
+  regType: '',
   endTime: ''
 })
 const menu2 = ref(false)
@@ -35,6 +54,80 @@ const handleFileUpload = (event) => {
     })
   }
 }
+const validateForm = () => {
+  errors.value.title = eventForm.value.title ? '' : 'Обязательно'
+
+  errors.value.description = eventForm.value.description ? '' : 'Обязательно'
+
+  errors.value.date = eventForm.value.date ? '' : 'Обязательно'
+  errors.value.org_bio = eventForm.value.org_bio ? '' : 'Обязательно'
+  errors.value.org_info = eventForm.value.org_info ? '' : 'Обязательно'
+  errors.value.org_name = eventForm.value.org_name ? '' : 'Обязательно'
+  errors.value.startTime = eventForm.value.startTime ? '' : 'Обязательно'
+  errors.value.maxPlayers = eventForm.value.maxPlayers ? '' : 'Обязательно'
+  errors.value.place = eventForm.value.place ? '' : 'Обязательно'
+  errors.value.price = eventForm.value.price ? '' : 'Обязательно'
+  errors.value.discount = eventForm.value.discount ? '' : 'Обязательно'
+  errors.value.regType = eventForm.value.regType ? '' : 'Обязательно'
+  errors.value.endTime = eventForm.value.endTime ? '' : 'Обязательно'
+
+}
+const isUpdateSuccess = ref(false)
+
+const errors = ref({
+  title: '',
+  description: '',
+  type: 'game',
+  date: '',
+  org_name: '',
+  org_bio: '',
+  startTime: '',
+  maxPlayers: '',
+  place: '',
+  price: '',
+  discount: '',
+  org_info: '',
+  regType: '',
+  endTime: ''
+})
+
+const submit = (saveType) => {
+  validateForm()
+  if (Object.values(errors.value).some(error => error)) {
+    toast.error('Пожалуйста, исправьте ошибки в форме.')
+    return
+  }
+
+  createEventsService().createEvent(eventForm.value).then(() => {
+    toast.success('Событие успешно создано')
+    isUpdateSuccess.value = true
+  }).catch(error => {
+    toast.error(error.message)
+  }).finally(() => {
+    isUpdateSuccess.value = false
+  })
+
+}
+const cancelUpdate = () => {
+  eventForm.value = {
+    title: '',
+    description: '',
+    type: 'game',
+    date: '',
+    org_name: '',
+    org_bio: '',
+    startTime: '',
+    maxPlayers: '',
+    place: '',
+    price: '',
+    discount: '',
+    org_info: '',
+    regType: '',
+    endTime: ''
+  }
+}
+
+
 </script>
 
 <template>
@@ -64,14 +157,14 @@ const handleFileUpload = (event) => {
       <div class="event-main__info">
         <div class="event-main__titles">
           <div class="input__wrapper">
-            <label for="title">Название</label>
+            <label>Название</label>
             <div class="input__group">
               <input v-model="eventForm.title" type="text" name="title" id="title"
                      placeholder="Как будет называться мероприятие?">
             </div>
           </div>
           <div class="input__wrapper">
-            <label for="about_you">Расскажите о себе</label>
+            <label>Расскажите о себе</label>
 
             <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
                       placeholder="Пусть весь мир узнает"></textarea>
@@ -80,13 +173,17 @@ const handleFileUpload = (event) => {
           </div>
         </div>
         <div class="event-main__image">
-          <label for="image" class="settings__top-left">
-            <img src="./images/Vector.svg" alt="">
+          <label class="settings__top-left">
+            <div class="file-upload__img">
+              <img src="@/assets/icons/FilePlus.svg" alt="">
+            </div>
             <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
                    @change="handleFileUpload">
-            <div class="settings__left-title">Нажмите для выбора изображения, либо перетащите его</div>
-            <div class="settings__left-subtitle">Формат jpeg, jpg, png, весом не более 1 MB и размером не более
-              2000 × 200
+            <div class="file-upload__info">
+              <div class="settings__left-title">Нажмите для выбора изображения, либо перетащите его</div>
+              <div class="settings__left-subtitle">Формат jpeg, jpg, png, весом не более 1 MB и размером не более
+                2000 × 200
+              </div>
             </div>
           </label>
         </div>
@@ -99,18 +196,18 @@ const handleFileUpload = (event) => {
       </h3>
       <div class="event-main__desc">
         <div class="input__wrapper">
-          <label for="about_you">Расскажите о себе</label>
+          <label>Полное описание</label>
 
           <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
-                    placeholder="Пусть весь мир узнает"></textarea>
+                    placeholder="Что планируется?"></textarea>
           <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
 
         </div>
         <div class="input__wrapper">
-          <label for="about_you">Расскажите о себе</label>
+          <label>Об организаторе</label>
 
-          <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
-                    placeholder="Пусть весь мир узнает"></textarea>
+          <textarea v-model="eventForm.org_info" type="text" name="about_you" id="about_you"
+                    placeholder="Расскажите о себе то, что считаете нужным..."></textarea>
           <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
 
         </div>
@@ -123,68 +220,31 @@ const handleFileUpload = (event) => {
 
       <div class="event-main__dates">
         <div class="input__wrapper">
-          <label for="date">Дата*</label>
-          <div class="input__group">
-            <v-date-input label="Date input" variant="solo-filled"></v-date-input>
+          <label>Дата*</label>
+          <div class="input__group _no-padding">
+            <DatePicker id="date" v-model="eventForm.date" />
+          </div>
+
+        </div>
+        <div class="input__wrapper">
+          <label>Время начала*</label>
+          <div class="input__group _no-padding">
+            <TimePicker v-model="eventForm.startTime" />
+          </div>
+
+        </div>
+        <div class="input__wrapper">
+          <label>Окончание события*</label>
+          <div class="input__group _no-padding">
+            <TimePicker v-model="eventForm.endTime" />
           </div>
         </div>
         <div class="input__wrapper">
-          <label for="time">Время начала*</label>
-          <div class="input__group">
-            <v-text-field
-              v-model="eventForm.startTime"
-              :active="menu2"
-              :focus="menu2"
-              label="Picker in menu"
-              prepend-icon="mdi-clock-time-four-outline"
-              readonly
-            >
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                activator="parent"
-                transition="scale-transition"
-              >
-                <v-time-picker
-                  v-if="menu2"
-                  v-model="eventForm.startTime"
-                  full-width
-                ></v-time-picker>
-              </v-menu>
-            </v-text-field>
-          </div>
-        </div>
-        <div class="input__wrapper">
-          <label for="time">Окончание события*</label>
-          <div class="input__group">
-            <v-text-field
-              v-model="eventForm.endTime"
-              :active="menu3"
-              :focus="menu3"
-              label="Picker in menu"
-              prepend-icon="mdi-clock-time-four-outline"
-              readonly
-            >
-              <v-menu
-                v-model="menu3"
-                :close-on-content-click="false"
-                activator="parent"
-                transition="scale-transition"
-              >
-                <v-time-picker
-                  v-if="menu3"
-                  v-model="eventForm.endTime"
-                  full-width
-                ></v-time-picker>
-              </v-menu>
-            </v-text-field>
-          </div>
-        </div>
-        <div class="input__wrapper">
-          <label for="">Место</label>
-          <div class="input__group">
-            <input v-model="eventForm.place" type="text" placeholder="Место">
-            <i class="fal fa-chevron-down"></i>
+          <label>Место</label>
+          <div class="input__group _no-padding">
+            <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
+            <!--            <i class="fal fa-chevron-down"></i>-->
+            <BaseSelect :icon="chair" v-model="eventForm.place" :items="placeTypes" placeholder="Место" />
           </div>
         </div>
       </div>
@@ -195,31 +255,31 @@ const handleFileUpload = (event) => {
       </h3>
       <div class="event-main__orginfo">
         <div class="input__wrapper">
-          <label for="title">Стоимость участия*</label>
+          <label>Стоимость участия*</label>
           <div class="input__group">
             <input v-model="eventForm.price" type="text" name="title" id="title"
                    placeholder="от 0 до 100 000 ₽ ">
           </div>
         </div>
         <div class="input__wrapper">
-          <label for="title">Размер скидки, %</label>
+          <label>Размер скидки, %</label>
           <div class="input__group">
             <input v-model="eventForm.discount" type="text" name="title" id="title"
                    placeholder="от 0 до 100">
           </div>
         </div>
         <div class="input__wrapper">
-          <label for="title">Макс. количество игроков*</label>
+          <label>Макс. количество игроков*</label>
           <div class="input__group">
             <input v-model="eventForm.maxPlayers" type="text" name="title" id="title"
                    placeholder="от 1 до 100">
           </div>
         </div>
         <div class="input__wrapper">
-          <label for="title">Запись на событие*</label>
-          <div class="input__group">
-            <input v-model="eventForm.regType" type="text" name="title" id="title"
-                   placeholder="Открытая или закрытая">
+          <label>Запись на событие*</label>
+          <div class="input__group _no-padding">
+            <BaseSelect :items="regTypes" v-model="eventForm.regType" placeholder="Открытая или закрытая" />
+
           </div>
         </div>
       </div>
@@ -240,6 +300,13 @@ const handleFileUpload = (event) => {
           </p>
         </div>
       </div>
+    </div>
+
+    <div class="settings__btns">
+      <button type="button" class="settings__btn submit" @click="submit('create')">
+        Отправить на утверждение
+      </button>
+      <div class="settings__btn cancel" @click=" ('draft')">Сохранить в черновики</div>
     </div>
 
   </div>
@@ -313,7 +380,7 @@ const handleFileUpload = (event) => {
 
       &__info {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         gap: 16px;
         margin-top: 24px;
 
@@ -343,13 +410,44 @@ const handleFileUpload = (event) => {
             border-style: dashed;
             border-color: #321939;
             border-width: 1px;
-
+            gap: 24px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row !important;
             align-items: center;
             justify-content: center;
-            padding: 32px 0;
+            padding: 14px 14px;
 
+
+            .file-upload__img {
+              background: linear-gradient(114.17deg, rgba(54, 38, 38, 0.3) -3.5%, rgba(34, 27, 36, 0.3) 47.08%, rgba(54, 38, 38, 0.3) 97.65%);
+              min-width: 180px;
+              height: 167px;
+              border-radius: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+            }
+
+            .file-upload__info {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+
+              .settings__left-title {
+                color: var(--04-text-main, #eee0f1);
+                text-align: center;
+                font-size: var(--pc-button-1-font-size, 20px);
+                margin-bottom: 16px;
+              }
+
+              .settings__left-subtitle {
+                color: var(--04-text-main, #eee0f1);
+                text-align: center;
+                max-width: unset;
+              }
+            }
 
             @media (max-width: 990px) {
               max-width: 100%;
@@ -416,7 +514,8 @@ const handleFileUpload = (event) => {
           font-size: 26px;
           line-height: 114.99999999999999%;
           letter-spacing: 0%;
-          color: linear-gradient(90deg, #CBBECD 0%, #FFFFFF 46.5%, #CBBECD 100%);
+          color: var(--04-text-main, #eee0f1);
+
 
         }
 
@@ -425,7 +524,7 @@ const handleFileUpload = (event) => {
           font-size: 46px;
           line-height: 100%;
           letter-spacing: 0%;
-
+          color: #E44653;
         }
       }
     }
@@ -456,5 +555,51 @@ const handleFileUpload = (event) => {
 
 .input__group {
   width: 100%;
+
+
+  &._no-padding {
+    padding: 0 12px;
+  }
+}
+
+.settings__btns {
+  display: flex;
+  margin-top: 28px;
+  gap: 19px;
+  justify-content: space-between;
+
+  @media (max-width: 670px) {
+    flex-direction: column;
+  }
+
+
+  .settings__btn {
+    padding: 15px 0;
+    color: var(--04-text-main, #eee0f1);
+    text-align: center;
+    font-size: var(--pc-button-1-font-size, 20px);
+
+
+  }
+
+  .submit {
+    width: 100%;
+    background: var(--05-success-main, #4a7548);
+    border-radius: 10px;
+
+    @media (max-width: 670px) {
+      max-width: 100%;
+    }
+  }
+
+  .cancel {
+    width: 100%;
+    background: var(--08-unavailable-2, #545560);
+    border-radius: 10px;
+
+    @media (max-width: 670px) {
+      max-width: 100%;
+    }
+  }
 }
 </style>
