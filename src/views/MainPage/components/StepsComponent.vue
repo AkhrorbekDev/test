@@ -15,7 +15,7 @@
         <div class="steps__pirates-item">
           <div class="steps__pirates-top">
             <h3 class="steps__pirates-title">Запишитесь на игру</h3>
-                                    <img src="../images/steps/edit.svg" alt="">
+                                    <img src="../images/steps-images/edit.svg" alt="">
           </div>
           <div class="steps__pirates-txt"> В нашем расписании выберите игру для новичков или обратитесь
             к <span>Привратнику</span> за советом —
@@ -27,7 +27,7 @@
         <div class="steps__pirates-item">
           <div class="steps__pirates-top">
             <h3 class="steps__pirates-title">Поговорите с Мастером</h3>
-                                    <img src="../images/steps/people.svg" alt="">
+                                    <img src="../images/steps-images/people.svg" alt="">
           </div>
           <div class="steps__pirates-txt">Перед игрой вы сможете познакомиться с Мастером, который объяснит
             правила, поможет создать персонажа и ответит на все вопросы
@@ -37,7 +37,7 @@
         <div class="steps__pirates-item">
           <div class="steps__pirates-top">
             <h3 class="steps__pirates-title">Создайте персонажа</h3>
-                                    <img src="../images/steps/robot.svg" alt="">
+                                    <img src="../images/steps-images/robot.svg" alt="">
           </div>
           <div class="steps__pirates-txt">Это ваш герой, которым вы будете управлять во время игры. Его можно
             сделать вместе с Мастером перед игрой или просто выбрать готового из предложенных,
@@ -48,7 +48,7 @@
         <div class="steps__pirates-item">
           <div class="steps__pirates-top">
             <h3 class="steps__pirates-title">Вникайте по ходу игры</h3>
-                                    <img src="../images/steps/three.svg" alt="">
+                                    <img src="../images/steps-images/three.svg" alt="">
           </div>
           <div class="steps__pirates-txt">
             Вам не нужно знать все правила заранее. Мастер будет вести игру и подсказывать вам, что делать
@@ -59,7 +59,7 @@
         <div class="steps__pirates-item">
           <div class="steps__pirates-top">
             <h3 class="steps__pirates-title">Наслаждайтесь процессом!</h3>
-                                    <img src="../images/steps/smile.svg" alt="">
+                                    <img src="../images/steps-images/smile.svg" alt="">
           </div>
           <div class="steps__pirates-txt">Самое важное — это просто расслабиться и получать удовольствие.
             Не бойтесь задавать вопросы и экспериментировать!
@@ -73,7 +73,7 @@
         <div class="steps__bottom-txt">Наш клуб всегда рад новичкам и готов помочь вам сделать первые шаги
           в удивительный мир настольных ролевых игр!
         </div>
-                        <img src="../images/steps/sword.svg" alt="">
+                        <img src="../images/steps-images/sword.svg" alt="">
       </div>
 
     </div>
