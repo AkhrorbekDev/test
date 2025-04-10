@@ -14,6 +14,17 @@ const newsService = () => {
 const filtersService = () => {
   return {
     getFilters: () => api('/common/filters/'),
+    createFilter: (data) => api('/admin/filters/', {
+      method: 'POST',
+      body: data
+    }),
+    updateFilter: (data) => api('/admin/filters/', {
+      method: 'PATCH',
+      body: data
+    }),
+    deleteFilter: (filterId) => api(`/admin/filters/${filterId}`, {
+      method: 'DELETE'
+    }),
   }
 }
 

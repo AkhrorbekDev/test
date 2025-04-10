@@ -2,81 +2,38 @@
   <transition name="fade">
     <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
       <transition name="modal">
-        <div class="modal-content add-modal">
+        <div class="modal-content">
           <div class="modal__content-top">
             <button class="close-btn" @click="closeModal"><i class="fal fa-times"></i></button>
           </div>
-          <h3 v-if="!item" class="modal-content__title">Новый тег?</h3>
+          <h3 class="modal-content__title">{{ title }}</h3>
+          <slot>
 
-          <form @submit.prevent="submit" class="modal-content__form">
-            <div class="inputs">
-              <div class="input__group">
-                <input v-model="values.fullName" type="text" placeholder="Полное название тега">
-              </div>
-              <div class="input__group">
-                <input v-model="values.tagName" type="text" placeholder="Короткое название тега">
-              </div>
-
-
-            </div>
-
-            <button  @click="submit" class="content__form-btn add">
-              {{ item ? 'Изменить' : 'Добавить' }}
-            </button>
-
-
-          </form>
+          </slot>
         </div>
       </transition>
     </div>
   </transition>
 </template>
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, onMounted, watch } from 'vue'
+import { ref, defineProps, defineEmits } from 'vue'
+import { obtainToken } from '@/services/tokenService'
 import { useToast } from 'vue-toastification'
+import { useUserGlobal } from '@/stores/userGlobal'
+import router from '@/router'
 
-const props = defineProps<{ isOpen: boolean, item: object }>()
-const emit = defineEmits(['close', 'save'])
+defineProps<{ isOpen: boolean, title: string }>()
+const emit = defineEmits(['close'])
 
 const passwordVisible = ref(false)
-
-const values = ref({
-  fullName: '',
-  tagName: '',
-  description: ''
+const loginData = ref({
+  email: '',
+  password: ''
 })
-watch(() => props.isOpen, (newValue) => {
-  if (newValue) {
-    values.value = props.item
-  } else {
-    values.value = {
-      fullName: '',
-      tagName: '',
-      description: ''
-    }
-  }
-}, { immediate: true })
+const toast = useToast()
+const userStore = useUserGlobal()
 const closeModal = () => {
   emit('close')
-}
-const saveModal = () => {
-  emit('save', values.value)
-}
-const toast = useToast()
-
-const submit = () => {
-  if (values.value.fullName && values.value.tagName) {
-    if (props.item) {
-      saveModal()
-    } else {
-      closeModal()
-    }
-  } else {
-    toast.error('Заполните все поля')
-  }
-}
-const togglePasswordVisibility = () => {
-  passwordVisible.value = !passwordVisible.value
 }
 
 </script>
@@ -115,11 +72,6 @@ const togglePasswordVisibility = () => {
   justify-content: center;
   align-items: center;
   z-index: 99;
-}
-
-.add-modal {
-  max-width: 560px;
-  width: 100%;
 }
 
 .modal-content {
@@ -191,12 +143,6 @@ const togglePasswordVisibility = () => {
   align-items: center;
   justify-content: center;
 
-}
-
-.add {
-  margin-top: 31px;
-  background: #000;
-  background: var(--05-success-main, #4a7548);
 }
 
 .login {

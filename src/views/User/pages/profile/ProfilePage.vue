@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useUserGlobal } from '@/stores/userGlobal'
 import { computed } from 'vue'
-
+import { isoToDate } from '../../../../utils'
+import avatar from './images/avatar.png'
 const userStore = useUserGlobal()
 
 const user = computed(() => userStore.user)
@@ -11,7 +12,7 @@ const user = computed(() => userStore.user)
   <div class="profile">
     <div class="profile__top">
       <div class="profile__top-left">
-        <img src="./images/avatar.png" alt="">
+        <img :src="user.avatar || avatar" alt="">
         <div class="profile__left-info">
           <div class="profile__left-login">{{ user.username }}</div>
         </div>
@@ -19,7 +20,7 @@ const user = computed(() => userStore.user)
       <div class="profile__top-right">
         <div class="profile__top-item">
           <div class="profile__top-label">Имя</div>
-          <div class="profile__top-title">{{ user.name }}</div>
+          <div class="profile__top-title">{{ user.firstName }}</div>
         </div>
         <div class="profile__top-item">
           <div class="profile__top-label">Ссылка на соц. сети</div>
@@ -35,7 +36,7 @@ const user = computed(() => userStore.user)
         </div>
         <div class="profile__top-item">
           <div class="profile__top-label">Дата регистрации</div>
-          <div class="profile__top-title">{{ user.created_at }}</div>
+          <div class="profile__top-title">{{ isoToDate(user.created_at) }}</div>
         </div>
       </div>
     </div>
@@ -50,7 +51,7 @@ const user = computed(() => userStore.user)
       </div>
       <div class="profile__info-item">
         <div class="profile__info-label">Участник</div>
-        <div class="profile__info-txt">10 событий</div>
+        <div class="profile__info-txt">{{ user.events?.length || 0 }} событий</div>
       </div>
     </div>
   </div>

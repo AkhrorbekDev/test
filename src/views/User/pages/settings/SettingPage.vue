@@ -116,9 +116,10 @@ onMounted(() => {
   const userService = createUserService()
   userService.getUserDetails()
     .then((response) => {
+      delete response.password
       form.value = {
         ...form.value,
-        ...response.user
+        ...response
       }
     })
     .catch((error) => {
@@ -131,7 +132,9 @@ onMounted(() => {
   <div class="settings">
     <form @submit.prevent="submit" action="">
       <div class="settings__top">
-        <label for="avatar" class="settings__top-left">
+        <label for="avatar" class="settings__top-left" :styl="{
+          '--background': `url(${form.profile.avatar})`,
+        }">
           <img src="./images/Vector.svg" alt="">
           <input hidden="hidden" type="file" id="avatar" accept="image/jpeg, image/jpg, image/png"
                  @change="handleFileUpload">
@@ -276,9 +279,13 @@ onMounted(() => {
     }
 
     .settings__top-left {
+      --background: var(--03-dark-2, #18171e);
       max-width: 252px;
       width: 100%;
-      background: var(--03-dark-2, #18171e);
+      background: var(--background);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
       border-radius: 5px;
       border-style: dashed;
       border-color: #321939;
