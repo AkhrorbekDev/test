@@ -2,7 +2,6 @@
 import Card from './components/Card.vue'
 
 
-import { createEventsService } from '@/services/eventsService'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useUserGlobal } from '@/stores/userGlobal'

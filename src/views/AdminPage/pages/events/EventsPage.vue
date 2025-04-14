@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import Card from './components/Card.vue'
 
-
-import { createEventsService } from '@/services/eventsService'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useUserGlobal } from '@/stores/userGlobal'
@@ -25,7 +23,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="events">
-    <Card v-for="event in 5" :key="event" :event="event" />
+    <Card v-for="event in events" :key="event" :event="event" />
   </div>
 </template>
 <style lang="scss" scoped></style>

@@ -42,7 +42,7 @@ const emit = defineEmits(['update:modelValue'])
 const time = computed({
   get: () => props.modelValue,
   set: (value) => {
-    emit('update:modelValue', date.format(value, 'keyboardDate'))
+    emit('update:modelValue', date.format(value, 'YYYY-MM-DD'))
   }
 })
 const menu = ref(false)

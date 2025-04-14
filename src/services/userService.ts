@@ -22,7 +22,7 @@ export const createUserService = () => {
 
     getUserById: (userId) => authApi(`/users/${userId}`),
 
-    getUserEvents: (userId) => authApi(`/users/${userId}/events`),
+    getUserEvents: () => authApi(`/events/`),
 
     updateAvatar: (data) => authApi('/users/me/avatar', {
       method: 'POST',

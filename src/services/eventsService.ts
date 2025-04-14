@@ -4,7 +4,10 @@ import { api } from '@/services/api'
 export const createEventsService = () => {
   return {
 
-    getEvents: () => api('/events/'),
+    getEvents: (query) => api('/events/', {
+      method: 'GET',
+      params: query
+    }),
     getEventById: (eventId: string) => api(`/events/${eventId}`),
     createEvent: (data: any) => api('/events/', {
       method: 'POST',
@@ -17,6 +20,11 @@ export const createEventsService = () => {
     deleteEvent: (eventId: string) => api(`/events/${eventId}`, {
       method: 'DELETE'
     }),
+
+    applyForEvent: (eventId: string, data: any) => api(`/events/${eventId}/apply`, {
+      method: 'POST',
+      body: data
+    })
 
   }
 }

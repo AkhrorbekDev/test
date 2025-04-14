@@ -72,7 +72,7 @@ const loggedIn = computed(() => userStore.loggedIn)
   background: linear-gradient(257.41deg, rgba(90, 51, 98, 0.2) -4.79%, rgba(31, 24, 33, 0.2) 86.4%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  position: fixed;
+  position: sticky;
   width: 100%;
   top: 0;
   z-index: 99;

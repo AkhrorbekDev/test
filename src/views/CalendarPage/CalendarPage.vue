@@ -1,3 +1,105 @@
+<script setup lang="ts">
+
+
+import CalendarDataManager from '@/views/CalendarPage/components/CalendarDataManager.vue'
+import EventsCalendar from '@/views/CalendarPage/components/EventsCalendar.vue'
+import LegendComponent from '@/views/CalendarPage/components/LegendsComponents.vue'
+import { ref } from 'vue'
+import { createEventsService } from '@/services/eventsService'
+import { useDate } from 'vuetify'
+const dateFormat = useDate()
+
+const data = [
+  { date: new Date('2025-04-10'), value: 100 },
+  { date: new Date('2025-04-10'), value: 150 },
+  { date: new Date('2025-04-11'), value: 200 },
+  { date: new Date('2025-04-12'), value: 300 },
+  { date: new Date('2025-04-14'), value: 400 },
+  { date: new Date('2025-04-15'), value: 500 },
+  { date: new Date('2025-04-18'), value: 600 }, // Outside example week range
+];
+/**
+ * Groups an array of date data objects by days within a specified week range
+ * @param {Array} dateData - Array of objects with date and other properties
+ * @param {Date} weekStart - The start date of the week
+ * @param {Date} weekEnd - The end date of the week
+ * @param {String} dateField - Name of the date field in objects (default: 'date')
+ * @returns {Object} - Object with dates as keys and arrays of matching data as values
+ */
+function groupDataByWeekDays(dateData, weekStart, weekEnd, dateField = 'date') {
+
+  // Normalize dates to start/end of day to ensure proper comparison
+  const startDay = new Date(weekStart);
+  // startDay.setHours(0, 0, 0, 0);
+
+  const endDay = new Date(weekEnd);
+  // endDay.setHours(23, 59, 59, 999);
+
+  // Create empty result object with all days in range
+  const result = {};
+  const currentDay = new Date(startDay);
+
+  // Initialize all days in the range with empty arrays
+  while (currentDay <= endDay) {
+    const dateKey = dateFormat.getDate(currentDay); // YYYY-MM-DD
+    result[`${dateKey}`] = [];
+
+    // Move to next day
+    currentDay.setDate(currentDay.getDate() + 1);
+  }
+  if (!Array.isArray(dateData) || dateData.length === 0) {
+    return result;
+  }
+  // Filter and group data items by day
+  dateData.forEach(item => {
+    // Get the date from the item
+    let itemDate;
+    if (item[dateField] instanceof Date) {
+      itemDate = item[dateField];
+    } else if (typeof item[dateField] === 'string') {
+      itemDate = new Date(item[dateField]);
+      console.log(itemDate, item[dateField])
+    } else {
+      return; // Skip invalid dates
+    }
+
+    // Normalize date to remove time
+    const dateKey =  dateFormat.getDate(itemDate); // YYYY-MM-DD
+
+    // Check if this date is within our range and exists in our result
+    if (result[dateKey] !== undefined) {
+      result[dateKey].push(item);
+    }
+  });
+
+  return result;
+}
+const loading = ref(true)
+const events = ref({})
+let dateFilter = ref({
+  start: new Date(),
+  monthEnd: dateFormat.endOfMonth(new Date()),
+  end: new Date()
+})
+const dateManager = ref(null)
+
+const getEvents = date => {
+  createEventsService().getEvents(date).then(res => {
+    // console.log(dateFormat.getWeekArray(new Date(date.dateFrom)))
+    // console.log(dateFormat.getWeekdays(dateFormat.getDate(new Date(date.dateFrom))))
+    dateFilter.value = {
+      start: new Date(date.dateFrom),
+      monthEnd: dateFormat.endOfMonth(new Date(date.dateFrom)),
+      end: new Date(date.dateTill)
+    }
+    events.value = groupDataByWeekDays(res.events, dateFilter.value.start, dateFilter.value.end)
+    loading.value = false
+  })
+}
+
+</script>
+
+
 <template>
   <div class="main">
     <div class="club__events ">
@@ -47,9 +149,9 @@
             <div class="club__help-btn"> Помогите, я новичок!</div>
           </div>
         </div>
-        <CalendarDataManager />
+        <CalendarDataManager ref="dateManager" @change-date="getEvents" />
 
-        <EventsCalendar style="margin-bottom: 30px;" />
+        <EventsCalendar :start-date="dateFormat.getDate(dateFilter.start)" :events="events" :loading="loading" style="margin-bottom: 30px;" />
 
         <LegendComponent />
 
@@ -60,18 +162,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-
-import CalendarDataManager from '@/views/CalendarPage/components/CalendarDataManager.vue'
-import EventsCalendar from '@/views/CalendarPage/components/EventsCalendar.vue'
-import LegendComponent from '@/views/CalendarPage/components/LegendsComponents.vue'
-import ModalComponent from '@/components/ModalComponents.vue'
-import EventCard from '@/views/CalendarPage/components/EventCard.vue'
-import { ref } from 'vue'
-
-const openEventCardModal = ref(false)
-</script>
 
 <style scoped lang="scss">
 .main {
@@ -199,6 +289,13 @@ const openEventCardModal = ref(false)
         font-size: var(--pc-button-1-font-size, 20px);
       }
     }
+  }
+}
+
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
   }
 }
 </style>

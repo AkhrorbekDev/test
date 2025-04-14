@@ -3,10 +3,43 @@ import { onMounted, ref } from 'vue'
 import UserAddModal from './components/UserAddModal.vue'
 import { createUserService } from '@/services'
 import { roles } from '@/types/constants'
+import UserContextMenu from '@/views/AdminPage/components/UserContextMenu.vue'
+
 const selectedRole = ref()
-const users = ref([])
+const users = ref([
+  { _id: 1, username: 'Бубебубебубу', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Админ' },
+  { _id: 2, username: 'Бубеб', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Мастер' },
+  { _id: 3, username: 'Бубебебе', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Мастер' },
+  { _id: 4, username: 'Бубебубебубу', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Админ' },
+  { _id: 5, username: 'Вувувувувду', phone: '+7 (888) 888-88-88', email: 'TEST111@TEST.COM', role: 'Админ' },
+  { _id: 6, username: 'Дададададада', phone: '+7 (777) 777-77-77', email: 'HELLO_WORLD@EXAMPLE.COM', role: 'Игрок' },
+  { _id: 7, username: 'Зазазазазазаза', phone: '+7 (666) 666-66-66', email: 'MYEMAIL@GMAIL.COM', role: 'Игрок' }
+])
 
 const addModal = ref(false)
+const showContextMenu = ref(false)
+const contextMenu = ref()
+const selectedUserID = ref(null)
+
+const clickOutside = (e) => {
+  console.log(e)
+  if (e.target.classList.contains('edit-btn')) {
+    return
+  }
+  if (contextMenu.value && !contextMenu.value.contains(e.target)) {
+    showContextMenu.value = false
+    document.removeEventListener('click', clickOutside)
+  }
+}
+const appendContextMenu = (e, user) => {
+  selectedUserID.value = user._id
+  e.target.parentNode.appendChild(contextMenu.value)
+  showContextMenu.value = true
+  document.addEventListener('click', clickOutside)
+
+}
+
+
 
 onMounted(() => {
   // Здесь можно выполнить дополнительные действия при монтировании компонента
@@ -61,16 +94,22 @@ onMounted(() => {
           <th>Телефон</th>
           <th>Email</th>
           <th>Роль</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="user in users" :key="user.id">
-          <td>{{ user.id }}</td>
+          <td>{{ user._id }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.phone }}</td>
           <td>{{ user.email }}</td>
           <td>
-            <span :class="['role-badge', user.role.toLocaleLowerCase()]">{{ roles[user.role.toLocaleLowerCase()] }}</span>
+            <span :class="['role-badge', user.role.toLocaleLowerCase()]">{{ roles[user.role.toLocaleLowerCase()]
+              }}</span>
+          </td>
+          <td class="base__table-edit">
+            <div @click="appendContextMenu($event, user)" class="edit-btn" />
+            <img src="@/assets/icons/PencilSimple.svg" alt="">
           </td>
         </tr>
         </tbody>
@@ -86,10 +125,19 @@ onMounted(() => {
 
     </div>
   </div>
+  <div ref="contextMenu" v-show="showContextMenu" class="context-menu">
+    <UserContextMenu :id="selectedUserID" />
+
+  </div>
 
   <UserAddModal :isOpen="addModal" @close="addModal = false" />
 </template>
 <style lang="scss" scoped>
+.context-menu {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
 .base {
   background: var(--plate-main,
     radial-gradient(closest-side,
@@ -184,6 +232,27 @@ onMounted(() => {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+
+  &-edit {
+    cursor: pointer;
+    position: relative;
+
+    .edit-btn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 2;
+    }
+
+    img {
+      width: 26px;
+      height: 26px;
+      margin: 0 auto;
+    }
+  }
+
 }
 
 .base__table th,

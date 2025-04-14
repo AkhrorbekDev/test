@@ -16,6 +16,13 @@ export const createAdminService = () => {
       method: 'POST',
       body: data
     }),
+    deleteUser: (userId) => api(`/admin/users/${userId}`, {
+      method: 'DELETE'
+    }),
+    changeRole: (data) => api('/admin/change/user', {
+      method: 'PATCH',
+      body: data
+    }),
     blockUser: (userId) => api(`/admin/users/${userId}/block`, {
       method: 'PATCH'
     }),

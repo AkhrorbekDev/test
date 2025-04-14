@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { type PropType, ref } from 'vue'
+import { onMounted, type PropType, ref } from 'vue'
 import FilterItem from '@/views/Events/components/FilterItem.vue'
 import { useRoute, useRouter, stringifyQuery, parseQuery } from 'vue-router'
-import { stringify } from 'qs'
+import { stringify, parse } from 'qs'
 
 type Filter = {
   _id: string
@@ -19,6 +19,7 @@ const props = defineProps({
     default: () => []
   }
 })
+const emit = defineEmits(['filter'])
 const openSections = ref<Record<string, boolean>>({})
 
 const toggleSection = (section: string) => {
@@ -43,9 +44,7 @@ const test = (e: {
     fullName: string
   }
 }) => {
-  console.log(route.query)
-  const query = { ...route.query }
-  console.log(query)
+  const query = parse(route.query)
   if (!query.features) {
     query.features = {}
   }
@@ -55,18 +54,22 @@ const test = (e: {
     query.features[e.filter._id] = query.features[e.filter._id] || []
     query.features[e.filter._id].push(e.item._id)
   }
-  console.log(query)
+
   console.log()
+  console.log()
+
   // console.log(stringifyQuery(query))
 
   router.push({
     name: 'events',
-    query: stringify(query, {
-      arrayFormat: 'indices',
-      skipNulls: true
-    })
+    query: query
+  }).then(() => {
+    emit('filter')
   })
 }
+onMounted(() => {
+  console.log(route.query)
+})
 </script>
 
 <template>
@@ -74,7 +77,7 @@ const test = (e: {
     <div class="filters__header">
       <div class="filters__title">Фильтры</div>
       <div class="filters__reset">
-        <div class="filters__reset-text">Сбросить</div>
+        <div class="filters__reset-text" @click="$emit('clear')">Сбросить</div>
       </div>
     </div>
     <div class="filters__content">

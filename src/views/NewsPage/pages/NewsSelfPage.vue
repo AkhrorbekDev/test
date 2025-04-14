@@ -6,10 +6,13 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { newsService } from '@/services/publicServices'
 import { useToast } from 'vue-toastification'
 import { isoToDate } from '../../../utils'
+import NewsAddModal from '@/views/NewsPage/components/NewsAddModal.vue'
+import { useUserGlobal } from '@/stores/userGlobal'
+import { createAdminService } from '@/services/adminService'
 
 const router = useRouter()
 
@@ -21,7 +24,38 @@ const news = ref([])
 const currentNews = ref({})
 const route = useRoute()
 const toast = useToast()
+const editNews = ref({
+  title: '',
+  short_description: '',
+  description: ''
+})
+const userStore = useUserGlobal()
+const shhowAddModal = ref(false)
 
+const user = computed(() => userStore.user)
+const closeModal = () => {
+  shhowAddModal.value = false
+  editNews.value = {
+    title: '',
+    short_description: '',
+    description: ''
+  }
+}
+const submit = (e) => {
+  createAdminService().updateNews(currentNews.value._id, e)
+    .then(() => {
+      toast.success('Новость успешно изменена')
+      closeModal()
+    })
+    .catch((error) => {
+      toast.error(error.data.error)
+    })
+
+}
+const goEdit = (item: any) => {
+  editNews.value = {...currentNews.value}
+  shhowAddModal.value = true
+}
 onMounted(() => {
   newsService().getNewsById(route.params.id)
     .then((response) => {
@@ -55,11 +89,14 @@ onMounted(() => {
         </div>
         <div class="news__self-right">
           <div class="news__right-top">
-            <div class="news__right-title">{{ isoToDate(currentNews.publisDate) }}</div>
+            <div class="news__right-title">{{ isoToDate(currentNews.publishDate) }}</div>
           </div>
           <div class="news__right-descr">
             {{ currentNews.content }}
           </div>
+          <button v-if="user?.role === 'Admin'" @click="goEdit" class="news__content-edit">
+            <img src="../images/PencilSimple.svg" alt="">
+          </button>
         </div>
       </div>
 
@@ -94,11 +131,23 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  <NewsAddModal :item="editNews" :is-open="shhowAddModal" @close="closeModal" @save="submit" />
 
 </template>
 
 
 <style lang="scss" scoped>
+.news__content-edit {
+  width: 56px;
+  height: 54px;
+  position: absolute;
+  background: #D23C48;
+  border-radius: 10px;
+  padding: 16px;
+  top: 0px;
+  right: 0px;
+}
+
 .news__self {
   padding: 150px 10px;
 
@@ -185,6 +234,7 @@ onMounted(() => {
       gap: 15px;
       max-width: 740px;
       width: 100%;
+      position: relative;
 
       @media (max-width: 1024px) {
         max-width: 100%;

@@ -7,14 +7,24 @@
       </div>
     </div>
     <div class="calendar__body">
-      <div v-for="(day, index) in days" :key="index" class="calendar__day" :class="{
-        _active: day.isCurrent
+      <template v-if="loading">
+        <div v-for="(day, index) in 7" :key="index" class="calendar__day">
+
+          <div class="skeleton-item _border-radius-12">
+
+          </div>
+        </div>
+      </template>
+
+      <div v-else v-for="(day, index) in events" :key="index" class="calendar__day" :class="{
+        _active: index == startDate
       }">
-        <div class="calendar__date" :class="{ 'calendar__date--current': day.isCurrent }">
-          {{ day.date }}
+        <div class="calendar__date" :class="{ 'calendar__date--current': index == startDate }">
+          {{ index }}
         </div>
 
-        <div v-for="(event, eventIndex) in day.events" :key="eventIndex" class="calendar__event" @click="openEventCardModal = true">
+        <div v-for="(event, eventIndex) in day" :key="eventIndex" class="calendar__event"
+             @click="selectEvent(event)">
           <div class="calendar__event-time">{{ event.time }}</div>
           <div class="calendar__event-title">{{ event.title }}</div>
 
@@ -47,9 +57,10 @@
 
         </div>
       </div>
+
     </div>
     <ModalComponent :is-open="openEventCardModal" @close="openEventCardModal = false">
-      <EventCard />
+      <EventCard :selected-event="selectedEvent" />
 
     </ModalComponent>
   </div>
@@ -62,9 +73,29 @@ import ModalComponent from '@/components/ModalComponents.vue'
 export default {
   name: 'EventsCalendar',
   components: { ModalComponent, EventCard },
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    week: {
+      type: Array,
+      default: () => []
+    },
+    startDate: {
+      type: Number,
+      default: 0
+    },
+    events: {
+      type: Object,
+      default: () => {
+      }
+    }
+  },
   data() {
     return {
       openEventCardModal: false,
+      selectedEvent: null,
       weekDays: [
         {
           name: 'Понедельник',
@@ -242,7 +273,13 @@ export default {
         }
       ]
     }
-  }
+  },
+  methods: {
+    selectEvent(event) {
+      this.selectedEvent = event
+      this.openEventCardModal = true
+    }
+  },
 }
 </script>
 
@@ -258,6 +295,50 @@ export default {
   margin: 0 auto;
   background: radial-gradient(53.64% 101.47% at 51.36% 54.36%, rgba(44, 38, 47, 0.3) 0%, rgba(21, 21, 22, 0.3) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
   border: 1px solid #18171E;
+}
+
+.skeleton {
+  &-item {
+    background-color: #fff;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        rgba(#dddbdd, 0) 0,
+        rgba(#dddbdd, 0.2) 20%,
+        rgba(#dddbdd, 0.5) 60%,
+        rgba(#dddbdd, 0)
+      );
+      animation: shimmer 2s infinite;
+      content: '';
+    }
+
+    &._border-radius-12 {
+      border-radius: 12px;
+
+      &::after {
+        border-radius: 12px;
+      }
+    }
+
+    &._border-radius-8 {
+      border-radius: 8px;
+
+      &::after {
+        border-radius: 8px;
+      }
+    }
+  }
 }
 
 /* Block: calendar header */

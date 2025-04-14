@@ -22,7 +22,7 @@ import { useToast } from 'vue-toastification'
 import { useUserGlobal } from '@/stores/userGlobal'
 import router from '@/router'
 
-defineProps<{ isOpen: boolean, title: string }>()
+defineProps<{ isOpen: boolean, title?: string }>()
 const emit = defineEmits(['close'])
 
 const passwordVisible = ref(false)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { createUserService } from '@/services'
 import { useToast } from 'vue-toastification'
 import { VDateInput } from 'vuetify/labs/VDateInput'
@@ -8,9 +8,12 @@ import TimePicker from '@/components/TimePicker.vue'
 import BaseSelect from '@/components/BaseSelect.vue'
 import chair from '@/assets/icons/Armchair.svg'
 import { createEventsService } from '@/services/eventsService'
+import { useRoute } from 'vue-router'
+import { useDate } from 'vuetify/framework'
+import { createAdminService } from '@/services/adminService'
 
 const toast = useToast()
-
+const route = useRoute()
 const regTypes = [
   { title: 'Открытая', value: 'open' },
   { title: 'Закрытая', value: 'close' }
@@ -59,6 +62,7 @@ const avatarUpload = ref(false)
 const eventForm = ref({
   title: '',
   description: '',
+  short_description: '',
   type: 'game',
   date: '',
   org_name: '',
@@ -70,7 +74,15 @@ const eventForm = ref({
   discount: '',
   org_info: '',
   regType: '',
-  endTime: ''
+  endTime: '',
+  system: '',
+  duration: '',
+  playerExp: '',
+  genre: '',
+  preparation: '',
+  playerLevel: '',
+  setting: '',
+
 })
 const menu2 = ref(false)
 const menu3 = ref(false)
@@ -80,24 +92,23 @@ const handleFileUpload = (event) => {
     const reader = new FormData()
 
     reader.append('file', file)
-    createUserService().updateAvatar(reader).then(() => {
-      toast.success('Avatar updated successfully')
-    }).catch(error => {
-      toast.error(error.message)
-    }).finally(() => {
-      avatarUpload.value = false
-    })
+    // createUserService().updateAvatar(reader).then(() => {
+    //   toast.success('Avatar updated successfully')
+    // }).catch(error => {
+    //   toast.error(error.message)
+    // }).finally(() => {
+    //   avatarUpload.value = false
+    // })
   }
 }
 const validateForm = () => {
   errors.value.title = eventForm.value.title ? '' : 'Обязательно'
 
   errors.value.description = eventForm.value.description ? '' : 'Обязательно'
+  errors.value.short_description = eventForm.value.short_description ? '' : 'Обязательно'
 
   errors.value.date = eventForm.value.date ? '' : 'Обязательно'
-  errors.value.org_bio = eventForm.value.org_bio ? '' : 'Обязательно'
   errors.value.org_info = eventForm.value.org_info ? '' : 'Обязательно'
-  errors.value.org_name = eventForm.value.org_name ? '' : 'Обязательно'
   errors.value.startTime = eventForm.value.startTime ? '' : 'Обязательно'
   errors.value.maxPlayers = eventForm.value.maxPlayers ? '' : 'Обязательно'
   errors.value.place = eventForm.value.place ? '' : 'Обязательно'
@@ -106,16 +117,24 @@ const validateForm = () => {
   errors.value.regType = eventForm.value.regType ? '' : 'Обязательно'
   errors.value.endTime = eventForm.value.endTime ? '' : 'Обязательно'
 
+  if (eventForm.value.type === 'game') {
+    errors.value.system = eventForm.value.system ? '' : 'Обязательно'
+    errors.value.duration = eventForm.value.duration ? '' : 'Обязательно'
+    errors.value.playerExp = eventForm.value.playerExp ? '' : 'Обязательно'
+    errors.value.genre = eventForm.value.genre ? '' : 'Обязательно'
+    errors.value.preparation = eventForm.value.preparation ? '' : 'Обязательно'
+    errors.value.playerLevel = eventForm.value.playerLevel ? '' : 'Обязательно'
+    errors.value.setting = eventForm.value.setting ? '' : 'Обязательно'
+  }
 }
 const isUpdateSuccess = ref(false)
 
 const errors = ref({
   title: '',
   description: '',
-  type: 'game',
+  short_description: '',
+  type: '',
   date: '',
-  org_name: '',
-  org_bio: '',
   startTime: '',
   maxPlayers: '',
   place: '',
@@ -123,19 +142,29 @@ const errors = ref({
   discount: '',
   org_info: '',
   regType: '',
-  endTime: ''
+  endTime: '',
+  system: '',
+  duration: '',
+  playerExp: '',
+  genre: '',
+  preparation: '',
+  playerLevel: '',
+  setting: '',
+  regTypes: ''
+
 })
 
 const submit = (saveType) => {
   validateForm()
-  if (Object.values(errors.value).some(error => error)) {
-    toast.error('Пожалуйста, исправьте ошибки в форме.')
-    return
-  }
+
   if (saveType === 'draft') {
     eventForm.value.status = 'draft'
   } else if (saveType === 'create') {
     eventForm.value.status = 'pending'
+  }
+  if (saveType === 'create' && Object.values(errors.value).some(error => error)) {
+    toast.error('Пожалуйста, исправьте ошибки в форме.')
+    return
   }
   createEventsService().createEvent(eventForm.value).then(() => {
     toast.success('Событие успешно создано')
@@ -151,6 +180,7 @@ const cancelUpdate = () => {
   eventForm.value = {
     title: '',
     description: '',
+    short_description: '',
     type: 'game',
     date: '',
     org_name: '',
@@ -162,9 +192,47 @@ const cancelUpdate = () => {
     discount: '',
     org_info: '',
     regType: '',
-    endTime: ''
+    endTime: '',
+    system: '',
+    duration: '',
+    playerExp: '',
+    genre: '',
+    preparation: '',
+    playerLevel: '',
+    setting: '',
+
+
   }
 }
+const dateFormatter = useDate()
+const edit = ref(false)
+const confirmEvent = () => {
+  createEventsService().updateEvent(eventForm.value._id, eventForm.value).then((res) => {
+    toast.success(res.message || 'Событие успешно изменено')
+  }).catch(error => {
+    toast.error(error.data.error)
+  })
+}
+const cancelEvent = () => {
+  createEventsService().deleteEvent(eventForm.value._id).then(() => {
+    toast.success(res.message || 'Событие успешно отменено')
+  }).catch(error => {
+    toast.error(error.data.error)
+  })
+}
+onMounted(() => {
+  if (route.params.id) {
+    createEventsService().getEventById(route.params.id)
+      .then(res => {
+        eventForm.value = res
+        eventForm.value.date = dateFormatter.format(new Date(res.date), 'YYYY-MM-DD')
+        edit.value = true
+      })
+      .catch(err => {
+        toast.error(err.message)
+      })
+  }
+})
 
 
 </script>
@@ -197,83 +265,96 @@ const cancelUpdate = () => {
         <div class="event-main__info">
           <div class="event-main__titles _game">
             <div class="input__wrapper">
-              <label>Название</label>
+              <label>Название<span>*</span></label>
               <div class="input__group">
                 <input v-model="eventForm.title" type="text" name="title" id="title"
                        placeholder="Как будет называться мероприятие?">
               </div>
+              <p v-if="errors.title" class="error-msg">{{ errors.title }}</p>
+
             </div>
             <div class="input__wrapper">
-              <label>Система*</label>
+              <label>Система<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.system" :items="eventSystem"
                             placeholder="Выберите из списка..." />
               </div>
+              <p v-if="errors.system" class="error-msg">{{ errors.system }}</p>
+
             </div>
             <div class="input__wrapper">
-              <label>Сеттинг*</label>
+              <label>Сеттинг<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.setting" :items="settings"
                             placeholder="Выберите из списка..." />
+                <p v-if="errors.setting" class="error-msg">{{ errors.settings }}</p>
+
               </div>
             </div>
             <div class="input__wrapper">
-              <label>Длительность*</label>
+              <label>Длительность<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.duration" :items="eventDuration"
                             placeholder="Нулевая сессия, ваншот, кампания..." />
               </div>
+              <p v-if="errors.duration" class="error-msg">{{ errors.duration }}</p>
             </div>
             <div class="input__wrapper">
-              <label>Опыт игроков*</label>
+              <label>Опыт игроков<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.playerExp" :items="eventExperience"
                             placeholder="Новички, опытные или оба?" />
               </div>
+              <p v-if="errors.playerExp" class="error-msg">{{ errors.playerExp }}</p>
             </div>
             <div class="input__wrapper">
-              <label>Жанр*</label>
+              <label>Жанр<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.genre" :items="eventGenre"
                             placeholder="Фантастика, комедия, драма" />
               </div>
+              <p v-if="errors.genre" class="error-msg">{{ errors.genre }}</p>
+
             </div>
             <div class="input__wrapper">
-              <label>Необходимая подготовка игрока*</label>
+              <label>Необходимая подготовка игрока<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.preparation" :items="eventPreparation"
                             placeholder="Не требуется, минимальная или..." />
               </div>
+              <p v-if="errors.preparation" class="error-msg">{{ errors.preparation }}</p>
             </div>
             <div class="input__wrapper">
-              <label>Уровень персонажа*</label>
+              <label>Уровень персонажа<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
                 <BaseSelect v-model="eventForm.playerLevel" :items="eventLevel"
                             placeholder="Низкий, средний, высокий, эпик?" />
               </div>
+              <p v-if="errors.playerLevel" class="error-msg">{{ errors.playerLevel }}</p>
             </div>
 
             <div class="titles-footer">
               <div class="input__wrapper">
-                <label>Расскажите о себе</label>
+                <label>Краткое описание<span>*</span></label>
 
-                <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
-                          placeholder="Пусть весь мир узнает"></textarea>
+                <textarea v-model="eventForm.short_description" type="text" name="about_you" id="about_you"
+                          placeholder="Что планируется?"></textarea>
                 <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+                <p v-if="errors.short_description" class="error-msg">{{ errors.description }}</p>
 
               </div>
               <div class="event-main__image">
@@ -306,13 +387,16 @@ const cancelUpdate = () => {
                 <input v-model="eventForm.title" type="text" name="title" id="title"
                        placeholder="Как будет называться мероприятие?">
               </div>
+              <p v-if="errors.title" class="error-msg">{{ errors.title }}</p>
+
             </div>
             <div class="input__wrapper">
               <label>Расскажите о себе</label>
 
-              <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
+              <textarea v-model="eventForm.short_description" type="text" name="about_you" id="about_you"
                         placeholder="Пусть весь мир узнает"></textarea>
               <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+              <p v-if="errors.short_description" class="error-msg">{{ errors.description }}</p>
 
             </div>
           </div>
@@ -346,6 +430,7 @@ const cancelUpdate = () => {
           <textarea v-model="eventForm.description" type="text" name="about_you" id="about_you"
                     placeholder="Что планируется?"></textarea>
           <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+          <p v-if="errors.description" class="error-msg">{{ errors.description }}</p>
 
         </div>
         <div class="input__wrapper">
@@ -354,6 +439,7 @@ const cancelUpdate = () => {
           <textarea v-model="eventForm.org_info" type="text" name="about_you" id="about_you"
                     placeholder="Расскажите о себе то, что считаете нужным..."></textarea>
           <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+          <p v-if="errors.org_info" class="error-msg">{{ errors.org_info }}</p>
 
         </div>
       </div>
@@ -365,24 +451,28 @@ const cancelUpdate = () => {
 
       <div class="event-main__dates">
         <div class="input__wrapper">
-          <label>Дата*</label>
+          <label>Дата<span>*</span></label>
           <div class="input__group _no-padding">
             <DatePicker id="date" v-model="eventForm.date" />
           </div>
+              <p v-if="errors.date" class="error-msg">{{ errors.date }}</p>
 
         </div>
         <div class="input__wrapper">
-          <label>Время начала*</label>
+          <label>Время начала<span>*</span></label>
           <div class="input__group _no-padding">
             <TimePicker v-model="eventForm.startTime" />
           </div>
+              <p v-if="errors.startTime" class="error-msg">{{ errors.startTime }}</p>
 
         </div>
         <div class="input__wrapper">
-          <label>Окончание события*</label>
+          <label>Окончание события<span>*</span></label>
           <div class="input__group _no-padding">
             <TimePicker v-model="eventForm.endTime" />
           </div>
+          <p v-if="errors.endTime" class="error-msg">{{ errors.endTime }}</p>
+
         </div>
         <div class="input__wrapper">
           <label>Место</label>
@@ -391,6 +481,8 @@ const cancelUpdate = () => {
             <!--            <i class="fal fa-chevron-down"></i>-->
             <BaseSelect :icon="chair" v-model="eventForm.place" :items="placeTypes" placeholder="Место" />
           </div>
+          <p v-if="errors.place" class="error-msg">{{ errors.place }}</p>
+
         </div>
       </div>
     </div>
@@ -400,11 +492,12 @@ const cancelUpdate = () => {
       </h3>
       <div class="event-main__orginfo">
         <div class="input__wrapper">
-          <label>Стоимость участия*</label>
+          <label>Стоимость участия<span>*</span></label>
           <div class="input__group">
             <input v-model="eventForm.price" type="text" name="title" id="title"
                    placeholder="от 0 до 100 000 ₽ ">
           </div>
+          <p v-if="errors.price" class="error-msg">{{ errors.price }}</p>
         </div>
         <div class="input__wrapper">
           <label>Размер скидки, %</label>
@@ -412,20 +505,24 @@ const cancelUpdate = () => {
             <input v-model="eventForm.discount" type="text" name="title" id="title"
                    placeholder="от 0 до 100">
           </div>
+          <p v-if="errors.discount" class="error-msg">{{ errors.discount }}</p>
         </div>
         <div class="input__wrapper">
-          <label>Макс. количество игроков*</label>
+          <label>Макс. количество игроков<span>*</span></label>
           <div class="input__group">
             <input v-model="eventForm.maxPlayers" type="text" name="title" id="title"
                    placeholder="от 1 до 100">
           </div>
+          <p v-if="errors.maxPlayers" class="error-msg">{{ errors.maxPlayers }}</p>
         </div>
         <div class="input__wrapper">
-          <label>Запись на событие*</label>
+          <label>Запись на событие<span>*</span></label>
           <div class="input__group _no-padding">
-            <BaseSelect :items="regTypes" v-model="eventForm.regType" placeholder="Открытая или закрытая" />
+            <BaseSelect :items="regTypes" v-model="eventForm.regType"
+                        placeholder="Открытая или закрытая" />
 
           </div>
+          <p v-if="errors.regType" class="error-msg">{{ errors.regType }}</p>
         </div>
       </div>
     </div>
@@ -447,7 +544,16 @@ const cancelUpdate = () => {
       </div>
     </div>
 
-    <div class="settings__btns">
+    <div v-if="edit" class="settings__btns" style="flex-direction: column">
+      <button type="button" class="settings__btn submit" @click="confirmEvent">
+        <img src="@/assets/icons/arrow-cold.svg" alt="">Сохранить
+      </button>
+      <div class="settings__btn cancelEvent" @click="cancelEvent">
+        <img src="@/assets/icons/Skull.svg" alt="">
+        Отменить событие
+      </div>
+    </div>
+    <div v-else class="settings__btns">
       <button type="button" class="settings__btn submit" @click="submit('create')">
         Отправить на утверждение
       </button>
@@ -563,8 +669,8 @@ const cancelUpdate = () => {
 
           .settings__top-left {
             width: 100%;
-            background: var(--03-dark-2, #18171e);
-            border-radius: 5px;
+            background: transparent;
+            border-radius: 15px;
             border-style: dashed;
             border-color: #321939;
             border-width: 1px;
@@ -574,6 +680,7 @@ const cancelUpdate = () => {
             align-items: center;
             justify-content: center;
             padding: 14px 14px;
+            margin-top: 28px;
 
 
             .file-upload__img {
@@ -711,8 +818,16 @@ const cancelUpdate = () => {
       color: #f0515e;
     }
   }
+
+}
+.input-error input {
+  border-color: #f0515e !important;
 }
 
+.error-msg {
+  color: #f0515e;
+  font-size: 14px;
+}
 .input__group {
   width: 100%;
 
@@ -738,7 +853,11 @@ const cancelUpdate = () => {
     color: var(--04-text-main, #eee0f1);
     text-align: center;
     font-size: var(--pc-button-1-font-size, 20px);
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 10px;
 
   }
 
@@ -750,6 +869,15 @@ const cancelUpdate = () => {
     @media (max-width: 670px) {
       max-width: 100%;
     }
+  }
+
+  .cancelEvent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1F1821;
+    color: #D23C48;
+
   }
 
   .cancel {

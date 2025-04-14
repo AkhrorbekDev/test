@@ -1,18 +1,19 @@
 <template>
   <div class="game-card">
-    <h1 class="game-card__title">Название игры</h1>
-    <p class="game-card__subtitle">Oneshot (3-4 часа)</p>
+    <h1 class="game-card__title">{{ selectedEvent.title }}</h1>
+    <p class="game-card__subtitle">{{ selectedEvent.duration }} ({{ selectedEvent.startTime }}-{{ selectedEvent.endTime
+      }} часа)</p>
 
     <div class="game-card__tags">
-      <span class="game-card__tag game-card__tag--genre">Жанр 1</span>
-      <span class="game-card__tag game-card__tag--genre">Жанр 2</span>
-      <span class="game-card__tag game-card__tag--setting">Сеттинг 1</span>
-      <span class="game-card__tag game-card__tag--system">Система 1</span>
+      <span v-for="tag in selectedEvent.tags" :key="tag" class="game-card__tag game-card__tag--genre">{{ tag }}</span>
+      <!--      <span class="game-card__tag game-card__tag&#45;&#45;genre">Жанр 2</span>-->
+      <!--      <span class="game-card__tag game-card__tag&#45;&#45;setting">Сеттинг 1</span>-->
+      <!--      <span class="game-card__tag game-card__tag&#45;&#45;system">Система 1</span>-->
     </div>
 
     <div class="game-card__details">
-      <p class="game-card__detail"><strong>Подготовка:</strong> минимальная</p>
-      <p class="game-card__detail">Только новички</p>
+      <p class="game-card__detail"><strong>Подготовка:</strong> {{ selectedEvent.preparation }}</p>
+      <p class="game-card__detail">{{ selectedEvent.playerLevel }}</p>
       <p class="game-card__detail">
         <span>Проводит мастер </span>
         <span class="game-card__master">NickName</span>
@@ -21,34 +22,63 @@
 
     <div class="game-card__description">
       <p>
-        В королевстве, охваченном тьмой, группа смелых искателей приключений
-        отправляется в опасное путешествие, чтобы спасти мир от забытого зла.
-        Их путь лежит через мрачные леса и заброшенные руины, где каждый шаг
-        может стать последним.
+        {{ selectedEvent.short_description }}
       </p>
       <p>
-        Смогут ли они преодолеть все преграды и вернуть свет в этот мир,
-        или тьма поглотит их навсегда?..
+        {{ selectedEvent.description }}
       </p>
     </div>
 
     <div class="game-card__footer">
       <div class="game-card__status">
-        <span class="game-card__occupancy">Занято 5/10</span>
+        <span class="game-card__occupancy">Занято {{ selectedEvent.invitations.length }}/{{ selectedEvent.maxPlayers
+          }}</span>
       </div>
-      <div class="game-card__price">2000 ₽</div>
+      <div class="game-card__price">{{ selectedEvent.price }} ₽</div>
     </div>
 
     <div class="game-card__actions">
-      <button class="game-card__button game-card__button--details">Подробнее</button>
-      <button class="game-card__button game-card__button--signup">Записаться</button>
+      <button @click="goToEvent" class="game-card__button game-card__button--details">Подробнее</button>
+      <button @click="sendRequest" class="game-card__button game-card__button--signup">Записаться</button>
     </div>
   </div>
 </template>
 
 <script>
+import { createEventsService } from '@/services/eventsService'
+import { useToast } from 'vue-toastification'
+
 export default {
   name: 'EventCard',
+  props: {
+    selectedEvent: {
+      type: Object,
+      default: () => ({}),
+      required: true
+    }
+  },
+  data() {
+    return {
+      toast: useToast()
+    }
+  },
+  methods: {
+    goToEvent() {
+      // Logic to navigate to the event details page
+      this.$router.push({ name: 'event', params: { id: this.selectedEvent._id } })
+    },
+    sendRequest() {
+      // Logic to send a request to join the event
+      createEventsService().applyForEvent(this.selectedEvent._id, { status: this.selectedEvent.status })
+        .then(response => {
+          this.$emit('requestSent', this.selectedEvent.id)
+          this.toast.success(response.message || 'Запрос на участие отправлен');
+        })
+        .catch(error => {
+          this.toast.error(error.data?.message || error.message || 'Произошла ошибка')
+        })
+    }
+  }
 }
 </script>
 

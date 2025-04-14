@@ -2,11 +2,14 @@
 import Pagination from './components/Pagination.vue'
 import image from './images/image.png'
 
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { newsService } from '@/services/publicServices'
 import { isoToDate } from '@/utils'
 import { useToast } from 'vue-toastification'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserGlobal } from '@/stores/userGlobal'
+import NewsAddModal from '@/views/NewsPage/components/NewsAddModal.vue'
+import { createAdminService } from '@/services/adminService'
 
 const currentPage = ref(1)
 
@@ -21,7 +24,73 @@ const router = useRouter()
 const itemsPerPage = ref(10)
 const news = ref([])
 const toast = useToast()
+const userStore = useUserGlobal()
+const shhowAddModal = ref(false)
 
+const user = computed(() => userStore.user)
+const closeModal = () => {
+  shhowAddModal.value = false
+  editNews.value = {
+    title: '',
+    short_description: '',
+    description: ''
+  }
+}
+const submit  = (e) => {
+  if (e._id) {
+    createAdminService().updateNews(e._id, e)
+      .then(() => {
+        toast.success('Новость успешно изменена')
+        closeModal()
+        newsService()
+          .getNews({
+            page: currentPage.value,
+            limit: itemsPerPage.value
+          })
+          .then((response) => {
+            // Обработка полученных данных
+            news.value = response.news
+            paginatoionn.value = {
+              ...response.pagination,
+              total: Math.ceil(response.pagination.total / 10)
+            }
+          })
+          .catch((error) => {
+            // Обработка ошибок
+            toast.error(error.data.error)
+          })
+      })
+      .catch((error) => {
+        toast.error(error.data.error)
+      })
+  } else {
+    createAdminService().addNews(e)
+      .then(() => {
+        toast.success('Новость успешно добавлена')
+        closeModal()
+        newsService()
+          .getNews({
+            page: currentPage.value,
+            limit: itemsPerPage.value
+          })
+          .then((response) => {
+            // Обработка полученных данных
+            news.value = response.news
+            paginatoionn.value = {
+              ...response.pagination,
+              total: Math.ceil(response.pagination.total / 10)
+            }
+          })
+          .catch((error) => {
+            // Обработка ошибок
+            toast.error(error.data.error)
+          })
+      })
+      .catch((error) => {
+        toast.error(error.data.error)
+      })
+  }
+}
 const paginate = (page: number) => {
   currentPage.value = page
   router.push({ query: { page } })
@@ -40,8 +109,18 @@ const paginate = (page: number) => {
     })
     .catch((error) => {
       // Обработка ошибок
-      toast.error(error.message)
+      toast.error(error.data.error)
     })
+}
+const editNews = ref({
+  title: '',
+  short_description: '',
+  description: ''
+})
+
+const goEdit = (item: any) => {
+  editNews.value = item
+  shhowAddModal.value = true
 }
 onMounted(() => {
   // Здесь можно выполнить дополнительные действия при монтировании компонента
@@ -63,17 +142,26 @@ onMounted(() => {
     })
     .catch((error) => {
       // Обработка ошибок
-      toast.error(error.message)
+      toast.error(error.data.error)
     })
 })
 </script>
 <template>
   <div class="news">
     <div class="news__container container">
-      <h3 class="news__title">Новости</h3>
+      <h3 class="news__title">Новости <button @click="goEdit({
+  title: '',
+  short_description: '',
+  description: ''
+})" class="news-add-btn">
+        <img src="@/assets/icons/Plus.svg" alt="">
+      </button></h3>
       <div class="news__content">
         <template v-for="item in news" :key="item.id">
           <div class="news__content-item">
+            <button v-if="user?.role === 'Admin'" @click="goEdit(item)" class="news__content-edit">
+              <img src="./images/PencilSimple.svg" alt="">
+            </button>
             <div class="news__item-img">
               <img :src="image" alt="">
             </div>
@@ -97,6 +185,7 @@ onMounted(() => {
       </div>
       <Pagination :model-value="paginatoionn.page" :totalPages="paginatoionn.total" @update:model-value="paginate" />
     </div>
+    <NewsAddModal :item="editNews" :is-open="shhowAddModal" @close="closeModal" @save="submit" />
   </div>
 </template>
 
@@ -104,7 +193,20 @@ onMounted(() => {
 <style lang="scss" scoped>
 .news {
   padding: 150px 0;
-
+.news-add-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4A7548;
+  margin-left: 15px;
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
   .news__title {
     color: #ffffff;
     font-size: 46px;
@@ -128,6 +230,17 @@ onMounted(() => {
 
     gap: 20px;
 
+    &-edit {
+      width: 56px;
+      height: 54px;
+      position: absolute;
+      background: #D23C48;
+      border-radius: 10px;
+      padding: 16px;
+      top: 15px;
+      right: 15px;
+    }
+
     @media (max-width: 768px) {
       display: flex !important;
       align-items: center;
@@ -136,7 +249,7 @@ onMounted(() => {
     }
 
     .news__content-item {
-
+      position: relative;
       width: 100%;
 
       @media (max-width: 768px) {

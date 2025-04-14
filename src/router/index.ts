@@ -1,8 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '@/views/MainPage/MainPage.vue'
+import { stringify, parse } from 'qs'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  stringifyQuery: (query) => {
+    console.log(query)
+    const str =  stringify(query, { arrayFormat: 'indices',     strictNullHandling: true
+
+    })
+    console.log(str)
+    return str
+  },
+  parseQuery: (query) => parse(query),
   routes: [
     {
       path: '/',
@@ -63,9 +73,13 @@ const router = createRouter({
     {
       path: '/event/:id',
       name: 'event',
-      component: () => import('@/views/Events/EventsPage.vue')
+      component: () => import('@/views/Events/EventDetailsPage.vue')
     },
-
+    {
+      path: '/event-add/:id?',
+      name: 'event-add',
+      component: () => import('@/views/Events/EventAdd.vue')
+    },
     {
       path: '/user',
       name: 'user',
@@ -74,7 +88,7 @@ const router = createRouter({
       meta: {
         auth: true
       },
-      children: [
+      children:  [
         {
           path: 'profile/',
           name: 'user-profile',
@@ -117,11 +131,7 @@ const router = createRouter({
         }
       ]
     },
-    {
-      path: '/event-add',
-      name: 'event-add',
-      component: () => import('@/views/Events/EventAdd.vue')
-    },
+
     {
       path: '/admin',
       name: 'admin',
