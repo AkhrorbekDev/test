@@ -4,7 +4,7 @@ import { api } from '@/services/api'
 export const createEventsService = () => {
   return {
 
-    getEvents: (query) => api('/events/', {
+    getEvents: (query) => api('/events/all', {
       method: 'GET',
       params: query
     }),
