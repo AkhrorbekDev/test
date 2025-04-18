@@ -14,10 +14,10 @@
             г. Москва, м. Арбатская Малый Николопесковский переулок, 6
           </div>
 
-          <div class="footer__center-social">
+          <a href="https://t.me/ChertogiGeroev_Club" target="_blank" class="footer__center-social">
             <i class="fab fa-telegram-plane"></i>
             <div>Телеграм канал</div>
-          </div>
+          </a>
         </div>
 
         <div class="footer__right">
@@ -27,10 +27,10 @@
             <div class="working__hours"><span>СБ-ВС:</span> с 12:30 до 24:00</div>
           </div>
 
-          <div class="footer__right-social">
+          <a href="https://vk.com/chertogi.club" target="_blank" class="footer__right-social">
             <i class="fab fa-vk"></i>
             <div>Сообщество в ВК</div>
-          </div>
+          </a>
         </div>
       </div>
       <div class="footer__copy">

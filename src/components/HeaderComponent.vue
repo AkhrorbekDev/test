@@ -22,13 +22,13 @@ const loggedIn = computed(() => userStore.loggedIn)
             <img src="@/assets/images/main-logo.svg" alt="Logo" class="navbar__logo" />
           </router-link>
           <div class="navbar__socials">
-            <div class="navbar__socials-btn"><i class="fab fa-vk"></i></div>
-            <div class="navbar__socials-btn"><i class="fab fa-telegram-plane"></i></div>
+            <a href="https://vk.com/chertogi.club" target="_blank" class="navbar__socials-btn"><i class="fab fa-vk"></i></a>
+            <a href="https://t.me/ChertogiGeroev_Club" target="_blank" class="navbar__socials-btn"><i class="fab fa-telegram-plane"></i></a>
           </div>
         </div>
         <div class="navbar__center">
           <ul class="navbar__list">
-            <li class="navbar__list-item"><router-link to="/tariffs" class="navbar__list-link">О клубе</router-link>
+            <li class="navbar__list-item"><router-link to="/" class="navbar__list-link">О клубе</router-link>
             </li>
             <li class="navbar__list-item"><router-link to="/tariffs" class="navbar__list-link">Тарифы</router-link></li>
             <router-link to="/events" class="navbar__list-item navbar__list-wings">

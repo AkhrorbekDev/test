@@ -25,10 +25,10 @@ const user = computed(() => userStore.user)
     <div class="user__container container">
       <div class="user__header">
         <div class="user__header-title">{{ pageTitle }} <span
-          class="kotiqueee-span4">({{ roles[user.role.toLocaleLowerCase()] }})</span></div>
+          class="kotiqueee-span4">({{ roles[user.role?.toLocaleLowerCase() || 'player'] }})</span></div>
         <div class="user__header-username">
           <span class="kotiqueee-span3">{{ user.username }}</span>
-          <span class="kotiqueee-span4">({{ roles[user.role.toLocaleLowerCase()] }})</span>
+          <span class="kotiqueee-span4">({{ roles[user.role?.toLocaleLowerCase() || 'player'] }})</span>
         </div>
       </div>
       <div class="user__wrapper">

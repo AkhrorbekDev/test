@@ -149,7 +149,7 @@ onMounted(() => {
 <template>
   <div class="news">
     <div class="news__container container">
-      <h3 class="news__title">Новости <button @click="goEdit({
+      <h3 class="news__title">Новости <button v-if="user?.role === 'Admin'" @click="goEdit({
   title: '',
   short_description: '',
   description: ''

@@ -25,9 +25,9 @@
 
             <button type="button" @click="login" class="content__form-btn login">Войти</button>
 
-            <button class="content__form-btn vk">
-              <i class="fab fa-vk"></i> Войти с помощью ВКонтакте
-            </button>
+<!--            <button class="content__form-btn vk">-->
+<!--              <i class="fab fa-vk"></i> Войти с помощью ВКонтакте-->
+<!--            </button>-->
 
             <router-link to="/registration" @click="closeModal"
                          class="content__form-btn registration">Зарегистрироваться
@@ -67,8 +67,19 @@ const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value
 }
 
+const validate = () => {
+  if (!loginData.value.email || !loginData.value.password) {
+    toast.error('Пожалуйста, заполните все поля.')
+    return false
+  }
+  return true
+}
+
 const login = () => {
   // Здесь можно добавить логику для обработки входа
+  if (!validate()) {
+    return
+  }
   obtainToken(loginData.value)
     .then((response) => {
       toast.success(response.message)
@@ -78,7 +89,7 @@ const login = () => {
       closeModal()
     })
     .catch((error) => {
-      toast.error(error.message)
+      toast.error(error.data.error || error.message || 'Ошибка входа')
     })
 }
 </script>
