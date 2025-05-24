@@ -163,7 +163,7 @@ onMounted(() => {
               <img src="./images/PencilSimple.svg" alt="">
             </button>
             <div class="news__item-img">
-              <img :src="image" alt="">
+              <img :src="item.imageUrl" alt="">
             </div>
 
             <div class="news__item-info">

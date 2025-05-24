@@ -19,7 +19,7 @@ export const createAdminService = () => {
     deleteUser: (userId) => api(`/admin/users/${userId}`, {
       method: 'DELETE'
     }),
-    changeRole: (data) => api('/admin/change/user', {
+    changeRole: (data) => api('/auth/role', {
       method: 'PATCH',
       body: data
     }),

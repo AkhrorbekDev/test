@@ -23,7 +23,7 @@
         :value="item['itemValue']"
         @click="selectItem(item)"
       >
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
+        <v-list-item-title>{{  item.title }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>
@@ -56,6 +56,14 @@ const props = defineProps({
   itemValue: {
     type: String,
     default: 'value'
+  },
+  labelKey: {
+    type: String,
+    default: null
+  },
+  valueKey: {
+    type: String,
+    default: null
   }
 })
 const date = useDate()
@@ -68,7 +76,7 @@ const time = computed({
   }
 })
 const selectItem = (item) => {
-  emit('update:modelValue', item[props.itemValue])
+  emit('update:modelValue', item[props.valueKey ? props.valueKey : props.itemValue])
   selectedItem.value = item
 }
 const menu = ref(false)

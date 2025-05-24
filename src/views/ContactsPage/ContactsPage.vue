@@ -35,12 +35,14 @@
 
           <div class="contacts__left-map">
             <div style="position:relative;overflow:hidden;"><a
-                href="https://yandex.uz/maps/10335/tashkent/?utm_medium=mapframe&utm_source=maps"
-                style="color:#eee;font-size:12px;position:absolute;top:0px;">Ташкент</a><a
-                href="https://yandex.uz/maps/10335/tashkent/?ll=69.243965%2C41.276526&utm_medium=mapframe&utm_source=maps&z=11.15"
-                style="color:#eee;font-size:12px;position:absolute;top:14px;">Яндекс Карты — транспорт, навигация, поиск
-                мест</a><iframe src="https://yandex.uz/map-widget/v1/?ll=69.243965%2C41.276526&z=11.15" width="100%"
-                height="370" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe></div>
+              href="https://yandex.uz/maps/10335/tashkent/?utm_medium=mapframe&utm_source=maps"
+              style="color:#eee;font-size:12px;position:absolute;top:0px;">Ташкент</a><a
+              href="https://yandex.uz/maps/10335/tashkent/?ll=69.243965%2C41.276526&utm_medium=mapframe&utm_source=maps&z=11.15"
+              style="color:#eee;font-size:12px;position:absolute;top:14px;">Яндекс Карты — транспорт, навигация, поиск
+              мест</a>
+              <iframe src="https://yandex.uz/map-widget/v1/?ll=69.243965%2C41.276526&z=11.15" width="100%"
+                      height="370" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe>
+            </div>
           </div>
 
           <div class="contacts__left-social">
@@ -66,12 +68,17 @@
         </div>
         <div class="contacts__right">
           <div style="position:relative;overflow:hidden;"><a
-              href="https://yandex.uz/maps/10335/tashkent/?utm_medium=mapframe&utm_source=maps"
-              style="color:#eee;font-size:12px;position:absolute;top:0px;">Ташкент</a><a
-              href="https://yandex.uz/maps/10335/tashkent/?ll=69.243965%2C41.276526&utm_medium=mapframe&utm_source=maps&z=11.15"
-              style="color:#eee;font-size:12px;position:absolute;top:14px;">Яндекс Карты — транспорт, навигация, поиск
-              мест</a><iframe src="https://yandex.uz/map-widget/v1/?ll=69.243965%2C41.276526&z=11.15" width="100%"
-              height="570" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe></div>
+            href="https://yandex.uz/maps/org/chertogi_geroyev/133180006455/?utm_medium=mapframe&utm_source=maps"
+            style="color:#eee;font-size:12px;position:absolute;top:0px;">Чертоги Героев</a><a
+            href="https://yandex.uz/maps/213/moscow/category/board_games/184107267/?utm_medium=mapframe&utm_source=maps"
+            style="color:#eee;font-size:12px;position:absolute;top:14px;">Настольные и интеллектуальные игры в
+            Москве</a><a
+            href="https://yandex.uz/maps/213/moscow/category/anti_caf_/31370163603/?utm_medium=mapframe&utm_source=maps"
+            style="color:#eee;font-size:12px;position:absolute;top:28px;">Антикафе в Москве</a>
+            <iframe
+              src="https://yandex.uz/map-widget/v1/org/chertogi_geroyev/133180006455/?azimuth=0.6130680809432512&ll=37.593129%2C55.751224&utm_source=share&z=17.25"
+              width="560" height="400" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe>
+          </div>
         </div>
       </div>
 
@@ -82,7 +89,7 @@
             <img src="./images/1.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Метро Арбатская: </div>
+              <div class="contacts__box-title">Метро Арбатская:</div>
 
               <div class="contacts__box-links">
                 <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> Арбатско-покровская Выход 8</div>
@@ -94,7 +101,7 @@
             <img src="./images/2.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Далее около 10 минут пешком: </div>
+              <div class="contacts__box-title">Далее около 10 минут пешком:</div>
 
               <div class="contacts__box-links">
                 <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> по Новому Арбату (быстрее)</div>
@@ -107,12 +114,12 @@
             <img src="./images/3.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Поворот в Серебрянный переулок </div>
+              <div class="contacts__box-title">Поворот в Серебрянный переулок</div>
 
               <div class="contacts__box-links">
                 <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> налево (и вниз) с Нового Арбата
                 </div>
-                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> направо со Старого Арбата </div>
+                <div class="contacts__box-link"><i class="fas fa-chevron-right"></i> направо со Старого Арбата</div>
               </div>
             </div>
           </div>
@@ -120,7 +127,7 @@
             <img src="./images/4.png" alt="">
 
             <div class="contacts__box-info">
-              <div class="contacts__box-title">Поворот во двор на углу дома «улица Арбат, 18/1с2» </div>
+              <div class="contacts__box-title">Поворот во двор на углу дома «улица Арбат, 18/1с2»</div>
 
 
             </div>
@@ -137,7 +144,6 @@
     </div>
   </div>
 </template>
-
 
 
 <style lang="scss" scoped>
@@ -165,8 +171,6 @@
     margin-bottom: 40px;
 
     font-size: calc(20px + 26 * (100vw / 1920));
-
-
 
 
     @media (max-width: 320px) {
@@ -200,8 +204,6 @@
           font-size: calc(14px + 6 * (100vw / 1920));
 
 
-
-
           @media (max-width: 320px) {
             font-size: calc(14px + (6 + 6 * 0.7) * ((100vw - 320px) / 1920));
           }
@@ -215,13 +217,10 @@
           font-size: calc(16px + 8 * (100vw / 1920));
 
 
-
-
           @media (max-width: 320px) {
             font-size: calc(16px + (8 + 8 * 0.7) * ((100vw - 320px) / 1920));
           }
         }
-
 
 
         .contacts__left-hours {
@@ -237,8 +236,6 @@
             font-weight: var(--pc-p1-font-weight, 400);
 
             font-size: calc(16px + 8 * (100vw / 1920));
-
-
 
 
             @media (max-width: 320px) {
@@ -258,8 +255,6 @@
           font-weight: 400;
           font-family: 'Alegreya-Regular';
           font-size: calc(16px + 8 * (100vw / 1920));
-
-
 
 
           @media (max-width: 320px) {
@@ -342,8 +337,6 @@
             font-size: calc(22px + 10 * (100vw / 1920));
 
 
-
-
             @media (max-width: 320px) {
               font-size: calc(22px + (10 + 10 * 0.7) * ((100vw - 320px) / 1920));
             }
@@ -359,8 +352,6 @@
           font-family: 'Alegreya-Regular';
 
           font-size: calc(16px + 4 * (100vw / 1920));
-
-
 
 
           @media (max-width: 320px) {
@@ -399,8 +390,6 @@
       font-size: calc(20px + 26 * (100vw / 1920));
 
 
-
-
       @media (max-width: 320px) {
         font-size: calc(20px + (26 + 26 * 0.7) * ((100vw - 320px) / 1920));
       }
@@ -435,8 +424,6 @@
             font-size: calc(16px + 2 * (100vw / 1920));
 
 
-
-
             @media (max-width: 320px) {
               font-size: calc(16px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
             }
@@ -462,8 +449,6 @@
             font-size: calc(14px + 2 * (100vw / 1920));
 
 
-
-
             @media (max-width: 320px) {
               font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1920));
             }
@@ -484,8 +469,6 @@
               align-items: center;
               gap: 12px;
               font-size: calc(14px + 2 * (100vw / 1920));
-
-
 
 
               @media (max-width: 320px) {
@@ -516,10 +499,10 @@
     .contacts__footer-title {
 
       background: var(--04-text-h1-style,
-          linear-gradient(90deg,
-            rgba(203, 190, 205, 1) 0%,
-            rgba(255, 255, 255, 1) 46.50000035762787%,
-            rgba(203, 190, 205, 1) 100%));
+        linear-gradient(90deg,
+          rgba(203, 190, 205, 1) 0%,
+          rgba(255, 255, 255, 1) 46.50000035762787%,
+          rgba(203, 190, 205, 1) 100%));
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -529,8 +512,6 @@
       text-align: center;
 
       font-size: calc(26px + 30 * (100vw / 1920));
-
-
 
 
       @media (max-width: 320px) {
@@ -548,8 +529,6 @@
       font-size: calc(16px + 4 * (100vw / 1920));
 
 
-
-
       @media (max-width: 320px) {
         font-size: calc(16px + (4 + 4 * 0.7) * ((100vw - 320px) / 1920));
       }
@@ -562,8 +541,6 @@
       font-weight: 700;
 
       font-size: calc(16px + 4 * (100vw / 1920));
-
-
 
 
       @media (max-width: 320px) {

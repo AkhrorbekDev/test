@@ -4,25 +4,29 @@ import UserAddModal from './components/UserAddModal.vue'
 import { createUserService } from '@/services'
 import { roles } from '@/types/constants'
 import UserContextMenu from '@/views/AdminPage/components/UserContextMenu.vue'
+import Pagination from '@/views/NewsPage/components/Pagination.vue'
 
 const selectedRole = ref()
 const users = ref([
-  { _id: 1, username: 'Бубебубебубу', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Админ' },
-  { _id: 2, username: 'Бубеб', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Мастер' },
-  { _id: 3, username: 'Бубебебе', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Мастер' },
-  { _id: 4, username: 'Бубебубебубу', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Админ' },
-  { _id: 5, username: 'Вувувувувду', phone: '+7 (888) 888-88-88', email: 'TEST111@TEST.COM', role: 'Админ' },
-  { _id: 6, username: 'Дададададада', phone: '+7 (777) 777-77-77', email: 'HELLO_WORLD@EXAMPLE.COM', role: 'Игрок' },
-  { _id: 7, username: 'Зазазазазазаза', phone: '+7 (666) 666-66-66', email: 'MYEMAIL@GMAIL.COM', role: 'Игрок' }
+  // { _id: 1, username: 'Бубебубебубу', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Админ' },
+  // { _id: 2, username: 'Бубеб', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Мастер' },
+  // { _id: 3, username: 'Бубебебе', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Мастер' },
+  // { _id: 4, username: 'Бубебубебубу', phone: '+7 999 999-99-99', email: 'EXAMASDASD@FJFA.COM', role: 'Админ' },
+  // { _id: 5, username: 'Вувувувувду', phone: '+7 (888) 888-88-88', email: 'TEST111@TEST.COM', role: 'Админ' },
+  // { _id: 6, username: 'Дададададада', phone: '+7 (777) 777-77-77', email: 'HELLO_WORLD@EXAMPLE.COM', role: 'Игрок' },
+  // { _id: 7, username: 'Зазазазазазаза', phone: '+7 (666) 666-66-66', email: 'MYEMAIL@GMAIL.COM', role: 'Игрок' }
 ])
 
 const addModal = ref(false)
 const showContextMenu = ref(false)
 const contextMenu = ref()
 const selectedUserID = ref(null)
-
+const paginatoionn = ref({
+  page: 1,
+  total: 1,
+  limit: 10
+})
 const clickOutside = (e) => {
-  console.log(e)
   if (e.target.classList.contains('edit-btn')) {
     return
   }
@@ -39,6 +43,19 @@ const appendContextMenu = (e, user) => {
 
 }
 
+const getUsers = (params) => {
+  createUserService().getAllUsers({
+    ...params,
+    limit: paginatoionn.value.limit
+  })
+    .then((response) => {
+      users.value = response.users
+    })
+    .catch((error) => {
+      console.error('Ошибка при получении пользователей:', error)
+    })
+}
+
 
 
 onMounted(() => {
@@ -46,6 +63,10 @@ onMounted(() => {
   createUserService().getAllUsers()
     .then((response) => {
       users.value = response.users
+      paginatoionn.value = {
+        ...response.pagination,
+        total: response.pagination.pages
+      }
     })
     .catch((error) => {
       console.error('Ошибка при получении пользователей:', error)
@@ -67,15 +88,15 @@ onMounted(() => {
 
           <div class="filters">
             <div class="filters-checkbox">
-              <input v-model="selectedRole" type="checkbox" value="admin" id="admin">
+              <input v-model="selectedRole" type="checkbox" value="admin" id="admin" @update:model-value="getUsers({role: 'Admin'})">
               <label for="admin">Админ</label>
             </div>
             <div class="filters-checkbox">
-              <input v-model="selectedRole" type="checkbox" value="master" id="master">
+              <input v-model="selectedRole" type="checkbox" value="master" id="master" @update:model-value="getUsers({role: 'Master'})">
               <label for="master">Мастер</label>
             </div>
             <div class="filters-checkbox">
-              <input v-model="selectedRole" type="checkbox" value="player" id="player">
+              <input v-model="selectedRole" type="checkbox" value="player" id="player" @update:model-value="getUsers({role: 'Player'})">
               <label for="player">Игрок</label>
             </div>
           </div>
@@ -94,7 +115,7 @@ onMounted(() => {
           <th>Телефон</th>
           <th>Email</th>
           <th>Роль</th>
-          <th></th>
+<!--          <th></th>-->
         </tr>
         </thead>
         <tbody>
@@ -107,22 +128,25 @@ onMounted(() => {
             <span :class="['role-badge', user.role.toLocaleLowerCase()]">{{ roles[user.role.toLocaleLowerCase()]
               }}</span>
           </td>
-          <td class="base__table-edit">
-            <div @click="appendContextMenu($event, user)" class="edit-btn" />
-            <img src="@/assets/icons/PencilSimple.svg" alt="">
-          </td>
+<!--          <td class="base__table-edit">-->
+<!--            <div @click="appendContextMenu($event, user)" class="edit-btn" />-->
+<!--            <img src="@/assets/icons/PencilSimple.svg" alt="">-->
+<!--          </td>-->
         </tr>
         </tbody>
       </table>
 
-      <div class="base__table-bottom">
-        <div class="base__table-left">
-          <div class="left-title"></div>
-          <div class="left-item"></div>
-        </div>
-        <div class="base__table-right"></div>
-      </div>
 
+
+    </div>
+    <div class="base__table-bottom">
+      <div class="base__table-left">
+        <div class="left-title"></div>
+        <div class="left-item"></div>
+      </div>
+      <div class="base__table-right">
+        <Pagination :model-value="paginatoionn.page" :totalPages="paginatoionn.total" @update:model-value="paginate" />
+      </div>
     </div>
   </div>
   <div ref="contextMenu" v-show="showContextMenu" class="context-menu">
@@ -153,6 +177,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     width: 100%;
+    overflow: auto;
 
 
     .base__table-header {
@@ -251,6 +276,12 @@ onMounted(() => {
       height: 26px;
       margin: 0 auto;
     }
+  }
+
+  &-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
 }

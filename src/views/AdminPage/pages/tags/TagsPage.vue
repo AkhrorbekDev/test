@@ -99,16 +99,16 @@ onMounted(() => {
                   <div class="tags__card-name">{{ item.fullName }}</div>
                   <div class="tags__card-undertitle">{{ item.description }}</div>
                 </div>
-                <div class="tags__card-right">
-                  <img @click="editFilterItem(filter, item)" src="./images/PencilSimple.svg" alt="">
-                  <img @click="deleteFilterItem(filter, item)" src="./images/X.svg" alt="">
-                </div>
+<!--                <div class="tags__card-right">-->
+<!--                  <img @click="editFilterItem(filter, item)" src="./images/PencilSimple.svg" alt="">-->
+<!--                  <img @click="deleteFilterItem(filter, item)" src="./images/X.svg" alt="">-->
+<!--                </div>-->
 
               </div>
-              <div class="tags__card-bottom"  @click="addModal = true">
-                <img src="./images/Vector.svg" alt="">
-                Добавить
-              </div>
+<!--              <div class="tags__card-bottom"  @click="addModal = true">-->
+<!--                <img src="./images/Vector.svg" alt="">-->
+<!--                Добавить-->
+<!--              </div>-->
             </div>
           </template>
 

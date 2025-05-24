@@ -2,7 +2,9 @@
 import { computed, onMounted } from 'vue'
 import { useUserGlobal } from '@/stores/userGlobal'
 import router from '@/router'
-import { isoToDate } from '../../../utils'
+import { getDate, isoToDate } from '../../../utils'
+import { createEventsService } from '@/services/eventsService'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps({
   event: {
@@ -17,15 +19,58 @@ enum Statuses {
   approved = 'Событие подтверждено',
   archived = 'Событие завершено',
 }
+const toast = useToast()
+
+const sendApplication = () => {
+  // Здесь можно добавить логику для отправки заявки
+  console.log('Отправка заявки на событие', props)
+  createEventsService().applyForEvent(props.event._id, { applicationId: props.event._id})
+    .then(() => {
+      toast.success('Заявка на событие успешно отправлена')
+    }).catch((error) => {
+    console.error('Ошибка при отмене события:', error)
+    toast.error(error.data.message)
+  })
+}
+
+const sendPending = () => {
+  // Здесь можно добавить логику для ожидания события
+  console.log('Ожидание события', props.event._id)
+  createEventsService().applyForEvent(props.event._id, { applicationId: props.event._id})
+    .then(() => {
+      toast.success('Заявка на ожидание события успешно отправлена')
+    }).catch((error) => {
+    console.error('Ошибка при отмене события:', error)
+    toast.error(error.data.message)
+
+  })
+}
 
 const cancelApproved = () => {
   // Здесь можно добавить логику для отмены события
-  console.log('Отмена события', props.event.id)
+  createEventsService().cancelFromEvent(props.event._id, { applicationId: props.event._id})
+    .then(() => {
+      toast.success('Отмена события успешно выполнена')
+    })
+    .catch((error) => {
+      console.error('Ошибка при отмене события:', error)
+      toast.error(error.data.message)
+
+    })
 }
 
 const cancelPending = () => {
   // Здесь можно добавить логику для отмены ожидающего события
   console.log('Отмена ожидающего события', props.event.id)
+  createEventsService().cancelFromEvent(props.event._id, { applicationId: props.event._id})
+    .then(() => {
+      toast.success('Отмена ожидающего события успешно выполнена')
+    })
+    .catch((error) => {
+      console.error('Ошибка при отмене события:', error)
+      toast.error(error.data.message)
+
+    })
 }
 const userStore = useUserGlobal()
 
@@ -36,7 +81,7 @@ const goEventAddPage = () => {
   router.push({
     name: 'eventAdd',
     params: {
-      id: props.event.id
+      id: props.event._id
     }
   })
 }
@@ -44,6 +89,10 @@ const eventTypes = {
   'game': 'Игровая сессия',
   'event': 'Мероприятие',
 }
+
+const userApplication = computed(() => {
+  return props.event.participants?.find(e => e.user.id === user.value.id)
+})
 
 </script>
 <template>
@@ -54,22 +103,22 @@ const eventTypes = {
       </div>
       <div class="event__top-right">
         <div class="event__card-subtitle">
-          {{ eventTypes[event.type || 'game'] }}
+          {{ event.format }}
         </div>
 
-        <div class="event__card-status">Авторская</div>
+<!--        <div class="event__card-status">{{ event.creator.username }}</div>-->
       </div>
       <div class="event__top-bottom">
         <div class="event__top-date"><img src="../images/CalendarBlank.svg" alt=""> {{ isoToDate(event.date) }}
         </div>
-        <div class="event__top-room"><img src="../images/Vector.svg" alt="">{{ event.invitations
-          }}/{{ event.participants }}
+        <div class="event__top-room"><img src="../images/Vector.svg" alt="">{{ event.participants.length
+          }}/{{ event.maxParticipants }}
         </div>
       </div>
     </div>
     <div class="event__card-content">
       <div class="event__card-left">
-        <img class="event__left-img" src="../images/pic.png" alt="" />
+        <img class="event__left-img" :src="event.imageUrl" alt="" />
         <div class="event__left-bottom">
           <div v-if="event.discount" class="event__left-discount">-{{ event.discount }}%</div>
           <div v-if="event.price" class="event__left-price "><img src="../images/price.svg" alt=""> {{ event.price }} ₽
@@ -78,7 +127,12 @@ const eventTypes = {
       </div>
       <div class="event__card-right">
         <div class="event__card-genres">
-          <div v-for="tag in event.tags" :key="tag" class="event__card-genre">{{ tag }}</div>
+          <div v-if="event.system"  class="event__card-genre">{{event.system}}</div>
+          <div v-if="event.setting"  class="event__card-genre">{{event.setting}}</div>
+          <div v-if="event.duration"  class="event__card-genre">{{event.duration}}</div>
+          <div v-if="event.playerExperience"  class="event__card-genre">{{ event.playerExperience }}</div>
+          <div v-if="event.genre"  class="event__card-genre">{{event.genre}}</div>
+          <div v-if="event.characterLevel"  class="event__card-genre">{{ event.characterLevel}}</div>
         </div>
         <div class="event__card-descr">
           {{ event.description }}
@@ -88,20 +142,39 @@ const eventTypes = {
     </div>
 
     <div class="event__card-bottom">
-      <div class="event__card-date"><img src="../images/CalendarBlank.svg" alt=""> {{ isoToDate(event.date) }}
+      <div class="event__card-date"><img src="../images/CalendarBlank.svg" alt=""> {{ getDate(event.date) }} {{ event.startTime }}
       </div>
       <router-link :to="{
         name: 'event',
         params: {
-          id: event.id || 1
+          id: event._id || 1
         }
       }" class="event__card-any">Подробнее
       </router-link>
-      <div v-if="event.status === 'pending'" class="event__card-btn">{{ Statuses[event.status] }}</div>
-      <div v-if="event.status === 'approved'" class="event__card-btn">{{ Statuses[event.status] }}</div>
-      <div v-if="event.status === 'rejected' " class="event__card-btn">{{ Statuses[event.status] }}</div>
-      <div v-if="event.status === 'archived'" class="event__card-btn">{{ Statuses[event.status] }}</div>
-      <div class="event__card-room"><img src="../images/Vector.svg" alt="">{{ event.invitations?.length || 0 }}/{{ event.participants?.length || 0 }}
+<!--      <template v-if="user.role === 'Master' || user.role === 'Admin'">-->
+<!--        <div v-if="event.status === 'approved'" @click="cancelApproved" class="event__card-btn">Отменить событие-->
+<!--        </div>-->
+<!--        <div v-if="event.status === 'pending'" @click="cancelPending" class="event__card-btn">Отменить ожидание-->
+<!--        </div>-->
+<!--      </template>-->
+      <template v-if="!userApplication">
+<!--        <div v-if="event.status === 'pending'" class="event__card-btn">{{ Statuses[event.status] }}</div>-->
+<!--        <div v-else-if="event.status === 'approved'" class="event__card-btn">{{ Statuses[event.status] }}</div>-->
+        <div v-if="event.status === 'rejected' " class="event__card-btn">{{ Statuses[event.status] }}</div>
+        <div v-if="event.status === 'archived'" class="event__card-btn">{{ Statuses[event.status] }}</div>
+        <div v-if="event.status === 'approved' && event.currentParticipants < event.maxParticipants"
+             @click="sendApplication" class="event__card-btn">Записаться</div>
+        <div v-else @click="sendPending" class="event__card-btn">Ожидать</div>
+      </template>
+      <template v-if="userApplication">
+        <div v-if="userApplication.status === 'pending'" class="event__card-btn" @click="cancelPending">Отменить ожидание</div>
+        <div v-if="userApplication.status === 'approved'" class="event__card-btn" @click="cancelApproved">Отменить запись</div>
+      </template>
+      <template v-else>
+
+      </template>
+      <div class="event__card-room"><img src="../images/Vector.svg" alt="">{{ event.participants.length
+        }}/{{ event.maxParticipants }}
       </div>
     </div>
   </div>
@@ -296,6 +369,7 @@ const eventTypes = {
 
       .event__card-genres {
         display: flex;
+        flex-wrap: wrap;
         gap: 14px;
         overflow-y: auto;
 

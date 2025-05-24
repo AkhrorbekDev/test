@@ -7,59 +7,22 @@
             <button class="close-btn" @click="closeModal"><i class="fal fa-times"></i></button>
           </div>
           <h3 class="modal-content__title">
-            {{ item._id ? 'Изменить новость' : 'Добавить новость' }}</h3>
+            Оставьте комментарий для мастера
+          </h3>
 
           <form @submit.prevent="submit" class="modal-content__form">
-            <div class="inputs">
-              <div class="input__wrapper">
-                <label>Название<span>*</span></label>
-                <div class="input__group">
-                  <input v-model="values.title" type="text" name="title" id="title"
-                         placeholder="Как будет называться новость?">
-                </div>
-                <p v-if="errors.title" class="error-msg">{{ errors.title }}</p>
+            <div class="input__wrapper">
+              <label>Краткое описание<span>*</span></label>
 
-              </div>
-              <div class="event-main__image">
-                <label class="settings__top-left">
-                  <div class="file-upload__img" :style="{
-                                       '--background': values.imageUrl ? 'url(' + values.imageUrl + ') no-repeat center' : 'linear-gradient(114.17deg, rgba(54, 38, 38, 0.3) -3.5%, rgba(34, 27, 36, 0.3) 47.08%, rgba(54, 38, 38, 0.3) 97.65%)'
+              <textarea v-model="values.reason" type="text" name="about_you" id="about_you"
+                        placeholder="Что нужно исправить?"></textarea>
+              <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
+              <p v-if="errors.reason" class="error-msg">{{ errors.reason }}</p>
 
-                  }">
-                    <img src="@/assets/icons/FilePlus.svg" alt="">
-                  </div>
-                  <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
-                         @change="handleFileUpload">
-                  <div class="file-upload__info">
-                    <div class="settings__left-title">Нажмите для выбора изображения, либо перетащите его</div>
-                    <div class="settings__left-subtitle">Формат jpeg, jpg, png, весом не более 1 MB и размером не более
-                      2000 × 200
-                    </div>
-                  </div>
-                </label>
-              </div>
-              <div class="input__wrapper">
-                <label>Краткое описание<span>*</span></label>
-
-                <textarea v-model="values.short_description" type="text" name="about_you" id="about_you"
-                          placeholder="Напишите здесь что-нибудь"></textarea>
-                <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
-                <p v-if="errors.short_description" class="error-msg">{{ errors.short_description }}</p>
-
-              </div>
-              <div class="input__wrapper">
-                <label>Полное описание <span>*</span></label>
-
-                <textarea v-model="values.content" type="text" name="about_you" id="about_you"
-                          placeholder="Напишите здесь что-нибудь"></textarea>
-                <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
-                <p v-if="errors.content" class="error-msg">{{ errors.content }}</p>
-
-              </div>
             </div>
 
-            <button type="button"  @click="submit" class="content__form-btn add">
-              {{ item._id ? 'Изменить' : 'Добавить' }}
+            <button  @click="submit" class="content__form-btn add">
+              Отправить
             </button>
 
 
@@ -72,36 +35,20 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits, onMounted, watch } from 'vue'
 import { useToast } from 'vue-toastification'
-import { createUserService } from '@/services'
-import { createImageService } from '@/services/imageService'
 
-const props = defineProps<{ isOpen: boolean, item: object }>()
+const props = defineProps<{ isOpen: boolean }>()
 const emit = defineEmits(['close', 'save'])
 
-const passwordVisible = ref(false)
 
 const values = ref({
-  title: '',
-  short_description: '',
-  content: '',
-  imageUrl: ''
+  reason: '',
 })
 const errors = ref({
-  title: '',
-  short_description: '',
-  content: '',
-  imageUrl: ''
+  reason: ''
 })
 watch(() => props.isOpen, (newValue) => {
-  if (newValue) {
-    values.value = props.item
-  } else {
-    values.value = {
-      title: '',
-      short_description: '',
-      content: '',
-      imageUrl: ''
-    }
+  values.value = {
+    reason: '',
   }
 }, { immediate: true })
 const closeModal = () => {
@@ -110,35 +57,14 @@ const closeModal = () => {
 const saveModal = () => {
   emit('save', values.value)
 }
-const handleFileUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    const reader = new FormData()
-
-    reader.append('image', file)
-    createImageService().uploadImage(reader).then((res) => {
-      values.value.imageUrl = res.imageUrl
-      toast.success('Изображение успешно загружено')
-    }).catch(error => {
-      toast.error(error.message)
-    })
-  }
-}
 const toast = useToast()
 
 const submit = () => {
-  if (values.value.title && values.value.content && values.value.short_description) {
-    if (props.item) {
-      saveModal()
-    } else {
-      closeModal()
-    }
+  if ( values.value.reason) {
+    saveModal()
   } else {
     toast.error('Заполните все поля')
   }
-}
-const togglePasswordVisibility = () => {
-  passwordVisible.value = !passwordVisible.value
 }
 
 </script>
@@ -295,8 +221,7 @@ const togglePasswordVisibility = () => {
 
 .add {
   margin-top: 31px;
-  background: #000;
-  background: var(--05-success-main, #4a7548);
+  background: #86489C;
 }
 
 .login {
@@ -348,8 +273,7 @@ const togglePasswordVisibility = () => {
 
 
   .file-upload__img {
-    background: var(--background);
-    background-size: cover;
+    background: linear-gradient(114.17deg, rgba(54, 38, 38, 0.3) -3.5%, rgba(34, 27, 36, 0.3) 47.08%, rgba(54, 38, 38, 0.3) 97.65%);
     min-width: 180px;
     height: 167px;
     border-radius: 10px;

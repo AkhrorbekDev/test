@@ -54,7 +54,7 @@ onMounted(() => {
   const eventsService = createEventsService()
   eventsService.getEvents()
     .then((response) => {
-      events.value = response.events
+      events.value = response
     })
     .catch((error) => {
       toast.error(error.message)
@@ -113,7 +113,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div v-if="user?.role === 'Master' || user?.role === 'Admin'" class="club__events-help">
+        <div v-if="user?.role === 'Master'" class="club__events-help">
 
           <div class="club__help-title">Нет подходящего события?</div>
           <div class="club__help-subtitle">Так создайте его сами!</div>

@@ -85,7 +85,7 @@ onMounted(() => {
 
       <div class="news__self-more">
         <div class="news__more-left">
-          <img :src="picture" alt="">
+          <img :src="currentNews.imageUrl" alt="">
         </div>
         <div class="news__self-right">
           <div class="news__right-top">

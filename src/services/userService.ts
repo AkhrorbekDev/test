@@ -6,7 +6,10 @@ export const createUserService = () => {
   return {
     // Get user details
     getUserDetails: () => authApi('/users/me'),
-    getAllUsers: () => authApi('/admin/users/'),
+    getAllUsers: (params) => authApi('/admin/users', {
+      method: 'GET',
+      params
+    }),
     // Generate API key
     generateApiKey: () => authApi('/generate-api-key/'),
 

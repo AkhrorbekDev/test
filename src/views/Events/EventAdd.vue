@@ -11,78 +11,46 @@ import { createEventsService } from '@/services/eventsService'
 import { useRoute } from 'vue-router'
 import { useDate } from 'vuetify/framework'
 import { createAdminService } from '@/services/adminService'
+import { createImageService } from '@/services/imageService'
+import { filtersService } from '@/services/publicServices'
 
 const toast = useToast()
 const route = useRoute()
-const regTypes = [
-  { title: 'Открытая', value: 'open' },
-  { title: 'Закрытая', value: 'close' }
-]
-
-const placeTypes = [
-  { title: 'Онлайн', value: 'online' },
-  { title: 'Офлайн', value: 'offline' }
-]
-const eventSystem = [
-  { title: 'D&D', value: 'dnd' },
-  { title: 'Pathfinder', value: 'pathfinder' },
-  { title: 'Vampire', value: 'vampire' }
-]
-const settings = [
-  { title: 'Фантастика', value: 'fantasy' },
-  { title: 'Комедия', value: 'comedy' },
-  { title: 'Драма', value: 'drama' }
-]
-const eventDuration = [
-  { title: 'Одноразовая', value: 'one-time' },
-  { title: 'Кампания', value: 'campaign' }
-]
-const eventExperience = [
-  { title: 'Новички', value: 'newbies' },
-  { title: 'Опытные', value: 'experienced' },
-  { title: 'Все', value: 'all' }
-]
-const eventGenre = [
-  { title: 'Фантастика', value: 'fantasy' },
-  { title: 'Комедия', value: 'comedy' },
-  { title: 'Драма', value: 'drama' }
-]
-const eventPreparation = [
-  { title: 'Не требуется', value: 'no-preparation' },
-  { title: 'Минимальная', value: 'minimal' },
-  { title: 'Требуется', value: 'required' }
-]
-const eventLevel = [
-  { title: 'Низкий', value: 'low' },
-  { title: 'Средний', value: 'medium' },
-  { title: 'Высокий', value: 'high' },
-  { title: 'Эпик', value: 'epic' }
-]
+const regTypes = ref([])
+const placeTypes = ref([])
+const eventSystem = ref([])
+const settings = ref([])
+const eventDuration = ref([])
+const eventExperience = ref([])
+const eventGenre = ref([])
+const eventPreparation = ref([])
+const eventLevel = ref([])
 const avatarUpload = ref(false)
 const eventForm = ref({
-  title: '',
-  description: '',
-  short_description: '',
-  type: 'game',
-  date: '',
-  org_name: '',
-  org_bio: '',
-  startTime: '',
-  maxPlayers: '',
-  place: '',
-  price: '',
-  discount: '',
-  org_info: '',
-  regType: '',
-  endTime: '',
-  system: '',
-  duration: '',
-  playerExp: '',
-  genre: '',
-  preparation: '',
-  playerLevel: '',
-  setting: '',
-
+  'title': '',
+  'description': '',
+  'shortDescription': '',
+  'format': 'Игровая сессия',
+  'date': '',
+  'org_name': '',
+  'org_bio': '',
+  'startTime': '',
+  'maxParticipants': '',
+  'location': '',
+  'imageUrl': '',
+  'price': '',
+  'discount': '',
+  'organizerInfo': '',
+  'isPrivate': '',
+  'endTime': '',
+  'system': '',
+  'duration': '',
+  'playerExperience': '',
+  'genre': '',
+  'preparation': '',
+  'playerLevel': '',
+  'setting': '',
+  'status': ''
 })
 const menu2 = ref(false)
 const menu3 = ref(false)
@@ -91,36 +59,38 @@ const handleFileUpload = (event) => {
   if (file) {
     const reader = new FormData()
 
-    reader.append('file', file)
-    // createUserService().updateAvatar(reader).then(() => {
-    //   toast.success('Avatar updated successfully')
-    // }).catch(error => {
-    //   toast.error(error.message)
-    // }).finally(() => {
-    //   avatarUpload.value = false
-    // })
+    reader.append('image', file)
+    createImageService().uploadImage(reader).then((res) => {
+      eventForm.value.imageUrl = res.imageUrl
+      toast.success('Изображение успешно загружено')
+    }).catch(error => {
+      toast.error(error.message)
+    }).finally(() => {
+      avatarUpload.value = false
+    })
   }
 }
 const validateForm = () => {
   errors.value.title = eventForm.value.title ? '' : 'Обязательно'
 
   errors.value.description = eventForm.value.description ? '' : 'Обязательно'
-  errors.value.short_description = eventForm.value.short_description ? '' : 'Обязательно'
+  errors.value.shortDescription = eventForm.value.shortDescription ? '' : 'Обязательно'
 
   errors.value.date = eventForm.value.date ? '' : 'Обязательно'
-  errors.value.org_info = eventForm.value.org_info ? '' : 'Обязательно'
+  errors.value.organizerInfo = eventForm.value.organizerInfo ? '' : 'Обязательно'
   errors.value.startTime = eventForm.value.startTime ? '' : 'Обязательно'
-  errors.value.maxPlayers = eventForm.value.maxPlayers ? '' : 'Обязательно'
-  errors.value.place = eventForm.value.place ? '' : 'Обязательно'
+  errors.value.maxParticipants = eventForm.value.maxParticipants ? '' : 'Обязательно'
+  errors.value.location = eventForm.value.location ? '' : 'Обязательно'
   errors.value.price = eventForm.value.price ? '' : 'Обязательно'
   errors.value.discount = eventForm.value.discount ? '' : 'Обязательно'
-  errors.value.regType = eventForm.value.regType ? '' : 'Обязательно'
+  errors.value.isPrivate = eventForm.value.isPrivate ? '' : 'Обязательно'
   errors.value.endTime = eventForm.value.endTime ? '' : 'Обязательно'
+  // errors.value.imageUrl = eventForm.value.imageUrl ? '' : 'Обязательно'
 
-  if (eventForm.value.type === 'game') {
+  if (eventForm.value.format === 'Игровая сессия') {
     errors.value.system = eventForm.value.system ? '' : 'Обязательно'
     errors.value.duration = eventForm.value.duration ? '' : 'Обязательно'
-    errors.value.playerExp = eventForm.value.playerExp ? '' : 'Обязательно'
+    errors.value.playerExperience = eventForm.value.playerExperience ? '' : 'Обязательно'
     errors.value.genre = eventForm.value.genre ? '' : 'Обязательно'
     errors.value.preparation = eventForm.value.preparation ? '' : 'Обязательно'
     errors.value.playerLevel = eventForm.value.playerLevel ? '' : 'Обязательно'
@@ -132,20 +102,21 @@ const isUpdateSuccess = ref(false)
 const errors = ref({
   title: '',
   description: '',
-  short_description: '',
-  type: '',
+  shortDescription: '',
+  format: '',
   date: '',
   startTime: '',
-  maxPlayers: '',
-  place: '',
+  maxParticipants: '',
+  location: '',
   price: '',
   discount: '',
-  org_info: '',
-  regType: '',
+  organizerInfo: '',
+  isPrivate: '',
   endTime: '',
+  imageUrl: '',
   system: '',
   duration: '',
-  playerExp: '',
+  playerExperience: '',
   genre: '',
   preparation: '',
   playerLevel: '',
@@ -180,26 +151,26 @@ const cancelUpdate = () => {
   eventForm.value = {
     title: '',
     description: '',
-    short_description: '',
-    type: 'game',
+    shortDescription: '',
+    format: 'Игровая сессия',
     date: '',
     org_name: '',
     org_bio: '',
     startTime: '',
-    maxPlayers: '',
-    place: '',
+    maxParticipants: '',
+    location: '',
     price: '',
     discount: '',
-    org_info: '',
-    regType: '',
+    organizerInfo: '',
+    isPrivate: '',
     endTime: '',
     system: '',
     duration: '',
-    playerExp: '',
+    playerExperience: '',
     genre: '',
     preparation: '',
     playerLevel: '',
-    setting: '',
+    setting: ''
 
 
   }
@@ -232,6 +203,32 @@ onMounted(() => {
         toast.error(err.message)
       })
   }
+
+  filtersService().getFilters()
+    .then((res) => {
+      if (res) {
+        res.forEach(item => {
+          console.log(item.name)
+          if (item.name === 'gameSystem') {
+            eventSystem.value = item.options
+          } else if (item.name === 'settings') {
+            settings.value = item.options
+          } else if (item.name === 'eventDuration') {
+            eventDuration.value = item.options
+          } else if (item.name === 'experienceLevel') {
+            eventExperience.value = item.options
+          } else if (item.name === 'gameStyle') {
+            eventGenre.value = item.options
+          } else if (item.name === 'eventPreparation') {
+            eventPreparation.value = item.options
+          } else if (item.name === 'eventLevel') {
+            eventLevel.value = item.options
+          } else if (item.name === 'gameFormat') {
+            regTypes.value = item.options
+          }
+        })
+      }
+    })
 })
 
 
@@ -245,13 +242,13 @@ onMounted(() => {
       </h1>
       <div class="event-types">
         <button class="event-types__type" :class="{
-          _active: eventForm.type === 'game'
-        }" @click="eventForm.type = 'game'">
+          _active: eventForm.format === 'Игровая сессия'
+        }" @click="eventForm.format = 'Игровая сессия'">
           Игровая сессия
         </button>
         <button class="event-types__type" :class="{
-        _active: eventForm.type === 'event'
-        }" @click="eventForm.type = 'event'">
+        _active: eventForm.format === 'Мероприятие'
+        }" @click="eventForm.format = 'Мероприятие'">
           Мероприятие
         </button>
       </div>
@@ -261,7 +258,7 @@ onMounted(() => {
         Основная информация
       </h3>
 
-      <template v-if="eventForm.type === 'game'">
+      <template v-if="eventForm.format === 'Игровая сессия'">
         <div class="event-main__info">
           <div class="event-main__titles _game">
             <div class="input__wrapper">
@@ -278,7 +275,7 @@ onMounted(() => {
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.system" :items="eventSystem"
+                <BaseSelect v-model="eventForm.system" labelKey="fullName" valueKey="tagName" :items="eventSystem"
                             placeholder="Выберите из списка..." />
               </div>
               <p v-if="errors.system" class="error-msg">{{ errors.system }}</p>
@@ -289,7 +286,7 @@ onMounted(() => {
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.setting" :items="settings"
+                <BaseSelect v-model="eventForm.setting" labelKey="fullName" valueKey="tagName" :items="settings"
                             placeholder="Выберите из списка..." />
                 <p v-if="errors.setting" class="error-msg">{{ errors.settings }}</p>
 
@@ -300,7 +297,7 @@ onMounted(() => {
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.duration" :items="eventDuration"
+                <BaseSelect v-model="eventForm.duration" labelKey="fullName" valueKey="tagName" :items="eventDuration"
                             placeholder="Нулевая сессия, ваншот, кампания..." />
               </div>
               <p v-if="errors.duration" class="error-msg">{{ errors.duration }}</p>
@@ -310,17 +307,18 @@ onMounted(() => {
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.playerExp" :items="eventExperience"
+                <BaseSelect v-model="eventForm.playerExperience" labelKey="fullName" valueKey="tagName"
+                            :items="eventExperience"
                             placeholder="Новички, опытные или оба?" />
               </div>
-              <p v-if="errors.playerExp" class="error-msg">{{ errors.playerExp }}</p>
+              <p v-if="errors.playerExperience" class="error-msg">{{ errors.playerExperience }}</p>
             </div>
             <div class="input__wrapper">
               <label>Жанр<span>*</span></label>
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.genre" :items="eventGenre"
+                <BaseSelect v-model="eventForm.genre" labelKey="fullName" valueKey="tagName" :items="eventGenre"
                             placeholder="Фантастика, комедия, драма" />
               </div>
               <p v-if="errors.genre" class="error-msg">{{ errors.genre }}</p>
@@ -331,7 +329,8 @@ onMounted(() => {
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.preparation" :items="eventPreparation"
+                <BaseSelect v-model="eventForm.preparation" labelKey="fullName" valueKey="tagName"
+                            :items="eventPreparation"
                             placeholder="Не требуется, минимальная или..." />
               </div>
               <p v-if="errors.preparation" class="error-msg">{{ errors.preparation }}</p>
@@ -341,7 +340,7 @@ onMounted(() => {
               <div class="input__group _no-padding">
                 <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
                 <!--            <i class="fal fa-chevron-down"></i>-->
-                <BaseSelect v-model="eventForm.playerLevel" :items="eventLevel"
+                <BaseSelect v-model="eventForm.playerLevel" labelKey="fullName" valueKey="tagName" :items="eventLevel"
                             placeholder="Низкий, средний, высокий, эпик?" />
               </div>
               <p v-if="errors.playerLevel" class="error-msg">{{ errors.playerLevel }}</p>
@@ -351,16 +350,18 @@ onMounted(() => {
               <div class="input__wrapper">
                 <label>Краткое описание<span>*</span></label>
 
-                <textarea v-model="eventForm.short_description" type="text" name="about_you" id="about_you"
+                <textarea v-model="eventForm.shortDescription" type="text" name="about_you" id="about_you"
                           placeholder="Что планируется?"></textarea>
                 <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
-                <p v-if="errors.short_description" class="error-msg">{{ errors.description }}</p>
+                <p v-if="errors.shortDescription" class="error-msg">{{ errors.shortDescription }}</p>
 
               </div>
               <div class="event-main__image">
 
                 <label class="settings__top-left">
-                  <div class="file-upload__img">
+                  <div class="file-upload__img" :style="{
+                    '--background': eventForm.imageUrl ? 'url(' + eventForm.imageUrl + ') no-repeat center' : 'linear-gradient(114.17deg, rgba(54, 38, 38, 0.3) -3.5%, rgba(34, 27, 36, 0.3) 47.08%, rgba(54, 38, 38, 0.3) 97.65%)'
+                  }">
                     <img src="@/assets/icons/FilePlus.svg" alt="">
                   </div>
                   <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
@@ -393,16 +394,19 @@ onMounted(() => {
             <div class="input__wrapper">
               <label>Расскажите о себе</label>
 
-              <textarea v-model="eventForm.short_description" type="text" name="about_you" id="about_you"
+              <textarea v-model="eventForm.shortDescription" type="text" name="about_you" id="about_you"
                         placeholder="Пусть весь мир узнает"></textarea>
               <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
-              <p v-if="errors.short_description" class="error-msg">{{ errors.description }}</p>
+              <p v-if="errors.shortDescription" class="error-msg">{{ errors.shortDescription }}</p>
 
             </div>
           </div>
           <div class="event-main__image">
             <label class="settings__top-left">
-              <div class="file-upload__img">
+              <div class="file-upload__img" :style="{
+                                       '--background': eventForm.imageUrl ? 'url(' + eventForm.imageUrl + ') no-repeat center' : 'linear-gradient(114.17deg, rgba(54, 38, 38, 0.3) -3.5%, rgba(34, 27, 36, 0.3) 47.08%, rgba(54, 38, 38, 0.3) 97.65%)'
+
+                  }">
                 <img src="@/assets/icons/FilePlus.svg" alt="">
               </div>
               <input hidden="hidden" type="file" id="image" accept="image/jpeg, image/jpg, image/png"
@@ -436,10 +440,10 @@ onMounted(() => {
         <div class="input__wrapper">
           <label>Об организаторе</label>
 
-          <textarea v-model="eventForm.org_info" type="text" name="about_you" id="about_you"
+          <textarea v-model="eventForm.organizerInfo" type="text" name="about_you" id="about_you"
                     placeholder="Расскажите о себе то, что считаете нужным..."></textarea>
           <div class="input__wrapper-txt">Не более 350 символов, включая пробелы</div>
-          <p v-if="errors.org_info" class="error-msg">{{ errors.org_info }}</p>
+          <p v-if="errors.organizerInfo" class="error-msg">{{ errors.organizerInfo }}</p>
 
         </div>
       </div>
@@ -455,7 +459,7 @@ onMounted(() => {
           <div class="input__group _no-padding">
             <DatePicker id="date" v-model="eventForm.date" />
           </div>
-              <p v-if="errors.date" class="error-msg">{{ errors.date }}</p>
+          <p v-if="errors.date" class="error-msg">{{ errors.date }}</p>
 
         </div>
         <div class="input__wrapper">
@@ -463,7 +467,7 @@ onMounted(() => {
           <div class="input__group _no-padding">
             <TimePicker v-model="eventForm.startTime" />
           </div>
-              <p v-if="errors.startTime" class="error-msg">{{ errors.startTime }}</p>
+          <p v-if="errors.startTime" class="error-msg">{{ errors.startTime }}</p>
 
         </div>
         <div class="input__wrapper">
@@ -476,12 +480,11 @@ onMounted(() => {
         </div>
         <div class="input__wrapper">
           <label>Место</label>
-          <div class="input__group _no-padding">
-            <!--            <input v-model="eventForm.place" type="text" placeholder="Место">-->
-            <!--            <i class="fal fa-chevron-down"></i>-->
-            <BaseSelect :icon="chair" v-model="eventForm.place" :items="placeTypes" placeholder="Место" />
+          <div class="input__group">
+            <input v-model="eventForm.location" type="text" placeholder="Место">
+            <!--            <BaseSelect :icon="chair" v-model="eventForm.location" :items="placeTypes" placeholder="Место" />-->
           </div>
-          <p v-if="errors.place" class="error-msg">{{ errors.place }}</p>
+          <p v-if="errors.location" class="error-msg">{{ errors.location }}</p>
 
         </div>
       </div>
@@ -510,19 +513,19 @@ onMounted(() => {
         <div class="input__wrapper">
           <label>Макс. количество игроков<span>*</span></label>
           <div class="input__group">
-            <input v-model="eventForm.maxPlayers" type="text" name="title" id="title"
+            <input v-model="eventForm.maxParticipants" type="text" name="title" id="title"
                    placeholder="от 1 до 100">
           </div>
-          <p v-if="errors.maxPlayers" class="error-msg">{{ errors.maxPlayers }}</p>
+          <p v-if="errors.maxParticipants" class="error-msg">{{ errors.maxParticipants }}</p>
         </div>
         <div class="input__wrapper">
           <label>Запись на событие<span>*</span></label>
           <div class="input__group _no-padding">
-            <BaseSelect :items="regTypes" v-model="eventForm.regType"
+            <BaseSelect :items="regTypes" labelKey="fullName" valueKey="tagName" v-model="eventForm.isPrivate"
                         placeholder="Открытая или закрытая" />
 
           </div>
-          <p v-if="errors.regType" class="error-msg">{{ errors.regType }}</p>
+          <p v-if="errors.isPrivate" class="error-msg">{{ errors.isPrivate }}</p>
         </div>
       </div>
     </div>
@@ -538,7 +541,7 @@ onMounted(() => {
         <div class="event-total__price">
           <p class="price-title">Формат события</p>
           <p class="price">
-            Запись {{ eventForm.regType }}, {{ eventForm.maxPlayers }} игроков
+            Запись {{ eventForm.isPrivate }}, {{ eventForm.maxParticipants }} игроков
           </p>
         </div>
       </div>
@@ -684,7 +687,8 @@ onMounted(() => {
 
 
             .file-upload__img {
-              background: linear-gradient(114.17deg, rgba(54, 38, 38, 0.3) -3.5%, rgba(34, 27, 36, 0.3) 47.08%, rgba(54, 38, 38, 0.3) 97.65%);
+              background: var(--background);
+              background-size: cover;
               min-width: 180px;
               height: 167px;
               border-radius: 10px;
@@ -820,6 +824,7 @@ onMounted(() => {
   }
 
 }
+
 .input-error input {
   border-color: #f0515e !important;
 }
@@ -828,6 +833,7 @@ onMounted(() => {
   color: #f0515e;
   font-size: 14px;
 }
+
 .input__group {
   width: 100%;
 

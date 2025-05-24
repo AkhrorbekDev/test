@@ -38,17 +38,23 @@
 
             <div class="event-card__content">
               <div class="event-card__header">
-                <h3 class="event-card__name">Система, Oneshot (3–4 часа)</h3>
+                <h3 class="event-card__name">{{ event.system }}, {{ event.setting }} ({{ event.duration }})</h3>
 
               </div>
 
               <div class="event-card__tags">
-                <span class="event-card__tag event-card__tag--purple">Genre</span>
-                <span class="event-card__tag event-card__tag--purple">Genre</span>
-                <span class="event-card__tag event-card__tag--purple">Genre</span>
-                <span class="event-card__tag event-card__tag--purple">Genre</span>
-                <span class="event-card__tag event-card__tag--green">Setting</span>
-                <span class="event-card__tag event-card__tag--blue">Duration</span>
+<!--                <span class="event-card__tag event-card__tag&#45;&#45;purple">Genre</span>-->
+<!--                <span class="event-card__tag event-card__tag&#45;&#45;purple">Genre</span>-->
+<!--                <span class="event-card__tag event-card__tag&#45;&#45;purple">Genre</span>-->
+<!--                <span class="event-card__tag event-card__tag&#45;&#45;purple">Genre</span>-->
+<!--                <span class="event-card__tag event-card__tag&#45;&#45;green">Setting</span>-->
+<!--                <span class="event-card__tag event-card__tag&#45;&#45;blue">Duration</span>-->
+                <span v-if="event.system"  class="event-card__tag event-card__tag--green">{{event.system}}</span>
+                <span v-if="event.setting"  class="event-card__tag event-card__tag--purple">{{event.setting}}</span>
+                <span v-if="event.duration"  class="event-card__tag event-card__tag--blue">{{event.duration}}</span>
+                <span v-if="event.playerExperience"  class="event-card__tag event-card__tag--purple">{{ event.playerExperience }}</span>
+                <span v-if="event.genre"  class="event-card__tag event-card__tag--purple">{{event.genre}}</span>
+                <span v-if="event.characterLevel"  class="event-card__tag event-card__tag--purple">{{ event.characterLevel}}</span>
               </div>
 
               <div class="event-card__details">
@@ -57,19 +63,19 @@
                   <span class="event-card__detail-icon event-card__detail-icon--purple">
                     <img src="./images/CalendarBlank.svg" alt="">
                   </span>
-                    <span class="event-card__detail-text">25 ноября</span>
+                    <span class="event-card__detail-text">{{ formatDate(event.date) }}</span>
                   </div>
                   <div class="event-card__detail">
                   <span class="event-card__detail-icon event-card__detail-icon--purple">
                     <img src="./images/Clock.svg" alt="">
                   </span>
-                    <span class="event-card__detail-text">19:00-23:00</span>
+                    <span class="event-card__detail-text">{{ event.startTime }}-{{ event.endTime }}</span>
                   </div>
                   <div class="event-card__detail">
                   <span class="event-card__detail-icon event-card__detail-icon--purple">
                     <img src="./images/Door.svg" alt="">
                   </span>
-                    <span class="event-card__detail-text">Зал Балдежа</span>
+                    <span class="event-card__detail-text">{{ event.location }}</span>
                   </div>
                 </div>
 
@@ -78,32 +84,30 @@
                   <span class="event-card__detail-icon event-card__detail-icon--purple">
                     <img src="./images/CastleTurret.svg" alt="">
                   </span>
-                    <span class="event-card__detail-text">Только новички</span>
+                    <span class="event-card__detail-text">{{ event.playerExperience }}</span>
                   </div>
                   <div class="event-card__detail">
                   <span class="event-card__detail-icon event-card__detail-icon--purple">
                     <img src="./images/Sword.svg" alt="">
                   </span>
-                    <span class="event-card__detail-text">Подготовка минимальная</span>
+<!--                    <span class="event-card__detail-text">{{ event. }}</span>-->
                   </div>
                   <div class="event-card__detail">
                   <span class="event-card__detail-icon event-card__detail-icon--purple">
                     <img src="./images/Ghost.svg" alt="">
                   </span>
-                    <span class="event-card__detail-text">Низкий уровень персонажа</span>
+                    <span class="event-card__detail-text">{{ event.characterLevel }}</span>
                   </div>
                 </div>
               </div>
 
               <div class="event-card__description">
                 <p class="event-card__text">
-                  В королевстве, охваченном тьмой, группа смелых искателей приключений отправляется в опасное путешествие,
-                  чтобы спасти мир от забытого зла. Их путь лежит через мрачные леса и заброшенные руины, где каждый шаг
-                  может стать последним.
+                  {{event.shortDescription }}
                 </p>
-                <p class="event-card__text">
-                  Смогут ли они преодолеть все преграды и вернуть свет в этот мир, или тьма поглотит их навсегда?..
-                </p>
+<!--                <p class="event-card__text">-->
+<!--                  {{ event.shortDescription }}-->
+<!--                </p>-->
               </div>
             </div>
           </div>
@@ -115,9 +119,9 @@
                 <h3 class="occupancy__title">Занято мест</h3>
                 <div class="occupancy__counter">
                   <img src="./images/Users.svg" alt="">
-                  <span class="occupancy__counter-current">8</span>
+                  <span class="occupancy__counter-current">{{ event.currentParticipants }}</span>
                   <span class="occupancy__counter-separator">/</span>
-                  <span class="occupancy__counter-total">10</span>
+                  <span class="occupancy__counter-total">{{ event.maxParticipants }}</span>
                 </div>
               </div>
 
@@ -125,18 +129,18 @@
                 wrap: event.status === 'pending' && user.role === 'Admin'
               }">
 
-                <template v-if="user.role === 'Admin' || user.role !== 'Master'">
+                <template v-if="user.role === 'Admin' ">
                   <template v-if="event.status === 'pending' && user.role === 'Admin'">
-                    <button class="occupancy__btn occupancy__btn--green">
+                    <button @click="approveEvent" class="occupancy__btn occupancy__btn--green">
                       <span class="occupancy__btn-icon">
                         <img src="./images/ThumbsUp.svg" alt="">
                       </span>
                       Утвердить событие
                     </button>
-                    <button class="occupancy__btn occupancy__btn--close">
-                    <span class="occupancy__btn-icon rotate-180">
-                      <img src="./images/ThumbsUp.svg" alt="" >
-                    </span>
+                    <button @click="openReportModal" class="occupancy__btn occupancy__btn--close">
+                      <span class="occupancy__btn-icon rotate-180">
+                        <img src="./images/ThumbsUp.svg" alt="" >
+                      </span>
                       Отправить на доработку
                     </button>
                   </template>
@@ -146,13 +150,19 @@
                         <img src="./images/LockKeyOpen.svg" alt="">
                       </span>
                     </div>
-                    <button class="occupancy__btn occupancy__btn--close">
+                    <button v-if="event.open" @click="closeApplication" class="occupancy__btn occupancy__btn--close">
                       <span class="occupancy__btn-icon">
                         <img src="./images/WarningCircle.svg" alt="">
                       </span>
                       Закрыть запись
                     </button>
-                    <button v-if="user.role === 'Admin'" class="occupancy__btn occupancy__btn--cancel">
+                    <button v-if="!event.open" @click="openApplication" class="occupancy__btn occupancy__btn--close">
+                      <span class="occupancy__btn-icon">
+                        <img src="./images/WarningCircle.svg" alt="">
+                      </span>
+                      Открыть запись
+                    </button>
+                    <button v-if="user.role === 'Admin'" @click="cancelEvent" class="occupancy__btn occupancy__btn--cancel">
                         <span class="occupancy__btn-icon">
                           <img src="@/assets/icons/Skull.svg" alt="">
                         </span>
@@ -169,62 +179,27 @@
                 <div class="game-master__avatar">
 
                 </div>
-                <div class="game-master__name">Nickname</div>
+                <div class="game-master__name">{{ event.creator.username }}</div>
                 <div class="game-master__star">⭐</div>
               </div>
             </div>
             <div class="participants" v-if="event.status !== 'approved'">
               <div class="participants__list">
-                <label for="" class="filters__option">
+                <label v-for="application in event.applications" :key="application.id" for="" class="filters__option">
                   <div class="filters__checkbox">
                     <input type="checkbox" name="" id="">
                   </div>
-                  <div class="filters__label">Никнейм22231</div>
+                  <div class="filters__label">{{ application.user.username }}</div>
                 </label>
-                <label for="" class="filters__option">
-                  <div class="filters__checkbox">
-                    <input type="checkbox" name="" id="">
-                  </div>
-                  <div class="filters__label">Никнейм22231</div>
-                </label>
-                <label for="" class="filters__option">
-                  <div class="filters__checkbox">
-                    <input type="checkbox" name="" id="">
-                  </div>
-                  <div class="filters__label">Никнейм22231</div>
-                </label>
-                <label for="" class="filters__option">
-                  <div class="filters__checkbox">
-                    <input type="checkbox" name="" id="">
-                  </div>
-                  <div class="filters__label">Никнейм22231</div>
-                </label>
-                <label for="" class="filters__option">
-                  <div class="filters__checkbox">
-                    <input type="checkbox" name="" id="">
-                  </div>
-                  <div class="filters__label">Никнейм22231</div>
-                </label>
-                <label for="" class="filters__option">
-                  <div class="filters__checkbox">
-                    <input type="checkbox" name="" id="">
-                  </div>
-                  <div class="filters__label">Никнейм22231</div>
-                </label>
-                <label for="" class="filters__option">
-                  <div class="filters__checkbox">
-                    <input type="checkbox" name="" id="">
-                  </div>
-                  <div class="filters__label">Никнейм22231</div>
-                </label>
-                <div class="participants__actions">
-                  <button class="participants__btn participants__btn--add-user">
 
-                  <span class="participants__btn-icon">
-                    <img src="./images/UserCirclePlus.svg" alt="">
-                  </span>
-                    Добавить пользователя
-                  </button>
+                <div class="participants__actions">
+<!--                  <button class="participants__btn participants__btn&#45;&#45;add-user">-->
+
+<!--                  <span class="participants__btn-icon">-->
+<!--                    <img src="./images/UserCirclePlus.svg" alt="">-->
+<!--                  </span>-->
+<!--                    Добавить пользователя-->
+<!--                  </button>-->
                   <button class="participants__btn participants__btn--add-favorite">
                   <span class="participants__btn-icon">
                     <img src="./images/PersonArmsSpread.svg" alt="">
@@ -246,35 +221,50 @@
           <!-- Tabs -->
           <div class="event-tabs">
             <div class="event-tabs__header">
-              <button class="event-tabs__tab event-tabs__tab--active">Описание</button>
-              <button class="event-tabs__tab">О мастере</button>
+              <button @click="activeTab = 1" class="event-tabs__tab event-tabs__tab--active">Описание</button>
+              <button @click="activeTab = 2" class="event-tabs__tab">О мастере</button>
             </div>
 
             <div class="event-tabs__content">
-              <div class="event-tabs__section">
-                <h4 class="event-tabs__subtitle">Предыстория:</h4>
+              <div v-if="activeTab === 1" class="event-tabs__section">
+<!--                <h4 class="event-tabs__subtitle">Предыстория:</h4>-->
                 <p class="event-tabs__text">
-                  Королевство Эландор когда-то было процветающим и мирным местом, но теперь его окутала тьма. Древние
-                  пророчества шепчут о возвращении забытого зла, известного как Темный Властелин. Группа отважных героев
-                  решает взять на себя миссию по спасению мира.
+                  К{{ event.description }}
                 </p>
 
-                <h4 class="event-tabs__subtitle">Сюжет:</h4>
+<!--                <h4 class="event-tabs__subtitle">Сюжет:</h4>-->
+<!--                <p class="event-tabs__text">-->
+<!--                  Группа героев начинает своё путешествие с небольшого городка, где они узнают о первых знаках возвращения-->
+<!--                  Тёмного Властелина. Они отправляются в мрачные леса, где сталкиваются с древними духами и магическими-->
+<!--                  существами. Затем их путь лежит через заброшенные руины, охраняемые древними стражами, и города, где-->
+<!--                  каждый шаг может стать последним.-->
+<!--                </p>-->
+
+<!--                <h4 class="event-tabs__subtitle">Цели:</h4>-->
+
+              </div>
+              <div v-else class="event-tabs__section">
+<!--                <h4 class="event-tabs__subtitle">Предыстория:</h4>-->
                 <p class="event-tabs__text">
-                  Группа героев начинает своё путешествие с небольшого городка, где они узнают о первых знаках возвращения
-                  Тёмного Властелина. Они отправляются в мрачные леса, где сталкиваются с древними духами и магическими
-                  существами. Затем их путь лежит через заброшенные руины, охраняемые древними стражами, и города, где
-                  каждый шаг может стать последним.
+                  {{ event.description }}
                 </p>
 
-                <h4 class="event-tabs__subtitle">Цели:</h4>
+<!--                <h4 class="event-tabs__subtitle">Сюжет:</h4>-->
+<!--                <p class="event-tabs__text">-->
+<!--                  Группа героев начинает своё путешествие с небольшого городка, где они узнают о первых знаках возвращения-->
+<!--                  Тёмного Властелина. Они отправляются в мрачные леса, где сталкиваются с древними духами и магическими-->
+<!--                  существами. Затем их путь лежит через заброшенные руины, охраняемые древними стражами, и города, где-->
+<!--                  каждый шаг может стать последним.-->
+<!--                </p>-->
+
+<!--                <h4 class="event-tabs__subtitle">Цели:</h4>-->
 
               </div>
             </div>
           </div>
         </div>
 
-
+        <ReportModal :is-open="showReportModal" @save="sendReport" @close="showReportModal = false"></ReportModal>
       </div>
     </main>
   </div>
@@ -287,10 +277,109 @@ import { createEventsService } from '@/services/eventsService'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserGlobal } from '@/stores/userGlobal'
 import { useToast } from 'vue-toastification'
-
-const event = ref({})
+import { createAdminService } from '@/services/adminService'
+const activeTab = ref(1)
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(date);
+};
+const event = ref({
+  "id": "event_id",
+  "title": "",
+  "shortDescription": "",
+  "description": "",
+  "organizerInfo": "",
+  "format": "",
+  "system": "",
+  "setting": "",
+  "duration": "",
+  "playerExperience": "",
+  "genre": "",
+  "characterLevel": "",
+  "imageUrl": "",
+  "date": "",
+  "startTime": "",
+  "endTime": "",
+  "location": "",
+  "price": 0,
+  "discount": 0,
+  "maxParticipants": 0,
+  "currentParticipants": 0,
+  "status": "",
+  "isPrivate": false,
+  "creator": {
+    "id": "",
+    "username": ""
+  },
+  "applications": [
+    {
+      "id": "",
+      "user": {
+        "id": "",
+        "username": "",
+        "avatar": ""
+      },
+      "status": "pending",
+      "createdAt": ""
+    }
+  ]})
 const route = useRoute()
 const router = useRouter()
+const showReportModal = ref(false)
+const openReportModal = () => {
+  // Open modal for sending report
+  showReportModal.value = true
+}
+const sendReport = e => {
+  // Send report to the server
+  createEventsService().sendReport(route.params.id, e)
+    .then(() => {
+      toast.success('Отправлено на модерацию')
+      showReportModal.value = false
+    })
+    .catch(error => {
+      toast.error(error.data.error || 'Ошибка при отправке отчета')
+    })
+}
+
+const approveEvent = () => {
+  createAdminService().approveEvent(route.params.id)
+    .then(() => {
+      toast.success('Событие утверждено')
+    })
+    .catch(error => {
+      toast.error(error.data.error || 'Ошибка при утверждении события')
+    })
+}
+
+const rejectEvent = () => {
+  createAdminService().rejectEvent(route.params.id)
+    .then(() => {
+      toast.success('Событие утверждено')
+    })
+    .catch(error => {
+      toast.error(error.data.error || 'Ошибка при утверждении события')
+    })
+}
+
+const closeApplication = () => {
+  createEventsService().closeApplication(route.params.id)
+    .then((res) => {
+      toast.success(res.message)
+    })
+    .catch(error => {
+      toast.error(error.data.error || 'Ошибка при отмене заявки')
+    })
+}
+const openApplication = () => {
+  createEventsService().openApplication(route.params.id)
+    .then((res) => {
+      toast.success(res.message)
+    })
+    .catch(error => {
+      toast.error(error.data.error || 'Ошибка при отмене заявки')
+    })
+}
 
 const userStore = useUserGlobal()
 const toast = useToast()
