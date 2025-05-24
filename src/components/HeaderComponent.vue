@@ -31,7 +31,7 @@ const loggedIn = computed(() => userStore.loggedIn)
             <li class="navbar__list-item"><router-link to="/" class="navbar__list-link">О клубе</router-link>
             </li>
             <li class="navbar__list-item"><router-link to="/tariffs" class="navbar__list-link">Тарифы</router-link></li>
-            <router-link to="/events" class="navbar__list-item navbar__list-wings">
+            <router-link to="/calendar" class="navbar__list-item navbar__list-wings">
               <img src="@/assets/icons/left-wing-icon.svg" alt="" />
               <div href="" class="navbar__list-link">К приключениям</div>
               <img src="@/assets/icons/right-wing-icon.svg" alt="" />

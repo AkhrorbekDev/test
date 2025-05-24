@@ -2,6 +2,7 @@
 
 import { onMounted, ref } from 'vue'
 import { useDate } from 'vuetify/framework'
+import { useRoute } from 'vue-router'
 
 defineProps({
   total : {
@@ -51,19 +52,34 @@ const changePeriod = (e) => {
   emit('changeDate', dateFilter)
   console.log(dateFilter)
 }
-
+const route = useRoute()
 onMounted(() => {
-  const currentDate = new Date()
-  const weekStart = new Date()
-  const weekEnd = date.endOfWeek(weekStart)
-  startOfWeek.value = date.getDate(date.startOfWeek(weekStart))
-  endOfWeek.value = date.getDate(weekEnd)
-  monthPrev.value = getMonthName(date.getMonth(currentDate))
-  monthNext.value = startOfWeek.value < endOfWeek.value ? monthPrev.value : getMonthName(date.getMonth(date.getNextMonth(currentDate)))
-  currentdate = currentDate
 
-  dateFilter.dateFrom = date.format(currentDate, 'YYYY-MM-DD').replace(', UTC', '').replaceAll('/', '-')
-  dateFilter.dateTill = date.format(weekEnd, 'YYYY-MM-DD').replace(', UTC', '').replaceAll('/', '-')
+  if (route.query.dateFrom && route.query.dateTill) {
+    dateFilter.dateFrom = route.query.dateFrom as string
+    dateFilter.dateTill = route.query.dateTill as string
+    const dateFrom = new Date(dateFilter.dateFrom)
+    const dateTill = new Date(dateFilter.dateTill)
+    startOfWeek.value = date.getDate(date.startOfWeek(dateFrom))
+    endOfWeek.value = date.getDate(date.endOfWeek(dateTill))
+    monthPrev.value = getMonthName(date.getMonth(dateFrom))
+    monthNext.value = startOfWeek.value < endOfWeek.value ? monthPrev.value : getMonthName(date.getMonth(date.getNextMonth(dateFrom)))
+    currentdate = dateFrom
+  } else {
+    const currentDate = new Date()
+    const weekStart = new Date()
+    const weekEnd = date.endOfWeek(weekStart)
+    startOfWeek.value = date.getDate(date.startOfWeek(weekStart))
+    endOfWeek.value = date.getDate(weekEnd)
+    monthPrev.value = getMonthName(date.getMonth(currentDate))
+    monthNext.value = startOfWeek.value < endOfWeek.value ? monthPrev.value : getMonthName(date.getMonth(date.getNextMonth(currentDate)))
+    currentdate = currentDate
+
+    dateFilter.dateFrom = date.format(currentDate, 'YYYY-MM-DD').replace(', UTC', '').replaceAll('/', '-')
+    dateFilter.dateTill = date.format(weekEnd, 'YYYY-MM-DD').replace(', UTC', '').replaceAll('/', '-')
+
+  }
+
 
 })
 

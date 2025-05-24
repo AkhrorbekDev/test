@@ -52,7 +52,9 @@ const clearFilters = () => {
 
 onMounted(() => {
   const eventsService = createEventsService()
-  eventsService.getEvents()
+  eventsService.getEvents({
+    ...route.query
+  })
     .then((response) => {
       events.value = response
     })
@@ -126,7 +128,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <EventsDataManager @change-date="getEventsWithDate" />
+      <EventsDataManager :total="events.length" @change-date="getEventsWithDate" />
 
       <div class="club__events-content">
         <EventsFilter @clear="clearFilters" :filters="filters" />

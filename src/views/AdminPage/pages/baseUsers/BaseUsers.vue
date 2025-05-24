@@ -84,21 +84,21 @@ onMounted(() => {
           <img src="../../images/search.svg" alt="">
         </div>
         <div class="base__table-filter">
-          <div class="filter__title">Фильтровать по</div>
+<!--          <div class="filter__title">Фильтровать по</div>-->
 
           <div class="filters">
-            <div class="filters-checkbox">
-              <input v-model="selectedRole" type="checkbox" value="admin" id="admin" @update:model-value="getUsers({role: 'Admin'})">
-              <label for="admin">Админ</label>
-            </div>
-            <div class="filters-checkbox">
-              <input v-model="selectedRole" type="checkbox" value="master" id="master" @update:model-value="getUsers({role: 'Master'})">
-              <label for="master">Мастер</label>
-            </div>
-            <div class="filters-checkbox">
-              <input v-model="selectedRole" type="checkbox" value="player" id="player" @update:model-value="getUsers({role: 'Player'})">
-              <label for="player">Игрок</label>
-            </div>
+<!--            <div class="filters-checkbox">-->
+<!--              <input v-model="selectedRole" type="checkbox" value="admin" id="admin" @update:model-value="getUsers({role: 'Admin'})">-->
+<!--              <label for="admin">Админ</label>-->
+<!--            </div>-->
+<!--            <div class="filters-checkbox">-->
+<!--              <input v-model="selectedRole" type="checkbox" value="master" id="master" @update:model-value="getUsers({role: 'Master'})">-->
+<!--              <label for="master">Мастер</label>-->
+<!--            </div>-->
+<!--            <div class="filters-checkbox">-->
+<!--              <input v-model="selectedRole" type="checkbox" value="player" id="player" @update:model-value="getUsers({role: 'Player'})">-->
+<!--              <label for="player">Игрок</label>-->
+<!--            </div>-->
           </div>
         </div>
         <div class="base__table-btn btn" @click="addModal = true">

@@ -163,7 +163,7 @@ onMounted(() => {
               <img src="./images/PencilSimple.svg" alt="">
             </button>
             <div class="news__item-img">
-              <img :src="item.imageUrl" alt="">
+              <img src="@/assets/images/calnedar-page-bg.jpg" alt="">
             </div>
 
             <div class="news__item-info">

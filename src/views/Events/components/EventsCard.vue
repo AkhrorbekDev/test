@@ -118,7 +118,7 @@ const userApplication = computed(() => {
     </div>
     <div class="event__card-content">
       <div class="event__card-left">
-        <img class="event__left-img" :src="event.imageUrl" alt="" />
+        <img class="event__left-img" src="@/assets/images/calnedar-page-bg.jpg" alt="" />
         <div class="event__left-bottom">
           <div v-if="event.discount" class="event__left-discount">-{{ event.discount }}%</div>
           <div v-if="event.price" class="event__left-price "><img src="../images/price.svg" alt=""> {{ event.price }} ₽
